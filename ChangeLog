@@ -1,0 +1,1743 @@
+NOTE: This is the change log for just the Fortran engine 
+before the revision control system was changed to git instead of CVS.
+--------------------------------------------------------------------------------
+RCS file: /usr/local/cvs/fmendel/Attic/mendel.f,v
+Working file: mendel.f
+head: 1.309
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 309;	selected revisions: 309
+description:
+Main file of Mendel -- a genetic simulation program to study mutation accumulation over time
+----------------------------
+revision 1.309
+date: 2013-02-16 01:34:31 +0900;  author: wes;  state: dead;  lines: +0 -0;  commitid: 1d2511e63894567;
+Moved to mendel.f90
+----------------------------
+revision 1.308
+date: 2013-02-09 02:42:29 +0900;  author: wes;  state: Exp;  lines: +235 -235;  commitid: da1511538de4567;
+Convert all "c" comment statements to "!" to prepare for converting to
+f90 free formed files.
+----------------------------
+revision 1.307
+date: 2013-02-09 02:16:58 +0900;  author: wes;  state: Exp;  lines: +0 -1519;  commitid: 7800511532e24567;
+Separate out file I/O routines to fileio.f and initialization routines to init.f
+----------------------------
+revision 1.306
+date: 2013-02-09 01:39:32 +0900;  author: wes;  state: Exp;  lines: +546 -3928;  commitid: 5e9a51152a0f4567;
+Separate out offpsring, selection, and diagnostics subroutines into
+separate files.
+----------------------------
+revision 1.305
+date: 2013-02-08 03:52:11 +0900;  author: wes;  state: Exp;  lines: +33 -30;  commitid: 4a885113f7294567;
+Fix a bug in diagnostics_polymorphisms_plot that allowed allele frequence
+to be greater than 100/num_tribes.  Also some code refactoring: replace all
+100's with the NBINS parameter.
+----------------------------
+revision 1.304
+date: 2013-02-08 00:58:13 +0900;  author: wes;  state: Exp;  lines: +63 -19;  commitid: 3ba5113ce524567;
+This is the initial implementation of tribal fission.  In this version
+only the population size has been modified with no migration of individuals.
+----------------------------
+revision 1.303
+date: 2013-02-06 01:29:47 +0900;  author: wes;  state: Exp;  lines: +5 -11;  commitid: 1eac511133364567;
+Undo previous version changes.  Using nint ended up generating step
+size changes.  The previous way of handling discrete changes in
+offspring works much better.
+----------------------------
+revision 1.302
+date: 2013-02-05 00:52:05 +0900;  author: wes;  state: Exp;  lines: +11 -5;  commitid: 678510fd8ec4567;
+Solve problem of shrinking tribes (especially when the pop sizes are small)
+when doing tribal competition by using nint function instead of int function.
+----------------------------
+revision 1.301
+date: 2013-02-04 22:34:03 +0900;  author: wes;  state: Exp;  lines: +42 -32;  commitid: 40c5510fb8444567;
+Make various improvements to tribal competition, including outputting
+more diagnostic information such as fertility_factor, and
+global_genetic_fitness.  Also, make several variables used in
+tribal competition as real*8 rather than just real.
+----------------------------
+revision 1.300
+date: 2013-01-05 06:48:55 +0900;  author: wes;  state: Exp;  lines: +31 -30;  commitid: 23850e74db54567;
+Fix a bug that showed up when trying to run 10 tribes in parallel.  The
+portion of the code which was meant for tribal competition was being
+executed for every parallel run, but did not crash until we tried at
+least 8 tribes.  Fix involved simply putting wrapping the portion code
+of code with an if (tribal_competition) statement.
+----------------------------
+revision 1.299
+date: 2012-12-23 12:22:02 +0900;  author: wes;  state: Exp;  lines: +1 -2;  commitid: 21da50d678cf4567;
+Remove debug statement.
+----------------------------
+revision 1.298
+date: 2012-12-23 10:42:28 +0900;  author: wes;  state: Exp;  lines: +169 -24;  commitid: 7c6950d660504567;
+Add coding for command-line options for running mendel from the command
+line (mendel -h displays help options).  Put default parameters inside the
+mendel.f code itself giving proper error message when mendel.in file does
+not exist.  This allows one to run "mendel -d" to run mendel with default
+parameters.  Also, add coding for displaying proper error message when
+mendel.in file does not exist.
+----------------------------
+revision 1.297
+date: 2012-11-16 14:46:49 +0900;  author: wes;  state: Exp;  lines: +6 -3;  commitid: e8750a5d3314567;
+Fix a bug in the new handling of neutral mutations.
+----------------------------
+revision 1.296
+date: 2012-07-20 23:18:41 +0900;  author: wes;  state: Exp;  lines: +354 -226;  commitid: 309e500967e74567;
+Create a new array nmutn to handle neutral mutations.  This required changes
+to many lines of code.  The neutral mutations were being stored in the dmutn
+array.  The user can control the size of each of the mutation arrays
+(dmutn, nmutn, fmutn) from the user interface, so as to only appropriate
+the amount of space that is needed.
+----------------------------
+revision 1.295
+date: 2012-02-19 01:04:39 +0900;  author: wes;  state: Exp;  lines: +5 -5;  commitid: 38bb4f3fcbdf4567;
+Replace absolute path for /usr/local/include/mpif.h with just mpif.h
+and set the include path in the Makefile.  This was done so I could
+test using Open MPI as an alternative solution to MPICH.
+----------------------------
+revision 1.294
+date: 2012-02-13 21:57:41 +0900;  author: wes;  state: Exp;  lines: +25 -1;  commitid: 9414f3908384567;
+Envelope all MPI commands with START_MPI and END_MPI.  These will act like
+preprocessor directives, although instead of using the Fortran preprocesser
+(fpp), we will use sed.  So, to produce a serial version of the code,
+one only needs to run "make serial" which will strip the MPI portions of
+code, and then run "make".
+----------------------------
+revision 1.293
+date: 2012-02-01 22:31:44 +0900;  author: wes;  state: Exp;  lines: +24 -17;  commitid: 8904f293e8b4567;
+Fix some format specifiers which are causing the new Intel compiler to
+give warnings.  Also, prepare code for adding a new option for
+fitness_distrib_type == 2.
+----------------------------
+revision 1.292
+date: 2012-01-31 04:06:08 +0900;  author: wes;  state: Exp;  lines: +142 -159;  commitid: 373b4f26ea024567;
+Clean up read_parameters output; make consistent with namelist.input format.
+Make slight improvements to diagnostics_selection.
+Rename new_mutn_per_offspring to mutn_rate to handle more general cases and
+be consistent with user interface.
+----------------------------
+revision 1.291
+date: 2012-01-11 02:32:21 +0900;  author: wes;  state: Exp;  lines: +8 -3;  commitid: 12b04f0c75944567;
+1. Also, add code to compute initial_alleles_mean_effect from input parameters.
+   This was originally done in the interface but led to some confusion.
+2. Change declaration of mfirst in diagnostics_polymorphisms_plot to real*8
+   from integer to remove bug when compiling with gfortran.
+----------------------------
+revision 1.290
+date: 2011-10-13 21:29:50 +0900;  author: wes;  state: Exp;  lines: +87 -1;  commitid: 25e54e96d9b74567;
+Added routine to output the distribution of contrasting alleles at the
+end of the run.
+----------------------------
+revision 1.289
+date: 2011-10-13 21:28:32 +0900;  author: wes;  state: Exp;  lines: +0 -86;  commitid: 25c04e96d8fc4567;
+Change all integer*1 logicals to true Fortran logicals.  These were changed
+to integer*1 in the past to allow using 0 and 1 for the mendel.in file,
+so that it would be compatible with the C version of Mendel.  Since
+using the namelist.input format, this is no longer an issue, and
+true logicals must be used in order to compile mendel.f using GNU's
+fortran compiler, gfortran.
+----------------------------
+revision 1.288
+date: 2011-10-07 07:21:34 +0900;  author: johnrb;  state: Exp;  lines: +125 -43;  commitid: 66594e8e298b4567;
+
+Added routine to output the distribution of contrasting alleles at the
+end of the run.
+----------------------------
+revision 1.287
+date: 2011-08-11 06:54:24 +0900;  author: johnrb;  state: Exp;  lines: +19 -12;  commitid: 5e864e42fd854567;
+
+Modified SE treatment so that SE contribution could never increase fitness.
+----------------------------
+revision 1.286
+date: 2011-07-30 03:09:44 +0900;  author: wes;  state: Exp;  lines: +66 -51;  commitid: 492f4e32f7524567;
+Include John Baumgardner's latest changes to Synergistic Epistatis treatment.
+----------------------------
+revision 1.285
+date: 2011-07-30 02:55:34 +0900;  author: wes;  state: Exp;  lines: +103 -97;  commitid: 48314e32f3f74567;
+Remove plot numbers from diagnostic subroutine names, because we keep
+changing the numbers in the interface as we add new plots.
+
+Increase the 25000 limit of polymorphisms to 1E6, and use a parameter
+MNP so that it is more easily changed in the future.
+
+Add a variable, plot_allele_gens, which the user change change to
+indicate the how often (i.e. time interval in generations) to call
+the function diagnostics_polymorphisms_plot.
+----------------------------
+revision 1.284
+date: 2011-06-23 00:49:01 +0900;  author: wes;  state: Exp;  lines: +11 -7;  commitid: 42854e020ec54567;
+Implement extinction_threshold as a user input parameter.
+----------------------------
+revision 1.283
+date: 2011-05-31 12:48:58 +0900;  author: wes;  state: Exp;  lines: +3 -3;  commitid: 7f204de464f84567;
+Fix minor bug when clonal_reproduction is turned on, do not set
+dominant_hetero_expression to 1.0 unless clonal_haploid is also set.
+----------------------------
+revision 1.282
+date: 2011-03-01 13:28:29 +0900;  author: wes;  state: Exp;  lines: +14 -100;  commitid: 3c0b4d6c75a84567;
+Rename uniform_fitness_effect to uniform_fitness_effect_del.
+Replace max_fav_fitness_gain*uniform_fitness_effect with
+uniform_fitness_effect_fav.
+Remove read_input_parameters_old() subroutine. WHB v1.9.4
+----------------------------
+revision 1.281
+date: 2011-03-01 12:26:20 +0900;  author: wes;  state: Exp;  lines: +17 -58;  commitid: 28fd4d6c66544567;
+Read in uniform_fitness_effect_fav.  Also, get rid of section in
+read_restart_dump and write_output_dump where parameters get stored
+in the output dump, which requires much maintenance every time a new
+input variable is added or removed.  I'm trying to simplify the amount
+of maintenance that is required for Mendel.  WHB
+----------------------------
+revision 1.280
+date: 2011-02-25 08:57:14 +0900;  author: wes;  state: Exp;  lines: +112 -60;  commitid: 366e4d66efb94567;
+Convert to using namelist input files.
+Remove organism_type parameter as it is not used.
+----------------------------
+revision 1.279
+date: 2011-02-23 11:43:37 +0900;  author: wes;  state: Exp;  lines: +243 -127;  commitid: 681f4d6473644567;
+Add the ability to be able to analyze allele statistics on a global level
+for parallel cases.  Fix a parallel bug which was causing strange results
+on the new Cornell server.  There needed to be an added check for
+tribal competition, as well as one variable needed to be initialized.
+Also, change the variable num_procs to num_tribes, since with overloading
+num_procs is not an accurate descriptor.  WHB
+----------------------------
+revision 1.278
+date: 2011-02-18 21:28:08 +0900;  author: wes;  state: Exp;  lines: +2 -2;  commitid: 3b614d5e659e4567;
+Fix parallel bug that showed up on v1.9.2 of the new server. Wes
+----------------------------
+revision 1.277
+date: 2011-02-17 04:00:19 +0900;  author: johnrb;  state: Exp;  lines: +12 -20;
+
+Fixed back mutation bug.
+----------------------------
+revision 1.276
+date: 2011-02-17 00:41:09 +0900;  author: johnrb;  state: Exp;  lines: +89 -101;
+
+Fixed problem in polymorphism analysis for multiple tribes.
+----------------------------
+revision 1.275
+date: 2011-02-16 06:22:51 +0900;  author: johnrb;  state: Exp;  lines: +4 -6;
+
+Fixed small bug relating to neutral treatment.
+----------------------------
+revision 1.274
+date: 2011-02-15 01:56:24 +0900;  author: gregor;  state: Exp;  lines: +7 -7;
+Make some corrections to the way social bonus is being handles.  Treat
+it as a scaling coefficient rather than an exponential factor.   Wes
+----------------------------
+revision 1.273
+date: 2011-02-14 08:27:00 +0900;  author: johnrb;  state: Exp;  lines: +352 -193;
+
+Fixed problems with neutral mutation treatment and a problem with the SE
+treatment that caused trouble for parallel runs.
+----------------------------
+revision 1.272
+date: 2011-02-08 10:19:27 +0900;  author: johnrb;  state: Exp;  lines: +39 -2;
+
+Fixed a problem with the clonal reproduction and self fertilization
+treatments.
+----------------------------
+revision 1.271
+date: 2011-02-08 07:37:58 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+
+This version fixes one more mistake in the treatment of neutrals.
+----------------------------
+revision 1.270
+date: 2011-02-08 07:33:00 +0900;  author: johnrb;  state: Exp;  lines: +6 -4;
+
+This version fixes a few more problems with the treatment of neutrals.
+----------------------------
+revision 1.269
+date: 2011-02-08 07:23:57 +0900;  author: johnrb;  state: Exp;  lines: +26 -13;
+
+This version makes some corrections in the treatment of neutral mutations.
+----------------------------
+revision 1.268
+date: 2011-02-06 11:44:46 +0900;  author: gregor;  state: Exp;  lines: +133 -81;
+v1.9.1 John Baumgardner added ability to track neutral mutations.
+----------------------------
+revision 1.267
+date: 2011-02-06 11:37:33 +0900;  author: gregor;  state: Exp;  lines: +45 -39;
+v1.9.0 Add, remove, and modify a number of variables:
+       * remove opf_user_input
+       * change offspring_per_female to reproductive_rate
+       * rename haploid_genome_size to genome_size
+       * add parameters:
+         - track_neutrals
+         - fraction_neutral
+         - organism_type
+----------------------------
+revision 1.266
+date: 2011-02-05 08:21:15 +0900;  author: wes;  state: Exp;  lines: +147 -156;
+John Baumgardner made some very significant revisions to the treatment
+of synergistic epistasis.
+----------------------------
+revision 1.265
+date: 2011-01-14 07:53:22 +0900;  author: wes;  state: Exp;  lines: +14 -33;
+Fix some problems in computing tribal fitness. Also, remove
+tc_scaling_exponent and random_death_exponent inputs.
+----------------------------
+revision 1.264
+date: 2011-01-12 06:36:14 +0900;  author: wes;  state: Exp;  lines: +193 -131;
+This version includes all of John Baumgardner's fixes to get tribal
+competition working correctly. It also includes some of my changes
+for tribal competition.
+----------------------------
+revision 1.263
+date: 2010-08-30 21:42:01 +0900;  author: wes;  state: Exp;  lines: +5 -3;
+Fix small bug when tribal competition turned off but parallel turned on.
+----------------------------
+revision 1.262
+date: 2010-08-23 06:09:22 +0900;  author: johnrb;  state: Exp;  lines: +170 -132;
+
+Found and corrected bugs in back mutation treatment.
+----------------------------
+revision 1.261
+date: 2010-03-25 05:15:06 +0900;  author: wes;  state: Exp;  lines: +26 -8;
+Fix the case when clonal_reproduction is on and bottleneck_pop_size is set
+to one to prevent mutational meltdown and to rebound correctly.
+----------------------------
+revision 1.260
+date: 2010-03-21 12:24:11 +0900;  author: wes;  state: Exp;  lines: +27 -4;
+Add option for cyclic bottlenecking.  Currently, this is handled by
+setting bottleneck_generations to a negative value.  For example,
+a value of -200 will create a bottleneck every 200 generations.
+----------------------------
+revision 1.259
+date: 2010-03-21 12:13:53 +0900;  author: wes;  state: Exp;  lines: +167 -13;
+Add feature to allow back mutations.  This is controlled by the user
+parameter allow_back_mutn and is handled in the subroutine back_mutn.
+This option will only effectively work for small genomes.  Also, one
+should set tracking_threshold to 0.0 for it to work accurately. This
+latter option is handled automatically in the user interface.
+----------------------------
+revision 1.258
+date: 2010-03-11 08:22:08 +0900;  author: wes;  state: Exp;  lines: +308 -39;
+Add ability to do group selection by tribal competition.  This involved
+adding a number of new parameters to the mendel.in file.  The main
+part of making this work was to compute the tribal_fitness_factor in
+the subroutine compute_tribal_fitness.  The tribal fitness factor is
+a measure of how each tribe's fitness relates to the mean fitnesses of
+all the tribes.  It is used primarily to compute a new value of
+offspring_per_female every generation.  The new population size for
+each tribe is computed as a result of the tribal_fitness_factor. The
+new parameters are discussed below:
+
+* altruistic : treats uploaded mutations as altruistic and as such
+               they are used to compute a social bonus to the tribal fitness
+* social_bonus_factor      : proportional scaling coeff. for social_bonus
+* tribal_competition       : turn tribal_competition on/off
+* opf_scaling_factor       : proportional coefficient for computing
+                             new value of offspring_per_female
+* opf_scaling_exponent     : scaling exponent for computing new offpspring_per_female
+* random_death_coefficient : used for also computing new value of random_death
+* group_heritability       : used to compute tribal_noise
+----------------------------
+revision 1.257
+date: 2010-03-11 07:23:26 +0900;  author: wes;  state: Exp;  lines: +6 -4;
+A couple changes needed for tracking uploaded mutations.
+----------------------------
+revision 1.256
+date: 2010-03-11 07:10:19 +0900;  author: wes;  state: Exp;  lines: +56 -21;
+Add ability to track uploaded mutations.
+----------------------------
+revision 1.255
+date: 2010-02-18 03:05:50 +0900;  author: wes;  state: Exp;  lines: +89 -1;
+Add ability to upload mutations which is triggered by the user input
+parameter: upload_mutations.
+----------------------------
+revision 1.254
+date: 2010-01-01 08:36:54 +0900;  author: wes;  state: Exp;  lines: +5 -1;
+Every generation re-initialize random number generator to reduce
+the amplitude of the 'waves' we tend to see in the mutation effect
+distribution plots.
+----------------------------
+revision 1.253
+date: 2010-01-01 07:59:24 +0900;  author: wes;  state: Exp;  lines: +31 -17;
+Modify diagnostics_heterozygosity to not only check mutations at the same
+location, but also to check for the same mutation at other locations in the
+second haplotype according to John B's suggestion.   This makes this coding
+very similar to the coding where in the selection subroutine where
+"appropriate fitness degradation" is added for "homozygous deleterious mutations".
+----------------------------
+revision 1.252
+date: 2009-12-30 07:48:27 +0900;  author: wes;  state: Exp;  lines: +107 -9;
+Add subroutine to compute statistics for heterozygosity.  This subroutine
+is called one time at the end of the run.
+----------------------------
+revision 1.251
+date: 2009-12-12 18:12:33 +0900;  author: wes;  state: Exp;  lines: +74 -22;
+Generalized tribal-death-tolerant version of Mendel, which uses global_run_status
+MPI_ALLREDUCE operator every generation to monitor which tribe shuts down
+and to deal accordingly with it.  This version recreates the MPI COMMUNICATOR
+after each tribe dies.  One caveat for this version is that tribes must
+die in sequentially descending order (e.g. tribe 4 must die, first, then
+tribe 3, etc.) so the user must specify the parameters in the correct order,
+to create the files mendel.in.004, mendel.in.003, etc.
+
+In the process of testing this version I made a few minor fixes in the
+selection subroutine which should prevent "almost extinct" cases,
+from crashing before going extinct.
+----------------------------
+revision 1.250
+date: 2009-12-05 08:51:44 +0900;  author: wes;  state: Exp;  lines: +104 -40;
+Make modifications to allow one tribe to go extinct, meltdown, or run for
+less number of generations than the other.  This version can only handle
+tribal-death in the limiting case of two tribes.  This version includes
+a minor fix related to fertility_dependent_fitness, that only showed up
+just before a tribe was about to die.  A number of MPI functions were added;
+the key function being MPI_Barrier which waits for all the tribes to finish
+before shutting down.  In this version a new communicator was created MYCOMM
+which was established to prepare the code for the next stage to allow
+to dynamically change the tribes involved in the message passing.
+----------------------------
+revision 1.249
+date: 2009-11-07 04:18:29 +0900;  author: wes;  state: Exp;  lines: +59 -17;
+Reanalyze and rebin alleles in the case of parallel runs to come up
+with global allele frequency plot.  The data for this plot is written
+to caseid.000.plm (which used to just average the bins from the various
+tribes) and is only plotted when the user sets plot_avg_data to be true
+in the web interface.  This required making an additional function: mpi_dsum
+----------------------------
+revision 1.248
+date: 2009-06-14 06:30:19 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Remove redundant myid/ownid from the mpi_migration call, since it is
+already being passed via a common statement in common.h.
+----------------------------
+revision 1.247
+date: 2009-06-05 07:18:42 +0900;  author: wes;  state: Exp;  lines: +3 -3;
+In searching for possible MPI  "gotcha's", I was reminded on the following NERSC
+website http://www.nersc.gov/nusers/help/tutorials/debug/mpi.php that the maximum
+value for a MPI tag (our msg_num) is 32768.  Hence we want to move the line 141
+in mendel .f
+      msg_num = 1
+down six or so lines to be inside the do gen= loop to reset the msg_num value to
+a small number each generation.
+----------------------------
+revision 1.246
+date: 2009-06-03 03:31:54 +0900;  author: johnrb;  state: Exp;  lines: +1 -3;
+
+Removed line that divided the averaged bin values by the number of processors
+in routine diagnostics_mutn_bins_plot2.  The reason this was needed was a bug
+in routine mpi_davg which is now fixed.
+----------------------------
+revision 1.245
+date: 2009-05-30 10:04:50 +0900;  author: wes;  state: Exp;  lines: +6 -4;
+Fix a couple bugs related to averaging the .dst files in the case
+when is_parallel is true.
+----------------------------
+revision 1.244
+date: 2009-05-14 06:35:52 +0900;  author: wes;  state: Exp;  lines: +145 -66;
+Add coding for averaging data for caseid.000.sel and caseid.000.thr
+files in the case of parallel runs.
+----------------------------
+revision 1.243
+date: 2009-05-13 07:17:54 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Add +1 to myid for the parallel cases to work properly.
+----------------------------
+revision 1.242
+date: 2009-05-11 10:31:25 +0900;  author: johnrb;  state: Exp;  lines: +5 -1;
+
+Fixed bug that caused input file to be echoed to the output filr for each process for parallel runs.  Now it is echoed only for process zero.
+----------------------------
+revision 1.241
+date: 2009-05-10 12:49:00 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+
+Repaired small oversight in changes to output selection thresholds to .out file when running parallel cases.
+----------------------------
+revision 1.240
+date: 2009-05-10 12:43:22 +0900;  author: johnrb;  state: Exp;  lines: +22 -3;
+
+Modified diagnostic routine to write averaged selection threshold values to the .out file for parallel runs.
+----------------------------
+revision 1.239
+date: 2009-04-25 07:43:05 +0900;  author: johnrb;  state: Exp;  lines: +40 -19;
+
+Added code to compute a deleterious tracking threshold when tracking is
+turned off and to output this information to the .out and .thr files.
+----------------------------
+revision 1.238
+date: 2009-04-07 09:13:46 +0900;  author: johnrb;  state: Exp;  lines: +1 -19;
+
+Removed the coding that scaled the fitness effect values by the factor 0.5
+in the diagnostic routines so as to represent them as the co-dominant fitness
+effect values.
+----------------------------
+revision 1.237
+date: 2009-03-31 01:10:53 +0900;  author: johnrb;  state: Exp;  lines: +31 -13;
+
+Added diagnostic to output the fractions of unselectable deleterious and
+favorable mutations based on the computed selection thresholds.
+----------------------------
+revision 1.236
+date: 2009-03-18 11:19:48 +0900;  author: wes;  state: Exp;  lines: +17 -4;
+Output NaN's also when del_rec_thres is zero. This is for plotting purposes,
+because a threshold of zero is meaningless.
+----------------------------
+revision 1.235
+date: 2009-03-18 07:42:14 +0900;  author: wes;  state: Exp;  lines: +17 -5;
+Print out NaN's instead of zero values.  The previous solution did not
+work for all possibilities of del_dom_thres and fav_dom_thres, but this
+one does.
+----------------------------
+revision 1.234
+date: 2009-03-18 06:47:02 +0900;  author: wes;  state: Exp;  lines: +8 -4;
+Only plot selection thresholds if they are greater than zero.
+----------------------------
+revision 1.233
+date: 2009-03-08 06:00:10 +0900;  author: johnrb;  state: Exp;  lines: +20 -20;
+
+Changed flush statements to flush subroutine calls so as to work with the Intel compiler.
+----------------------------
+revision 1.232
+date: 2009-03-08 05:06:12 +0900;  author: johnrb;  state: Exp;  lines: +30 -5;
+
+Fixed problem causing NaNs in the .hap file when there were no deleterious mutations.  Also added flush statements to flush output buffers so that all the output files contain the latest output data.
+----------------------------
+revision 1.231
+date: 2009-03-04 12:25:36 +0900;  author: johnrb;  state: Exp;  lines: +6 -2;
+
+Removed limit on the maximum number of tracked mutations that formerly had
+been imposed to prevent overflow.  This was done to allow more beneficial
+mutations for special cases which John Sanford desired to run.
+----------------------------
+revision 1.230
+date: 2009-02-21 06:30:21 +0900;  author: johnrb;  state: Exp;  lines: +8 -8;
+
+Modified scheme for computing favorable selection threshold to make it more robust.
+----------------------------
+revision 1.229
+date: 2009-02-17 11:51:24 +0900;  author: johnrb;  state: Exp;  lines: +56 -56;
+
+Improved calculation method for the favorable selection threshold.
+----------------------------
+revision 1.228
+date: 2009-02-12 03:05:53 +0900;  author: johnrb;  state: Exp;  lines: +69 -4;
+
+Added coding to compute and output the selection threshold for dominant
+favorable mutations.
+----------------------------
+revision 1.227
+date: 2008-12-03 11:02:50 +0900;  author: johnrb;  state: Exp;  lines: +4 -2;
+
+Fixed bug in polymorphism diagnostics routine that prevented the analysis of
+favorable mutation polymorphisms.
+Added the limit on the number of initial contrasting alleles to be no greater than the number of linkage blocks.  This fixed a problem that arose if a user input a number that exceeded the number of linkage blocks.
+----------------------------
+revision 1.226
+date: 2008-11-30 07:56:34 +0900;  author: johnrb;  state: Exp;  lines: +11 -9;
+
+Fixed problem that was causing code to crash with large numbers of beneficials. Fix now limits fitness dependent fertility to fitnesses less than one. This prevents the number of offspring from exceeding the input parameter offspring_per_female, which determines how much memory is allocated for storing the new offspring arrays.
+----------------------------
+revision 1.225
+date: 2008-11-06 07:17:06 +0900;  author: wes;  state: Exp;  lines: +3 -1;
+Fix restarts: change subroutine read_restart_dump to
+include pop_growth_model and pop_growth_rate.
+----------------------------
+revision 1.224
+date: 2008-10-22 02:05:52 +0900;  author: johnrb;  state: Exp;  lines: +1 -9;
+
+Removed previous change to reinitialize random number generator seed every
+ten generations.
+----------------------------
+revision 1.223
+date: 2008-10-21 02:55:59 +0900;  author: johnrb;  state: Exp;  lines: +8 -0;
+
+Added feature of reinitializing random number generator with new seed every
+ten generations.
+----------------------------
+revision 1.222
+date: 2008-09-21 07:41:58 +0900;  author: johnrb;  state: Exp;  lines: +29 -27;
+
+Restored the smoothing to the fitness effect bin data used to generate
+plot 2 but using a slightly different smoothing formula to avoid the
+'triplet' behavior the former treatment displayed.
+----------------------------
+revision 1.221
+date: 2008-09-19 08:03:18 +0900;  author: johnrb;  state: Exp;  lines: +117 -90;
+
+Previous smoothing of fitness effect bin values that are used to generate
+plot2 is now removed.
+
+The distribution of alleles according to fitness effect using 10 fitness
+effect bins is now computed for each of the 100 frequency bins.  This table
+of 5000 values is written to a new file with suffix .pmd.  This is done in
+the diagnostics routine for polymorphisms that also generates data for
+plot 7.
+----------------------------
+revision 1.220
+date: 2008-09-16 05:47:29 +0900;  author: johnrb;  state: Exp;  lines: +231 -208;
+
+Replaced polymorphism diagnostics routine with one that is much more
+(typically 100 times) efficient.  Make significant changes in synergistic
+epistasis treatment for non-linked mutations in routine selection.
+----------------------------
+revision 1.219
+date: 2008-09-12 16:28:57 +0900;  author: wes;  state: Exp;  lines: +11 -11;
+Fix bug reading in logicals as one-byte integers by changing format field-width.
+----------------------------
+revision 1.218
+date: 2008-09-08 07:54:16 +0900;  author: johnrb;  state: Exp;  lines: +17 -15;
+
+Made slight corrections to the treatment of synergistic interations between
+nonlinked mutations.
+----------------------------
+revision 1.217
+date: 2008-09-04 16:31:15 +0900;  author: wes;  state: Exp;  lines: +15 -1;
+Maintain a separate polymorphism "snapshot file" for windows which
+just has a snapshot of the most recent polymorphism information.
+----------------------------
+revision 1.216
+date: 2008-09-02 11:14:33 +0900;  author: wes;  state: Exp;  lines: +11 -11;
+Retype logicals to be integer*1.  Windows version crashes when trying to
+read a logical as in integer, but C version cannot handle logicals
+intrinsically.
+----------------------------
+revision 1.215
+date: 2008-09-02 10:23:04 +0900;  author: wes;  state: Exp;  lines: +6 -6;
+Remove commas "write()," -> "write()" to compile in Windows.
+----------------------------
+revision 1.214
+date: 2008-09-02 04:59:48 +0900;  author: johnrb;  state: Exp;  lines: +17 -4;
+
+Made slight modifications in diagnostics to output accumulating mutation
+statisitcs.
+----------------------------
+revision 1.213
+date: 2008-09-02 02:11:01 +0900;  author: johnrb;  state: Exp;  lines: +17 -18;
+
+Fixed minor problems that caused Windows comiler to fail.
+----------------------------
+revision 1.212
+date: 2008-09-01 09:30:47 +0900;  author: johnrb;  state: Exp;  lines: +69 -48;
+
+Modified the diagnostics for outputing statistics on mutation accumulation
+to include more information and also to do so at less frequent intervals.
+----------------------------
+revision 1.211
+date: 2008-08-31 12:07:30 +0900;  author: johnrb;  state: Exp;  lines: +39 -8;
+
+Added diagnostic to output change in accumulated deleterious dominant
+mutations every 100 generations.
+----------------------------
+revision 1.210
+date: 2008-08-30 17:31:13 +0900;  author: wes;  state: Exp;  lines: +20 -7;
+Add carrying capacity model.
+----------------------------
+revision 1.209
+date: 2008-08-29 08:14:12 +0900;  author: johnrb;  state: Exp;  lines: +156 -92;
+
+Replaced quicksort sort routine with heapsort routine which is more stable
+for large numbers of items.  Replaced Poisson random number routine with
+an alternate version from Numerical Recipes.  Former routine was causing
+random crashes of Mendel.  Also changed range used in computing the
+selection threshold statistic from 0.10-0.90 to 0.25-0.75 to gain a bit
+more robustness.
+----------------------------
+revision 1.208
+date: 2008-08-26 21:11:25 +0900;  author: wes;  state: Exp;  lines: +36 -20;
+Make changes to support dynamic population sizes.
+----------------------------
+revision 1.207
+date: 2008-07-23 01:12:53 +0900;  author: johnrb;  state: Exp;  lines: +13 -14;
+
+Changes maximum number of favoarable alleles to be considered in polymorphism
+analysis from 5000 to 25000.
+----------------------------
+revision 1.206
+date: 2008-07-22 09:39:12 +0900;  author: johnrb;  state: Exp;  lines: +7 -7;
+
+Fixed a few more glitches in scaling of plot 4.
+----------------------------
+revision 1.205
+date: 2008-07-22 09:09:08 +0900;  author: johnrb;  state: Exp;  lines: +13 -8;
+
+Fixed some more glitches in scaling of favorable mutation distributions for
+plots.
+----------------------------
+revision 1.204
+date: 2008-07-22 07:04:48 +0900;  author: johnrb;  state: Exp;  lines: +34 -48;
+
+Fixed problems in scaling of favorable mutation distributions in Figures
+2 and 4.
+----------------------------
+revision 1.203
+date: 2008-07-21 08:08:07 +0900;  author: johnrb;  state: Exp;  lines: +8 -153;
+
+Deleted subroutine diagnostics_favorables since other diagnostics now
+supersede what this routine provided.  Fixed bugs in calculation of
+favorable mutation effect distribution for Figure 2b.  Fixed error in
+four places where alpha_del had incorrectly been used in place of alpha_fav.
+----------------------------
+revision 1.202
+date: 2008-07-18 23:43:14 +0900;  author: johnrb;  state: Exp;  lines: +325 -110;
+
+Modified mutation effect distribution for favorables to enforce that the
+minimum mutation effect value is now 1./hapoid_genome_size.  This requires
+that the gamma exponents for deleterious and favorable mutations now be
+different.
+Also modified the scaling of the output of mutation effect data in the files
+used for plotting and also in the .out file such that these values now
+reflect heterozygous co-dominant values, that is, the former values for a
+homozygous pair are now divided by two.
+----------------------------
+revision 1.201
+date: 2008-06-26 13:37:42 +0900;  author: johnrb;  state: Exp;  lines: +23 -2;
+
+Added three-point running average to binned mutation distribution used to
+compute selection threshold to give more stable results for small population
+sizes.
+----------------------------
+revision 1.200
+date: 2008-05-29 11:54:45 +0900;  author: wes;  state: Exp;  lines: +31 -31;
+Change read/write of mendel.in to use 0/1's in instead of booleans T/F
+so that the mendel.in can be used interchangeably between Fortran and C.
+----------------------------
+revision 1.199
+date: 2008-05-28 06:51:21 +0900;  author: johnrb;  state: Exp;  lines: +29 -24;
+
+Implemented regression analysis method for obtaining the selection threshold.
+----------------------------
+revision 1.198
+date: 2008-05-27 12:01:21 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Fix asynchronous shutdowns dump_number > 9 does not work.
+----------------------------
+revision 1.197
+date: 2008-05-27 10:47:16 +0900;  author: johnrb;  state: Exp;  lines: +19 -18;
+
+Modified yet once again the averaging scheme for computing the selection
+threshold.
+----------------------------
+revision 1.196
+date: 2008-05-27 07:37:42 +0900;  author: johnrb;  state: Exp;  lines: +17 -17;
+
+Modified averaging procedure once again used to compute the selection
+threshold to improve its stability.
+----------------------------
+revision 1.195
+date: 2008-05-27 06:57:29 +0900;  author: johnrb;  state: Exp;  lines: +18 -15;
+
+Modified the averaging procedure for computing the selection threshold to
+make the procedure less sensitive to jumps in bin heights.
+----------------------------
+revision 1.194
+date: 2008-05-27 05:53:21 +0900;  author: johnrb;  state: Exp;  lines: +13 -13;
+
+Modified the averaging used to compute the selection threshold to make it less
+sensitive to jumps in the binning of the fitness effect distribution.
+----------------------------
+revision 1.193
+date: 2008-05-27 04:19:30 +0900;  author: johnrb;  state: Exp;  lines: +21 -22;
+
+Made local variable total_del_mutn double precision in diagnostics routine
+to fix anomaly in plot of accumulated mutations in plot 1 (manifested as
+'scalloped' shape in what should be an almost straight line).
+----------------------------
+revision 1.192
+date: 2008-05-23 05:58:05 +0900;  author: johnrb;  state: Exp;  lines: +14 -6;
+
+Modified slightly the calculation of selection threshold.  Added new output
+file with suffix .thr for outputting the selection threshold values as a
+function of generation number.
+----------------------------
+revision 1.191
+date: 2008-05-23 02:21:20 +0900;  author: johnrb;  state: Exp;  lines: +25 -26;
+
+Modified the way the selection threshold is computed.
+----------------------------
+revision 1.190
+date: 2008-05-22 12:20:47 +0900;  author: wes;  state: Exp;  lines: +7 -2;
+Modification to not plot selection ratio for low bin counts.
+----------------------------
+revision 1.189
+date: 2008-05-22 01:56:30 +0900;  author: johnrb;  state: Exp;  lines: +6 -3;
+
+Refined the method for computing selection threshold in diagnostics routine
+that computes mutation effect distribution.
+----------------------------
+revision 1.188
+date: 2008-05-21 12:58:30 +0900;  author: johnrb;  state: Exp;  lines: +49 -38;
+
+Modified diagnostics routine that generates .dst file such that it now
+creates 50 bins for each class of mutations instead of 10.  Routine also
+computes and prints in the .out file the estimate for the selection threshold.
+----------------------------
+revision 1.187
+date: 2008-05-16 02:42:41 +0900;  author: johnrb;  state: Exp;  lines: +19 -15;
+
+Modified way feedback to correct error in Poisson generator is handled.
+----------------------------
+revision 1.186
+date: 2008-05-15 08:32:07 +0900;  author: johnrb;  state: Exp;  lines: +6 -5;
+
+Changed binning arrays in diagnostics routine from single precision to double
+precision to avoid overflows.
+----------------------------
+revision 1.185
+date: 2008-05-15 01:27:35 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+
+Modified limiting value for max_tracked_mutn_per_indiv to allow for 20%
+statistical variation above the expected mean value.
+----------------------------
+revision 1.184
+date: 2008-05-15 01:21:25 +0900;  author: johnrb;  state: Exp;  lines: +7 -8;
+
+Made variable new_mutn_count a floating point instead of an integer variable
+to prevent overflow.
+----------------------------
+revision 1.183
+date: 2008-05-13 08:51:44 +0900;  author: johnrb;  state: Exp;  lines: +41 -31;
+
+Imposed a limit on the value of input parameter max_tracked_mutn_per_indiv
+to prevent excessive memory being allocated by improper choice by user.
+----------------------------
+revision 1.182
+date: 2008-05-10 04:51:17 +0900;  author: johnrb;  state: Exp;  lines: +9 -9;
+
+Made one further correction to the routine that generates the data for the
+.sel file used for plotting the selection statistics.
+----------------------------
+revision 1.181
+date: 2008-05-10 04:13:49 +0900;  author: johnrb;  state: Exp;  lines: +5 -5;
+
+Fixed problem in routine that generates selection statistics for plotting.
+----------------------------
+revision 1.180
+date: 2008-05-10 03:56:10 +0900;  author: johnrb;  state: Exp;  lines: +9 -7;
+
+Modified array used to initialize qsort to make it random.  Using an already
+sorted array can cause qsort to exhaust available stack space when the
+population size is very large (e.g. > 18,000).
+Also modified slightly the routine that generates the selection statistics
+for plotting.
+----------------------------
+revision 1.179
+date: 2008-05-07 07:06:56 +0900;  author: johnrb;  state: Exp;  lines: +15 -4;
+
+Fixed problem in diagnostics routine for computing selection properties.
+----------------------------
+revision 1.178
+date: 2008-05-07 04:44:36 +0900;  author: johnrb;  state: Exp;  lines: +18 -17;
+
+Modified the manner in which the ratio of after selection to before
+selection bins was computed to eliminate spurious values of zero on
+right hand side of distribution.
+----------------------------
+revision 1.177
+date: 2008-05-06 14:07:17 +0900;  author: wes;  state: Exp;  lines: +6 -1;
+Make a fix to reduce noise in before_after_sel_ratio.
+----------------------------
+revision 1.176
+date: 2008-05-04 13:45:07 +0900;  author: wes;  state: Exp;  lines: +11 -3;
+Add before_after_sel_ratio column of data to *.sel (24) file.
+----------------------------
+revision 1.175
+date: 2008-04-29 13:02:02 +0900;  author: johnrb;  state: Exp;  lines: +34 -37;
+
+Modified routine diagnostics_polymorphisms_plot5 such that the statistics
+are not scaled to include non-tracked mutations but only tracked ones.
+Also changed some of the comments this routine generates to make the output
+more instructive to the Mendel user.
+----------------------------
+revision 1.174
+date: 2008-04-28 09:56:03 +0900;  author: johnrb;  state: Exp;  lines: +142 -76;
+
+Modified polymorphism diagnostics to make the analysis more robust.  The
+basic analysis procedure, however, was left intact.
+----------------------------
+revision 1.173
+date: 2008-04-23 04:03:36 +0900;  author: johnrb;  state: Exp;  lines: +15 -11;
+
+----------------------------------------------------------------------
+Modified Files:
+	mendel.f
+
+Modified by John Baumgardner on April 22,2008
+
+Change: Under partial truncation option in subroutine selection, the
+phenotypic fitness is now divided by the mean phenotypic fitness to
+make this scheme independent of the mean phenotypic fitness.
+----------------------------------------------------------------------
+----------------------------
+revision 1.172
+date: 2008-04-10 15:19:23 +0900;  author: wes;  state: Exp;  lines: +15 -13;
+Read in parameter partial_truncation_value.
+replace part_trun with this value.
+----------------------------
+revision 1.171
+date: 2008-04-09 16:38:54 +0900;  author: johnrb;  state: Exp;  lines: +9 -6;
+The treatment of partial truncation selection was generalized to use a
+user-specified parameter to set the degree of partial truncation. As a
+temporary measure, we make double use of the parameter uniform_fitness_effect
+to input this value.
+----------------------------
+revision 1.170
+date: 2008-04-09 04:25:26 +0900;  author: johnrb;  state: Exp;  lines: +4 -17;
+Deleted the output file with suffic .fav.  Changed the parameter in the
+partial truncation selection scheme from a value of 0.25 to one of 0.5.
+This should noticeably increase its tendency to select away low fitness
+individuals.
+----------------------------
+revision 1.169
+date: 2008-03-07 08:33:01 +0900;  author: johnrb;  state: Exp;  lines: +3 -2;
+Set minimum value of tracking_threshold to 1.e-8.
+----------------------------
+revision 1.168
+date: 2008-03-06 02:37:40 +0900;  author: johnrb;  state: Exp;  lines: +30 -21;
+Fixed problem that occurred when tracking_threshold was set to zero.
+Setting the tracking_threshold to zero now allows all mutaions to be
+tracked without causing problems with the output diagnostics.
+Also fixed problem with the mutation effect distribution output for
+favorable mutations for file .dst that is utilized in plot 2.
+----------------------------
+revision 1.167
+date: 2008-02-28 08:11:23 +0900;  author: johnrb;  state: Exp;  lines: +100 -115;
+Modified output to .dst file to give equal width boxes in in plots of
+fitness effect distribution.
+----------------------------
+revision 1.166
+date: 2008-02-28 05:04:18 +0900;  author: johnrb;  state: Exp;  lines: +21 -5;
+Fixed bug causing information on favorable mutations to be zero in .dst file.
+Added additional output on pre- and post- fitness and standard deviations
+in .sel file.
+----------------------------
+revision 1.165
+date: 2008-02-14 04:36:14 +0900;  author: johnrb;  state: Exp;  lines: +65 -11;
+Added output of phenotypic fitness distribution before and after selection.
+Removed factor of ten enhancement of synergistic epistasis effect installed
+for testing purposes.
+----------------------------
+revision 1.164
+date: 2007-11-06 05:23:06 +0900;  author: johnrb;  state: Exp;  lines: +257 -159;
+Deleted input parameter 'initial_contrasting_alleles' and added two new
+parameters 'num_contrasting_alleles' and 'initial_alleles_mean_effect'.
+Modified synergistic epistasis (SE) treatment to make its specification
+by the user simpler.  Deleted the previous four parameters whose names
+began with 'frac_sysnergy' and added one new parameter 'linked_mutn_se_fraction.
+Added treatment of clonal reproduction and added two new logical parameters,
+'clonal_reproduction' and 'clonal_haploid'.
+----------------------------
+revision 1.163
+date: 2007-11-02 08:26:53 +0900;  author: wes;  state: Exp;  lines: +3 -3;
+Fix two lines that were giving errors when compiling in Windows.
+----------------------------
+revision 1.162
+date: 2007-10-20 09:57:19 +0900;  author: johnrb;  state: Exp;  lines: +1 -9;
+Removed remaining diagnostic print statement inserted for debugging.
+----------------------------
+revision 1.161
+date: 2007-10-20 09:52:59 +0900;  author: johnrb;  state: Exp;  lines: +1 -9;
+Removed diagnostic print statement added for debugging purposes.
+----------------------------
+revision 1.160
+date: 2007-10-19 07:14:20 +0900;  author: johnrb;  state: Exp;  lines: +133 -139;
+Fixed bug that prevented correct execution with more than 100 initial
+contrasting alleles.
+----------------------------
+revision 1.159
+date: 2007-10-08 22:26:58 +0900;  author: johnrb;  state: Exp;  lines: +3 -3;
+Fixed scaling of fitness effect for initial contrasting alleles.
+----------------------------
+revision 1.158
+date: 2007-10-08 10:54:16 +0900;  author: johnrb;  state: Exp;  lines: +229 -59;
+Added ability to include recessive initial contrasting alleles.
+Added restart capability with initial contrasting alleles.
+Fixed miscellaneous problems with initial contrasting alleles.
+----------------------------
+revision 1.157
+date: 2007-10-05 23:29:44 +0900;  author: wes;  state: Exp;  lines: +15 -1;
+Include coding for dynamic population sizes.
+However, currently it is commented out.
+In order for it to work correctly, arrays should be dynamically
+reallocated every generation.  It may be possible for it to
+work using static memory allocation, however, it does not
+currently work.  Therefore, some changes may need to be made
+to initially allocate arrays with maximum possible population size.
+----------------------------
+revision 1.156
+date: 2007-09-12 23:14:40 +0900;  author: wes;  state: Exp;  lines: +1 -9;
+Change pop_size for parallel case to not divide by num_tribes
+This means pop_size for each subpopulation is the number entered
+by the user.
+----------------------------
+revision 1.155
+date: 2007-08-08 02:45:21 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+Fixed problem with parallel restarts.  In line 1973,
+         write(myid_str,'(i3.3)') myid+1,
+changed myid+1 to myid.
+----------------------------
+revision 1.154
+date: 2007-08-06 22:43:22 +0900;  author: johnrb;  state: Exp;  lines: +7 -6;
+Fixed problem with new mutations per individual less than one.
+Fixed labeling problem in output file of 'recess' and 'domint' being
+reversed.
+----------------------------
+revision 1.153
+date: 2007-08-04 04:06:04 +0900;  author: johnrb;  state: Exp;  lines: +100 -76;
+Cleaned up diagnostics for initial contrasting alleles treatment and
+fixed several minor problems associated with this new feature.
+
+Changed the reproduction rate during a bottleneck event to be the same
+as outside such an event insted of fixing at a value of 2.0 as
+previously.
+----------------------------
+revision 1.152
+date: 2007-08-03 13:23:04 +0900;  author: johnrb;  state: Exp;  lines: +147 -28;
+Added new diagnostics routine named 'diagnostics_contrasting_alleles'.
+Changed name of routine 'initial_contrasting_alleles' to
+'gen_initial_contrasting_alleles'.  Changed name of variable
+'starting_haplotype_std_dev' to 'initial_contrasting_alleles'.
+----------------------------
+revision 1.151
+date: 2007-07-19 00:52:36 +0900;  author: johnrb;  state: Exp;  lines: +166 -62;
+Added new subroutine named initial_contrasting_alleles to introduce a limited number of initial allele pairs, located in linkage block pairs, with contrasting effects, positive and negative, on each pair, identical for each individual in the population.
+Made significant changes to subroutine diagnostics_polymorphisms_plot5 to improve its reliability and speed.
+Made other minor changes.
+----------------------------
+revision 1.150
+date: 2007-07-13 00:01:19 +0900;  author: wes;  state: Exp;  lines: +41 -75;
+Fix scaling for recessives in figures 2 and 3.
+----------------------------
+revision 1.149
+date: 2007-04-27 23:51:27 +0900;  author: wes;  state: Exp;  lines: +3 -3;
+Fix a couple bugs that showed up when trying to compile under Windows
+related to logical test statements.
+----------------------------
+revision 1.148
+date: 2007-04-22 23:09:58 +0900;  author: johnrb;  state: Exp;  lines: +2 -1;
+Fixed normalization of starting haplotype standard deveiation.
+----------------------------
+revision 1.147
+date: 2007-04-21 05:03:16 +0900;  author: johnrb;  state: Exp;  lines: +16 -27;
+Fixed problem that caused the number of new mutations per offspring to deviate wildly from the specified value in restart runs.  Also modified the way in which
+restart dumps are read to try to prevent overflow of mutation arrays when number of mutations in restart dump exceeds the specified array size in the new run.
+----------------------------
+revision 1.146
+date: 2007-04-11 10:52:54 +0900;  author: wes;  state: Exp;  lines: +3 -3;
+Fix formatting overflow when fitness goes over 100.
+----------------------------
+revision 1.145
+date: 2007-04-08 23:00:43 +0900;  author: wes;  state: Exp;  lines: +4 -4;
+Change formatting to exponential on .hst data file to fix plotting problem.
+Fix spelling mistake.
+----------------------------
+revision 1.144
+date: 2007-04-06 08:24:05 +0900;  author: johnrb;  state: Exp;  lines: +24 -48;
+Added test to prevent array overflow when large numbers of initial favorable
+mutations are specified but few or no favorable mutations per offspring are
+specified.  Added test to prevent execution of a restart run if the parameter
+max_tracked_mutn_per_indiv does not agree between restart dump and the input
+file of the new run.  Also deleted 40 lines of repeated code in subroutine
+favorable_mutn.
+----------------------------
+revision 1.143
+date: 2007-04-04 01:38:35 +0900;  author: johnrb;  state: Exp;  lines: +5 -5;
+Move line 529 'close(10)' to follow line 518 'read(10)'..
+----------------------------
+revision 1.142
+date: 2007-03-20 03:20:48 +0900;  author: johnrb;  state: Exp;  lines: +8 -16;
+Removed sampling procedure for diagnosing polymorphisms.
+----------------------------
+revision 1.141
+date: 2007-03-20 01:43:57 +0900;  author: johnrb;  state: Exp;  lines: +14 -10;
+Changed the call to polymorphism diagnostics from every 100 generations
+to once at the end of the run.
+----------------------------
+revision 1.140
+date: 2007-03-01 08:40:20 +0900;  author: johnrb;  state: Exp;  lines: +3 -9;
+Make further correction to linkage block statistics.
+----------------------------
+revision 1.139
+date: 2007-03-01 04:11:48 +0900;  author: johnrb;  state: Exp;  lines: +26 -41;
+Fixed computation of linkage block statistics.
+----------------------------
+revision 1.138
+date: 2007-02-28 02:47:17 +0900;  author: johnrb;  state: Exp;  lines: +4 -4;
+Changed constant term in 'enhanced natural selection' scheme from 0.5 to 0.25.
+----------------------------
+revision 1.137
+date: 2007-02-23 03:38:40 +0900;  author: johnrb;  state: Exp;  lines: +12 -9;
+Fixed problem that prevented running parallel with tracking_threshold = 1.0.
+----------------------------
+revision 1.136
+date: 2007-02-22 07:06:55 +0900;  author: johnrb;  state: Exp;  lines: +81 -71;
+Fixed bugs that prevented code from running in parallel.
+Turned off the writing of .ppm and .sam files.
+----------------------------
+revision 1.135
+date: 2007-02-06 04:53:51 +0900;  author: johnrb;  state: Exp;  lines: +12 -10;
+Modified the location of some of the timing calls to give more accurate timings.
+----------------------------
+revision 1.134
+date: 2007-02-01 09:16:49 +0900;  author: johnrb;  state: Exp;  lines: +3 -3;
+Adjusted the scaling factor for plot 4 for the case of no tracking of
+mutations.
+----------------------------
+revision 1.133
+date: 2007-02-01 08:36:04 +0900;  author: johnrb;  state: Exp;  lines: +76 -39;
+Eliminated unnecessary copying of portion of mutation arrays not containing
+actual mutation information.  This speeds up the code by more than a factor
+of three early in a run when mutation numbers are relatively small.
+----------------------------
+revision 1.132
+date: 2007-02-01 03:11:36 +0900;  author: johnrb;  state: Exp;  lines: +138 -113;
+Fixed bug that wrote output to unit 9 before unit 9 was opened.
+Added feature of allowing high efficiency when parameter tracking_threshold
+is set to 1.0.  This option causes no mutations to be tracked and allocates
+no memory for storing tracked mutations and causes all mutations to be
+dominant and sets dominant_hetero_expression to 0.5.  It runs an otherwise
+identical case six times faster.
+----------------------------
+revision 1.131
+date: 2007-01-30 09:51:37 +0900;  author: johnrb;  state: Exp;  lines: +74 -76;
+Fixed bug that prevented output of individual fitness values.
+Added output of pre-selection genotypic fitness mean in standard output file..
+----------------------------
+revision 1.130
+date: 2007-01-27 01:41:27 +0900;  author: johnrb;  state: Exp;  lines: +172 -126;
+Fixed problem causing code to crash occasionally in routine write_sample.
+Added output of standard deviations both before and after selection.
+Added output of allele frequency summary to standard output file.
+----------------------------
+revision 1.129
+date: 2007-01-24 12:51:46 +0900;  author: johnrb;  state: Exp;  lines: +62 -88;
+Added output of phenotypic variance in screen output and .out file.
+----------------------------
+revision 1.128
+date: 2007-01-24 11:26:32 +0900;  author: wes;  state: Exp;  lines: +2 -1;
+Write max_homozygous count also to file unit 9.
+----------------------------
+revision 1.127
+date: 2007-01-24 11:20:26 +0900;  author: wes;  state: Exp;  lines: +20 -1;
+Add statistics for homozygous mutation counts.
+----------------------------
+revision 1.126
+date: 2007-01-24 08:59:13 +0900;  author: johnrb;  state: Exp;  lines: +2 -1;
+Added 'use qsort_c_module' in main program that had been omitted in last version.
+----------------------------
+revision 1.125
+date: 2007-01-24 08:28:49 +0900;  author: johnrb;  state: Exp;  lines: +9 -10;
+Fixed a bug in the way the qsort routine was intialized.
+----------------------------
+revision 1.124
+date: 2007-01-24 07:40:10 +0900;  author: johnrb;  state: Exp;  lines: +11 -15;
+Restored absolute values in test for homozygosity in routine selection
+(removing this a few versions earlier was not correct).
+Modified code to track uniform effect mutations so that polymorphism
+statistics can be generated now when the tracking threshold is set to
+zero.
+----------------------------
+revision 1.123
+date: 2007-01-24 06:28:10 +0900;  author: johnrb;  state: Exp;  lines: +267 -277;
+Moved most of the initialization in the main program to a new routine
+named initialization in order to simplify the main program.
+----------------------------
+revision 1.122
+date: 2007-01-23 23:12:02 +0900;  author: johnrb;  state: Exp;  lines: +19 -24;
+Fixed problem in polymorphism diagnostics that caused code to crash for
+small population size.
+----------------------------
+revision 1.121
+date: 2007-01-23 12:17:48 +0900;  author: johnrb;  state: Exp;  lines: +3 -3;
+Fixed single typo error in previous version.
+----------------------------
+revision 1.120
+date: 2007-01-23 12:13:45 +0900;  author: johnrb;  state: Exp;  lines: +1165 -1046;
+Removed most of the detailed diagnostics calculations from main program
+and placed them in five separate routines called by the main program.
+----------------------------
+revision 1.119
+date: 2007-01-19 07:40:39 +0900;  author: wes;  state: Exp;  lines: +14 -11;
+Add diagnostics for homozygous mutations.
+----------------------------
+revision 1.118
+date: 2007-01-17 04:52:24 +0900;  author: johnrb;  state: Exp;  lines: +65 -48;
+Fixed problems with output of binned mutation data, including total
+mutation counts per bin.
+----------------------------
+revision 1.117
+date: 2007-01-16 12:53:10 +0900;  author: johnrb;  state: Exp;  lines: +97 -23;
+Added to the main output file the date and time of the run.
+Fixed a bug that led to occasional negative fitness values after selection.
+Added two new selection schemes. One, designated selection_scheme = 3, is
+strict probability selection in which the factor C is not allowed to exceed
+one.  The second, designated selection_scheme = 4, makes retention of
+individuals within the range fmin (P=0) and fmax (P=1).
+----------------------------
+revision 1.116
+date: 2007-01-15 23:41:52 +0900;  author: johnrb;  state: Exp;  lines: +100 -16;
+Added improved characterization of fitness distribution function in printed
+output file.  Made qsort routine double precision to allow finer distinctions
+in fitness during selection.  Added feedback loop to drive mean value of
+new mutations per offspring to its correct user specified value.  This is
+to deal with slight errors in the Poisson random number generator in
+giving precisely the correct mean value.
+----------------------------
+revision 1.115
+date: 2007-01-12 09:40:25 +0900;  author: wes;  state: Exp;  lines: +27 -2;
+Output PPM graphics file for each process/tribe.
+----------------------------
+revision 1.114
+date: 2007-01-11 08:54:07 +0900;  author: wes;  state: Exp;  lines: +20 -4;
+Add ability for heterogenous tribes by reading unique mendel.in
+file for each tribe.
+----------------------------
+revision 1.113
+date: 2007-01-10 09:44:13 +0900;  author: wes;  state: Exp;  lines: +3 -1;
+When unexpectedly shutting down using .st8 file set dump_number
+to the generation number.
+----------------------------
+revision 1.112
+date: 2006-12-08 10:42:12 +0900;  author: johnrb;  state: Exp;  lines: +16 -7;
+Slight change: Allow population size potentially to rebound after reduction
+due to negative phenotypic fitnesses.
+----------------------------
+revision 1.111
+date: 2006-12-07 07:13:11 +0900;  author: johnrb;  state: Exp;  lines: +47 -32;
+Restored feature of automatically eliminating offspring whose phenotypic
+fitness is negative.
+----------------------------
+revision 1.110
+date: 2006-12-07 05:15:06 +0900;  author: johnrb;  state: Exp;  lines: +13 -40;
+Removed realized_heritability treatment.
+----------------------------
+revision 1.109
+date: 2006-12-06 09:25:41 +0900;  author: johnrb;  state: Exp;  lines: +174 -104;
+Added calculation of genotypic-phenotypic correlation and realized heritability.
+----------------------------
+revision 1.108
+date: 2006-12-05 04:35:56 +0900;  author: johnrb;  state: Exp;  lines: +21 -62;
+Installed a new (and What I believe is now a correct) probability selection
+scheme.
+----------------------------
+revision 1.107
+date: 2006-12-05 04:22:55 +0900;  author: wes;  state: Exp;  lines: +20 -13;
+Fix problem of not shutting down correctly in case of extinction
+in parallel mode.
+----------------------------
+revision 1.106
+date: 2006-12-01 09:47:10 +0900;  author: johnrb;  state: Exp;  lines: +7 -7;
+Fixed problem in probaility selection.
+----------------------------
+revision 1.105
+date: 2006-12-01 09:01:36 +0900;  author: johnrb;  state: Exp;  lines: +44 -4;
+Revised treatment of probability selection to correspond to formulation
+provided by Walter Remine.
+----------------------------
+revision 1.104
+date: 2006-12-01 07:48:35 +0900;  author: johnrb;  state: Exp;  lines: +24 -23;
+Made some minor changes to selection routine.  Individuals with negative
+phenotypic fitness are now automatically eliminated.
+----------------------------
+revision 1.103
+date: 2006-12-01 06:25:45 +0900;  author: johnrb;  state: Exp;  lines: +22 -111;
+Fixed problems with selection routine.
+----------------------------
+revision 1.102
+date: 2006-11-30 08:56:02 +0900;  author: wes;  state: Exp;  lines: +6 -5;
+Cleaner implementation of premature shutdown.
+----------------------------
+revision 1.101
+date: 2006-11-30 08:20:59 +0900;  author: wes;  state: Exp;  lines: +12 -12;
+Create shutdown section for cleaner shutdown in case of extinction
+by using "goto 20" command rather than "stop" command.
+----------------------------
+revision 1.100
+date: 2006-11-30 07:49:37 +0900;  author: wes;  state: Exp;  lines: +12 -1;
+Output .fit file containing fitness value for each individual
+in population.
+----------------------------
+revision 1.99
+date: 2006-11-30 05:45:08 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Declare fmin as real.
+----------------------------
+revision 1.98
+date: 2006-11-30 03:04:00 +0900;  author: johnrb;  state: Exp;  lines: +30 -59;
+Modified formulation of probability selection.
+----------------------------
+revision 1.97
+date: 2006-11-29 09:35:25 +0900;  author: johnrb;  state: Exp;  lines: +16 -13;
+Fixed problems with truncation selection and probability selection.
+----------------------------
+revision 1.96
+date: 2006-11-28 06:28:27 +0900;  author: wes;  state: Exp;  lines: +26 -3;
+Add state file *.st8 for dynamically controlling restarts and
+shutdowns.  This file is read at the end of the loop for each
+generation.  If it contains a value of 1, the program will write
+a .dmp file and shutdown, otherwise it contains a value of 0.
+----------------------------
+revision 1.95
+date: 2006-11-28 02:45:08 +0900;  author: wes;  state: Exp;  lines: +8 -3;
+Compute par_fitness_variance as the variance of fitnesses
+from different processors, instead of the average fitness_variance
+of each tribe.
+----------------------------
+revision 1.94
+date: 2006-11-14 12:25:15 +0900;  author: wes;  state: Exp;  lines: +72 -28;
+Add significant more timing information, including a .tim file
+which provides timing information per generation.
+----------------------------
+revision 1.93
+date: 2006-11-10 04:07:14 +0900;  author: wes;  state: Exp;  lines: +7 -10;
+Only write out total_del_mutn_indivual instead of integer
+mutn_per_indiv (which was only done in fixed mutation cases).
+----------------------------
+revision 1.92
+date: 2006-11-09 09:34:40 +0900;  author: johnrb;  state: Exp;  lines: +31 -45;
+Now allows favorable mutations for uniform_fitness_effect cases.
+----------------------------
+revision 1.91
+date: 2006-11-09 08:53:23 +0900;  author: johnrb;  state: Exp;  lines: +4 -9;
+Fixed but in probability selection that caused noise to be omitted.
+----------------------------
+revision 1.90
+date: 2006-11-09 08:28:12 +0900;  author: wes;  state: Exp;  lines: +8 -1;
+Add tracking_threshold back in.  Add fix for heritability NaN's.
+----------------------------
+revision 1.89
+date: 2006-11-08 09:24:45 +0900;  author: wes;  state: Exp;  lines: +25 -13;
+Fix parallel reporting of avg_linkage_block_effect and
+lb_fitness_percent_positive.
+----------------------------
+revision 1.88
+date: 2006-11-08 08:03:31 +0900;  author: wes;  state: Exp;  lines: +51 -17;
+Try to fix some problems related to Plotting of Allele frequencies
+for parallel cases.  There are some problems with Gnuplot plotting
+when favorable mutations are all zero.
+----------------------------
+revision 1.87
+date: 2006-11-08 01:44:51 +0900;  author: wes;  state: Exp;  lines: +17 -10;
+Fix problems with .dst plot bins.
+Write out deleterious mutations as real, instead of integer, in
+order to fix "stair-stepping" plots for low mutation rates.
+----------------------------
+revision 1.86
+date: 2006-11-04 06:32:30 +0900;  author: johnrb;  state: Exp;  lines: +15 -15;
+Fixed 14 instances where '+1' had been omitted after dmutn(1,:,) or
+fmutn(1,:,:) for specifying the mutation index range.
+----------------------------
+revision 1.85
+date: 2006-11-04 03:05:58 +0900;  author: wes;  state: Exp;  lines: +27 -8;
+Fix .dst plot by specifying box_width and recomputing a new midpoint
+based on the bin edges.
+----------------------------
+revision 1.84
+date: 2006-11-04 02:01:29 +0900;  author: wes;  state: Exp;  lines: +4 -6;
+Remove tracking threshold limitation.
+Fix computation of average linkage block effect.
+Fix output format for .plm file.
+----------------------------
+revision 1.83
+date: 2006-11-02 04:33:45 +0900;  author: wes;  state: Exp;  lines: +11 -4;
+Fix the way homozygous deleterious mutation effects are added back in.
+----------------------------
+revision 1.82
+date: 2006-10-25 07:28:51 +0900;  author: johnrb;  state: Exp;  lines: +2 -1;
+Fixed bug that occurs for very small values of max_fav_fitness_gain.
+----------------------------
+revision 1.81
+date: 2006-10-25 04:17:08 +0900;  author: johnrb;  state: Exp;  lines: +5 -5;
+Fixed bug in how favorable mutations were being binned for output.
+----------------------------
+revision 1.80
+date: 2006-10-23 12:26:27 +0900;  author: wes;  state: Exp;  lines: +4 -4;
+A couple minor fixes to way lb_fitness_percent_positive is computed
+and annotation of output for .plm file.
+----------------------------
+revision 1.79
+date: 2006-10-22 09:34:41 +0900;  author: wes;  state: Exp;  lines: +19 -23;
+Change the way lb_fitness_percent_positive is computed.
+No longer write out haplotype_singles and haplotype_doubles.
+----------------------------
+revision 1.78
+date: 2006-10-20 01:42:30 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+Fixed bug in write_status; replaced '9' in write statement with 'unit'.
+----------------------------
+revision 1.77
+date: 2006-10-19 13:14:06 +0900;  author: wes;  state: Exp;  lines: +27 -6;
+Compute percentage of linkage blocks which has positive
+fitness values.
+----------------------------
+revision 1.76
+date: 2006-10-19 06:01:59 +0900;  author: johnrb;  state: Exp;  lines: +38 -35;
+Fixed problems with computing and outputting data on polymorhisms.
+----------------------------
+revision 1.75
+date: 2006-10-18 03:38:33 +0900;  author: johnrb;  state: Exp;  lines: +7 -4;
+Made minor correction to calculation of array 'expn_bins' so that values
+correspond to the bin centers instead of the bin edges.
+----------------------------
+revision 1.74
+date: 2006-10-17 08:03:05 +0900;  author: wes;  state: Exp;  lines: +94 -31;
+Make changes to output statistics about favorable alleles.
+----------------------------
+revision 1.73
+date: 2006-10-17 07:18:34 +0900;  author: johnrb;  state: Exp;  lines: +33 -3;
+Previous fix for loading haplotype_bins was not correct.  This
+represents another try.
+----------------------------
+revision 1.72
+date: 2006-10-17 06:43:02 +0900;  author: johnrb;  state: Exp;  lines: +8 -9;
+Fixed error involving interchange of indices in array lb_mutn_count
+when loading haplotype_bins for favorable mutations.
+----------------------------
+revision 1.71
+date: 2006-10-17 05:34:43 +0900;  author: wes;  state: Exp;  lines: +12 -6;
+Fix extinction reporting for parallel case.
+----------------------------
+revision 1.70
+date: 2006-10-17 03:58:18 +0900;  author: johnrb;  state: Exp;  lines: +145 -96;
+Made the introduction of new favorable mutations identical to
+the way deleterious mutations are introduced.
+----------------------------
+revision 1.69
+date: 2006-10-15 02:43:26 +0900;  author: wes;  state: Exp;  lines: +158 -145;
+Fix problems related to output and plotting of parallel
+averaged data files.  There were many problems due to
+wrong specification of variables between real and real*8.
+Also, add some additional annotation to output files to
+include generation number.
+----------------------------
+revision 1.68
+date: 2006-10-14 02:06:30 +0900;  author: wes;  state: Exp;  lines: +69 -26;
+Fix problems related to output and plotting of parallel
+averaged data files.  There were many problems due to
+wrong specification of variables between real and real*8.
+Also, add some additional annotation to output files to
+include generation number.
+----------------------------
+revision 1.67
+date: 2006-10-13 06:14:56 +0900;  author: wes;  state: Exp;  lines: +37 -27;
+Add subroutine for writing out the status of the program.
+Write final output before shutting down due to extinction.
+Fix restart problem.
+----------------------------
+revision 1.66
+date: 2006-10-13 03:02:45 +0900;  author: wes;  state: Exp;  lines: +72 -22;
+Enhance reporting of favorable mutations by:
+1. create new .fav file containing unscaled favorable mutations.
+2. extend number of bins for counting mutations from 120 to 200.
+3. change output format of .hap file from fixed to exponential.
+----------------------------
+revision 1.65
+date: 2006-10-06 09:25:07 +0900;  author: wes;  state: Exp;  lines: +142 -37;
+Add ability to plot 3b: distribution plot of beneficial mutations
+with selection as compared to expected mutations without selection.
+Also made changes to the way favorable threshold is computed
+(now called threshold_cutoff_fav).  Also, changed the way
+plot 3a is scaled (distribution of deleterious mutations).
+----------------------------
+revision 1.64
+date: 2006-10-05 00:21:55 +0900;  author: wes;  state: Exp;  lines: +20 -4;
+Fix some problems related to the Allele frequency statistics.
+----------------------------
+revision 1.63
+date: 2006-10-04 06:15:50 +0900;  author: wes;  state: Exp;  lines: +29 -6;
+Annotate output files.  Change criterion for fixed alleles from
+1.9 (95%) to 1.98 (99%).
+----------------------------
+revision 1.62
+date: 2006-09-09 07:56:31 +0900;  author: wes;  state: Exp;  lines: +29 -17;
+Add extinction_fitness_threshold to allow program to shutdown
+if fitness goes below this threshold.
+Rename bins_singles to bins_independent_mutns to avoid confusion.
+----------------------------
+revision 1.61
+date: 2006-09-09 02:36:35 +0900;  author: wes;  state: Exp;  lines: +3 -4;
+Fix figures 4a & 4b by scaling by bins_singles rather than
+haplotype bins_singles.
+----------------------------
+revision 1.60
+date: 2006-09-08 08:42:56 +0900;  author: wes;  state: Exp;  lines: +9 -3;
+Fix parallel reporting of favorable mutations.
+----------------------------
+revision 1.59
+date: 2006-09-07 05:15:37 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+Fixed error in treatment to use random number modulus for lb_modulo.
+----------------------------
+revision 1.58
+date: 2006-09-07 03:54:39 +0900;  author: johnrb;  state: Exp;  lines: +8 -2;
+Added feature of forcing lb_modulo to be a sub-multiple of
+the modulus of the random number generator.
+----------------------------
+revision 1.57
+date: 2006-09-06 23:37:30 +0900;  author: johnrb;  state: Exp;  lines: +40 -7;
+Added self-fertilization feature.
+----------------------------
+revision 1.56
+date: 2006-09-06 07:04:41 +0900;  author: wes;  state: Exp;  lines: +14 -2;
+Add fraction_self_fertilization.
+Compute tracking_threshold = 2.*uniform_fitness_degradation
+when running Crow special case.
+----------------------------
+revision 1.55
+date: 2006-08-12 01:40:16 +0900;  author: wes;  state: Exp;  lines: +8 -1;
+Put in check for negative mutations.
+Set mutn_per_indiv = 0 if negative mutations (for plotting
+purposes only).
+----------------------------
+revision 1.54
+date: 2006-08-10 09:55:18 +0900;  author: wes;  state: Exp;  lines: +25 -12;
+Add timing information for the diagnostic routines.
+----------------------------
+revision 1.53
+date: 2006-08-09 07:04:02 +0900;  author: wes;  state: Exp;  lines: +12 -1;
+Classify allele frequencies into 3 categories:
+rare (0-1%), polymorphic (1-99%), fixed (99-100%)
+and output as last line of .plm file.
+----------------------------
+revision 1.52
+date: 2006-08-01 04:51:25 +0900;  author: wes;  state: Exp;  lines: +4 -3;
+Fix output of single favorable mutations.
+----------------------------
+revision 1.51
+date: 2006-07-29 04:05:27 +0900;  author: wes;  state: Exp;  lines: +7 -1;
+For the case of dynamic linkage, ensure that the number of linkage
+subunits is an integer times the haploid chromosome number.
+----------------------------
+revision 1.50
+date: 2006-07-28 06:18:32 +0900;  author: wes;  state: Exp;  lines: +16 -19;
+Rename haplotype_bins_singles2 to bins_singles
+----------------------------
+revision 1.49
+date: 2006-07-26 03:11:54 +0900;  author: wes;  state: Exp;  lines: +6 -6;
+Fix problem with the way the fitness distribution for single
+mutations are being computed.
+----------------------------
+revision 1.48
+date: 2006-07-24 08:00:52 +0900;  author: wes;  state: Exp;  lines: +50 -14;
+Add routines for plot 4b: haplotype fitness distribution of
+single mutations.
+----------------------------
+revision 1.47
+date: 2006-07-14 10:52:53 +0900;  author: wes;  state: Exp;  lines: +85 -1;
+Insert timing routines including subroutines second() and profile().
+----------------------------
+revision 1.46
+date: 2006-07-11 01:16:58 +0900;  author: wes;  state: Exp;  lines: +5 -1;
+Add migration_model parameter.
+----------------------------
+revision 1.45
+date: 2006-06-11 05:06:21 +0900;  author: wes;  state: Exp;  lines: +8 -7;
+New variable migration_generations to call mpi_migration
+every migration_generations.
+----------------------------
+revision 1.44
+date: 2006-06-08 11:08:49 +0900;  author: wes;  state: Exp;  lines: +4 -3;
+Output total_fav_mutn to .hst file.
+----------------------------
+revision 1.43
+date: 2006-06-07 12:52:01 +0900;  author: johnrb;  state: Exp;  lines: +91 -68;
+Added tracking of total mumber of beneficial mutations.
+----------------------------
+revision 1.42
+date: 2006-06-06 09:33:20 +0900;  author: wes;  state: Exp;  lines: +6 -4;
+Output count of allele frequencies to .plm file.
+----------------------------
+revision 1.41
+date: 2006-06-06 07:45:14 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Change global pop size to population size to screen output.
+----------------------------
+revision 1.40
+date: 2006-06-06 06:12:48 +0900;  author: johnrb;  state: Exp;  lines: +11 -5;
+Fixed reference histogram for haplotype bins.
+Added expected mutations per bin for plot 3.
+----------------------------
+revision 1.39
+date: 2006-06-02 01:22:16 +0900;  author: wes;  state: Exp;  lines: +2 -2;
+Fix revision output.
+----------------------------
+revision 1.38
+date: 2006-06-02 00:40:54 +0900;  author: johnrb;  state: Exp;  lines: +3 -2;
+Fixed bug having to do with reading of favorable mutation parameters.
+----------------------------
+revision 1.37
+date: 2006-06-01 13:34:35 +0900;  author: wes;  state: Exp;  lines: +1 -1;
+Make mistake: change $Id to $Id$.
+----------------------------
+revision 1.36
+date: 2006-06-01 13:33:31 +0900;  author: wes;  state: Exp;  lines: +4 -1;
+Change output version string from $Header to $Id.
+----------------------------
+revision 1.35
+date: 2006-06-01 13:28:52 +0900;  author: wes;  state: Exp;  lines: +59 -29;
+Simplify parallel output to screen, compute haplotype_bins_singles,
+haplotype_bins_doubles, and do not include 0's or 1's frequencies
+when computing standard haplotype_bins.  Output RCS version information
+when running.
+----------------------------
+revision 1.34
+date: 2006-06-01 05:58:05 +0900;  author: johnrb;  state: Exp;  lines: +8 -7;
+Fixed bug in dynamic linkage treatment.
+----------------------------
+revision 1.33
+date: 2006-06-01 05:03:29 +0900;  author: johnrb;  state: Exp;  lines: +32 -24;
+Modified the haplotype histogram output to extend the negative range
+to -0.01 and reduce the positive range to 0.002.
+----------------------------
+revision 1.32
+date: 2006-06-01 01:57:48 +0900;  author: johnrb;  state: Exp;  lines: +172 -104;
+Added dynamic linkage treatment.
+Added ture proability selection treatment.
+----------------------------
+revision 1.31
+date: 2006-05-19 07:05:00 +0900;  author: wes;  state: Exp;  lines: +35 -29;
+Clean up parallel output to screen.
+----------------------------
+revision 1.30
+date: 2006-05-15 12:34:52 +0900;  author: wes;  state: Exp;  lines: +166 -119;
+Added fraction_random_death.  Improved synergistic_epistasis to
+include variables frac_synergy_local_pool, frac_synergy_remote_pool,
+frac_synergy_remote_to_total, frac_synergy_effect,
+changed probability_selection to selection_scheme.
+----------------------------
+revision 1.29
+date: 2006-05-13 06:57:28 +0900;  author: wes;  state: Exp;  lines: +3 -2;
+Pass lb_mutn_count array to mpi_tribal_exchange.
+----------------------------
+revision 1.28
+date: 2006-05-12 13:13:12 +0900;  author: johnrb;  state: Exp;  lines: +190 -160;
+Installed new fitness function of the form exp(-ax**gamma).
+Modified synergistic epistatis treatment.
+Added new input parameters: high_impact_mutn_fraction,
+high_impact_mutn_threshold, haploid_genome_size.
+Changed name of input parameter mean_fitness_degradation to
+uniform_fitness_degradation.  Also added new input parameter gamma.
+----------------------------
+revision 1.27
+date: 2006-05-09 06:07:31 +0900;  author: wes;  state: Exp;  lines: +3 -2;
+Pass lb_mutn_count array to mpi_tribal_exchange.
+----------------------------
+revision 1.26
+date: 2006-05-06 09:41:36 +0900;  author: johnrb;  state: Exp;  lines: +82 -106;
+Revised treatment of synergistic epistasis.  Changed name of input
+parameter fraction_fav_mutn to fav_mutn_ratio.
+----------------------------
+revision 1.25
+date: 2006-05-05 08:59:43 +0900;  author: johnrb;  state: Exp;  lines: +299 -47;
+Modified the way total mutation count is done, from a sampled approach
+to one in which the mutation count for each linkage block is tracked
+such that the total mutation count is now exact.  Also added a new
+routine, write_sample, that outputs every 100 generations a sample of
+five individuals from the population with all their tracked mutations
+in an easy to comprehend format.  The fitness effect of each tracked
+mutation is printed according to the linkage block on which it occurs.
+The suffix of the new output file is .sam.
+----------------------------
+revision 1.24
+date: 2006-05-02 07:29:49 +0900;  author: johnrb;  state: Exp;  lines: +35 -21;
+Fixed line that prevented cases with one linkage block from running.
+Added new input parameter 'tracking_threshold', mainly to allow user
+specification of the width of the fitness bins in the output plot of
+the fitness distribution.
+----------------------------
+revision 1.23
+date: 2006-04-26 01:46:59 +0900;  author: wes;  state: Exp;  lines: +5 -5;
+*** empty log message ***
+----------------------------
+revision 1.22
+date: 2006-04-26 01:12:38 +0900;  author: wes;  state: Exp;  lines: +164 -56;
+Create additional files named *.000.* with averaged data
+from each of the different tribes.
+----------------------------
+revision 1.21
+date: 2006-04-07 06:22:59 +0900;  author: johnrb;  state: Exp;  lines: +86 -12;
+Incorporated new synergistic epistasis treatment.  Also fixed minor
+problem in truncation selection treatment.
+----------------------------
+revision 1.20
+date: 2006-04-06 08:27:11 +0900;  author: johnrb;  state: Exp;  lines: +12 -2;
+Fixed minor problems with probability selection treatment.
+----------------------------
+revision 1.19
+date: 2006-04-06 05:58:29 +0900;  author: wes;  state: Exp;  lines: +32 -4;
+Add synergistic_epistasis option.
+Pass dmutn(1,1,pop_size+1) as work array to mpi_tribal_exchange.
+Adjust max_size to account for high number of num_indiv_exchanged.
+----------------------------
+revision 1.18
+date: 2006-04-04 07:38:15 +0900;  author: johnrb;  state: Exp;  lines: +20 -11;
+Modified probability selection treatment to make it more robust.
+----------------------------
+revision 1.17
+date: 2006-04-04 04:01:06 +0900;  author: wes;  state: Exp;  lines: +23 -25;
+Update for reading in restart files in parallel mode.
+also for writing out dump files in parallel mode.
+----------------------------
+revision 1.16
+date: 2006-04-01 10:00:10 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+Limited the maximum number of polymorphisms in the analysis to 20000.
+----------------------------
+revision 1.15
+date: 2006-04-01 08:48:25 +0900;  author: johnrb;  state: Exp;  lines: +59 -6;
+Added diagnostic for counting polymorhisms and outputting the results.
+----------------------------
+revision 1.14
+date: 2006-04-01 03:24:29 +0900;  author: wes;  state: Exp;  lines: +31 -9;
+Add logic for shutting down all processers.
+Fix random number generator bug for parallel version.
+----------------------------
+revision 1.13
+date: 2006-03-30 14:58:18 +0900;  author: wes;  state: Exp;  lines: +57 -27;
+fully working parallel version
+----------------------------
+revision 1.12
+date: 2006-03-30 08:55:05 +0900;  author: johnrb;  state: Exp;  lines: +81 -33;
+Added new probability selection treatment.
+----------------------------
+revision 1.11
+date: 2006-03-07 03:09:13 +0900;  author: johnrb;  state: Exp;  lines: +36 -28;
+Added feature of not tracking favorable mutations that fall below the
+fitness threshold.
+----------------------------
+revision 1.10
+date: 2006-03-06 23:57:10 +0900;  author: wes;  state: Exp;  lines: +7 -2;
+Remove include mpif.h statement
+Change file open statement for *.hst to append if restart_case = T
+----------------------------
+revision 1.9
+date: 2006-03-06 00:38:17 +0900;  author: johnrb;  state: Exp;  lines: +3 -3;
+Fixed problems involving array replaced_by_offspring.
+----------------------------
+revision 1.8
+date: 2006-03-04 08:03:17 +0900;  author: wes;  state: Exp;  lines: +31 -7;
+Wes: insert hooks for MPI calls located in mpi_mendel.f
+----------------------------
+revision 1.7
+date: 2006-03-04 06:27:03 +0900;  author: johnrb;  state: Exp;  lines: +8 -4;
+Added new input parameters: is_parallel and num_indiv_exchanged.
+Deleted input_parameter: haploid_genome_size.
+----------------------------
+revision 1.6
+date: 2006-03-04 03:58:15 +0900;  author: johnrb;  state: Exp;  lines: +24 -21;
+Added the feature of allowing the population size to collapse to zero
+when fitness dependent fertility is selected.
+----------------------------
+revision 1.5
+date: 2006-03-03 04:44:51 +0900;  author: johnrb;  state: Exp;  lines: +2 -2;
+Added multiplicative weighting option, fitness_dependent_fertility
+option, implemented tracking of only high impact mutations
+----------------------------
+revision 1.4
+date: 2006-03-03 04:41:07 +0900;  author: johnrb;  state: Exp;  lines: +60 -22;
+Disabled probability selection until further notice.
+----------------------------
+revision 1.3
+date: 2006-03-02 09:21:40 +0900;  author: johnrb;  state: Exp;  lines: +18 -18;
+Fixed calculation of total number of mutations so that it is done
+after each generation instead of after every ten.
+----------------------------
+revision 1.2
+date: 2006-03-02 05:21:59 +0900;  author: johnrb;  state: Exp;  lines: +56 -85;
+Removed feature of counting the non-tracked mutations; replaced this
+by counting the tracked low-impact mutations.
+----------------------------
+revision 1.1
+date: 2006-03-02 02:56:33 +0900;  author: johnrb;  state: Exp;
+Initial revision
+=============================================================================
