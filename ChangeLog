@@ -1,3 +1,711 @@
+Following are git commits to Perl-based full Mendel repo
+
+commit 9cfb552aeb39ad8736e5c0b5ecdc07bbc5608b75
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sun Jul 12 19:09:21 2015 +0900
+
+    Update OSX README file
+
+commit 8a0568a7eb9ae8a3658bc4e5bffbbe6dac67352c
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Jul 10 09:15:07 2015 +0900
+
+    Modify OSX install script about non-blank password usage
+
+commit f3df8bfb947f729b426fac49f1c2a49bcf85dc04
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jul 7 19:27:22 2015 -0400
+
+    Update documentation to include waiting time experiments
+
+commit c0a072bd7459303fc56c58dac568d8dab68b99d0
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jul 7 17:47:19 2015 -0400
+
+    Bug fix for bottlenecks that was introduced in 2.4.0
+
+commit 7875ba474ba80d7358067a2a5bce9ef733d41621
+Merge: d87c467 7121069
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jun 29 22:10:29 2015 +0900
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit d87c467cf14b31fc956e6ab01a943d34ad694059
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jun 29 22:09:36 2015 +0900
+
+    Remove memory allocation section from installation script
+
+commit 2f6e9104ec89149783a304a021da2ed68fb315c0
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Jun 26 06:01:29 2015 +0900
+
+    Update ChangeLog
+
+commit 72333b380daca4f1b6d24f4b25502c0e792ffb30
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Jun 26 05:58:27 2015 +0900
+
+    Update OSX installation README.txt file
+
+commit fd99c9af26833088c647e2f9cbf9b96288c2fc14
+Merge: ae64d9d f4d667a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jun 25 16:09:11 2015 +0900
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit ae64d9d4301c6e63a253448727672302b5c66611
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jun 25 15:58:26 2015 +0900
+
+    Fix some issues with installation script on OSX for 2.5.0
+
+commit 7121069bdb6c6753a0987b03898d03b3726e91c9
+Merge: 6fd63df fd99c9a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jun 25 00:17:33 2015 -0400
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit 6fd63dff28a65cf161910d029988828b294074ac
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jun 25 00:16:56 2015 -0400
+
+    A few mods to Makefile for compiling serial version
+
+commit 69a479c199cc50215a0912b31ebc1bbd0315cddd
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jun 23 15:40:10 2015 +0900
+
+    update install uninstall scripts for OSX
+
+commit f4d667abe4b109a29ff130466394b8265362a478
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jun 23 00:45:10 2015 -0400
+
+    Fix some minor issues with parallel waiting time experiments
+
+commit 5774613650d3108b8cffec2b0ada30bb16cc7cc7
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jun 20 16:10:50 2015 +0900
+
+    Add libquadmath.0.dylib to distro
+
+commit 7ee71fb17ef2be5c7f63dae2c071dad36dcb3b22
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jun 16 21:07:03 2015 +0900
+
+    Fix issues with running with "noq" option on OSX
+
+commit 15099ec99c2ea597693b96f91f924253e176027f
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jun 11 23:44:55 2015 -0400
+
+    Mods to user interface to prepare for 2.5.0 release
+
+commit af0afaad5c89c3d982b031dc6418edd49af9b9cd
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Feb 2 16:35:28 2015 +0900
+
+    Remove engines/java/nbproject/private directory from repo
+
+commit bda843bbf6e95e3915ffc662876ed4466e6320a4
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jan 26 12:22:37 2015 -0500
+
+    John B's changes for handling recessive polygenic beneficials
+
+commit eb84198bb51bc2be64005f33e54504d3b74ffb58
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Jan 14 13:54:23 2015 -0500
+
+    Add polygenic_init to read_parameters output
+
+commit 96207fe45547263e3617cd338253c0d6e432834c
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jan 13 12:29:41 2015 -0500
+
+    Clean up plotting for polygenic beneficials
+
+commit 6302d146e1c4a049635a6757f06c8be640af3fd9
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jan 12 12:50:57 2015 -0500
+
+    Some adjustments output diagnostics for polygenic beneficials
+
+commit dd939b30755c2493a8516860d214712ed47fa9e9
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jan 8 13:15:29 2015 -0500
+
+    Change if/then to select/case for nucl_to_int() function
+
+commit 7fe9515cb2ab9c425036d8602dd54f19157cce16
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jan 8 12:56:51 2015 -0500
+
+    Implement string initialization for polygenic beneficials
+
+commit 8e082ca0dcb3b790d253e5712e41b2292bc9ee4a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jan 8 11:57:31 2015 -0500
+
+    A bit more cleanup by John B on polygen. bens.
+
+commit 121ea8ca84107f2f2a39bc6682b352a44741e08e
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jan 5 19:34:51 2015 -0500
+
+    John B's changes to remove most of bugs for polygenic benificials
+
+commit 61e179802d9e73ef404a360b68ef93537d25d589
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 24 00:40:05 2014 -0500
+
+    John B's changes for handling mutation rates less than 1.e-4
+
+commit b4b92752b74b1917f84bfb116ab6442ca54349c1
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 18 16:36:45 2014 -0500
+
+    Don't print fitness distrib params when equal effect
+
+commit ef402a66709a10dfadbadcba791ab7f011022788
+Merge: 5967f7e 2883d8a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 18 15:56:29 2014 -0500
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit 5967f7e47ab364e359819a55918eb600918c1cd6
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 18 15:54:47 2014 -0500
+
+    Change output label for percentage of individuals not selected
+
+commit 2883d8abde95aeaedb372b1c6899ecd8ae4ebe59
+Merge: 75be420 2a5ecdf
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 18 10:17:15 2014 -0800
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit 75be420e805e18f36cc6b128547b4452aae1e4ed
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 18 10:16:38 2014 -0800
+
+    Add config file for running on Amazon EC2 machine
+
+commit 2a5ecdffe7f4702f1e49d487e5fc0781b8d81aec
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 17 19:13:04 2014 -0500
+
+    Add in status line that shows first/last generation of poly instance
+
+commit 8c00bc6b9bdd21fe4df09671c4989979b15a13f7
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 17 18:39:57 2014 -0500
+
+    John B's change to output DNA of 50th percentile individual
+
+commit 99b112d70c3ac4845c6405459b298d0bf8a11ec3
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 17 00:10:39 2014 -0500
+
+    Working version of tabulated poly beneficials output
+
+commit 9ab780b51af407e86e1ae3052915caf39f215801
+Merge: ccbb39b c45f6cd
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 17 00:01:21 2014 -0500
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit ccbb39b158ae1258bb52f09637d671805834fa90
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Dec 16 23:56:44 2014 -0500
+
+    John B. has polygenic beneficials working
+
+commit c45f6cdfc8a9e89caf45688f3ecc414ee651fa40
+Merge: 5d2211d bd298d6
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Dec 15 22:20:02 2014 -0800
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit bd298d6d54b0e6ac6e0bc6ac7bbd1a08dbf5857a
+Merge: 216a976 fd4149a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Dec 16 00:59:11 2014 -0500
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+    
+    Conflicts:
+    	engines/fortran/mendel.f90
+
+commit 216a9766f9f3b2f0b8d019d3ae5ab760411071d7
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Dec 16 00:19:23 2014 -0500
+
+    John B's fixes for polygenic beneficials
+
+commit 5d2211df11347e855d897a5c8d6b636264cb2bb0
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Dec 15 21:16:15 2014 -0800
+
+    Fix the tabulation of polygenic beneficial alleles (branch wes)
+
+commit cc867dbb956394bacac8f4f6305b6bbabbba39f6
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Dec 15 21:01:41 2014 -0800
+
+    Revert "Fix the tabulation of polygenic beneficial alleles"
+    
+    This reverts commit fd4149ae5591a62a157249358406323ee2626979.
+
+commit fd4149ae5591a62a157249358406323ee2626979
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Dec 15 12:24:24 2014 -0800
+
+    Fix the tabulation of polygenic beneficial alleles
+
+commit 716e160ff3ea7c55e6548f63af0abd20ad7e8443
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Dec 11 10:06:38 2014 -0500
+
+    Finish the rewrite of polygenic beneficials, but still not correct
+
+commit fb266372504756f369e9b6be8dfb236c8a9ffce4
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 10 09:19:20 2014 -0500
+
+    Add John B's proposed changes for suppressing crossover
+
+commit 06e24aa4e4ecc5a8f8d8a934b570ddea00f4b697
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Dec 10 08:59:47 2014 -0500
+
+    Fix problems with neutrals accumulating with polygenic_beneficials on
+
+commit 389bfdf40e4db3b35d71e64a867236ce27f2021c
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Dec 9 15:35:31 2014 -0500
+
+    First working version of new polygenic beneficials treatment
+
+commit 81e1c1d0cdf8cc506d23e6850960a6348636774f
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Dec 9 13:01:25 2014 -0500
+
+    Strip out old treatment of poly. bens. to prepare way for new
+
+commit 6ff43d7d3499edc08b2eb96ac72b81723a81b59f
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Dec 6 13:28:57 2014 -0500
+
+    Fix minor bug related to suppressed recombination option
+
+commit 86d22c9814b63ca5deeabc6f095c2c07514989ae
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Dec 5 18:28:35 2014 -0500
+
+    Add suppressed recombination option
+
+commit ccad6276be9f5e764b05696f1fd75141e0ace1d7
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Dec 5 13:57:01 2014 -0500
+
+    Minor tweaks in plot_flot.pl and start.js
+
+commit 43bc91400fd2930e7715e31e8823001c2b55616d
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Oct 25 07:41:52 2014 -0400
+
+    Annotate Poisson methods with year
+
+commit 834c400f26ed55f9c72c258aad3f9bd48eb338a5
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Oct 25 20:26:48 2014 +0900
+
+    Add interface option to use RANLIB's Poisson RNG
+
+commit 04a18da5f34e4e032cf41720b5d659c48e124c8f
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Oct 18 18:16:53 2014 +0900
+
+    Rename mendel.in to mendel.cin
+
+commit b962f2a56f0d397ed16ea86cfa1ed11e473a1bad
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Oct 18 18:01:11 2014 +0900
+
+    Convert mutn_rate to exponential format
+
+commit 4427edc6c4480b1a3eeaeb31c84ea79e4fb72734
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Oct 18 17:54:31 2014 +0900
+
+    Convert mutn_rate to exponential format
+
+commit b20425968e591637fa3ce4962daa2ecb73dd93a5
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Sep 1 22:21:05 2014 +0900
+
+    Change default plot_allele_gens to 1 when using polygenic beneficials
+
+commit 898500264fab49e3455103d1000811d48b1f91ff
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Aug 21 15:27:03 2014 +0900
+
+    Some minor fixes and cleanup related exit gen for polygenic beneficials
+
+commit c47dc341269baa9a41f8d6cad364b1d35257459c
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Aug 21 00:04:09 2014 +0900
+
+    Add docs folder.. also more info in main README.md
+
+commit 6fde77301f172043e721893f4f3d99531a7a2e46
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 19 22:16:12 2014 +0900
+
+    Add top-level Makefile
+
+commit 906d6f6698ca87ab847e2acd25383536e43addad
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 19 22:01:08 2014 +0900
+
+    Remove .o and .mod files
+
+commit b7f0e7e12bc4b311a1d86cebe2b4db34ea78f7f9
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 19 21:53:01 2014 +0900
+
+    Compute polygenic exit gen...Directory structure
+
+commit 7cff9e6ba8d0b20093543aa680f32d37a10bc87b
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 17:03:15 2014 +0900
+
+    Add cmendel.exe symbolic link
+
+commit 4b2cb096fda7e20fbdd8a04002ce7dd7637dbfc7
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 16:57:03 2014 +0900
+
+    Add login directory to repo
+
+commit d028c8eb47ea4fa0f4076efc4c7791784349cb5b
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 16:55:29 2014 +0900
+
+    Remove login dir
+
+commit fede67c6a193fe4462af9c5ad23706ffe66c6252
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 16:14:32 2014 +0900
+
+    Readded htdocs correctly
+
+commit 7c0ae9315d1fb792772b442f5167a45f0ef0fc55
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 16:14:00 2014 +0900
+
+    Remove htdocs
+
+commit b220c953e2666cf90b565d3bf39a2fcfb0ef0541
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 16:01:40 2014 +0900
+
+    Add scrolling outputs. Add htdocs in distro.
+
+commit e7011e84cc2a322618d4ce658bcb682b07d1953e
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 14:05:07 2014 +0900
+
+    Write polygenics diagnostics info to .poly file
+
+commit e11725911bd92dec03c4a9ab24a266c45131cd20
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Aug 5 00:11:26 2014 +0900
+
+    Ensure polygenic mutns never mutate to same nucleotide
+
+commit ca074878995ed59d4d95422e8d107321b56bb4ff
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Jul 25 23:50:33 2014 +0900
+
+    Output info about when polygenic beneficials are fixed
+
+commit d48a450e28257cac07d77c6c60a8e427ab50d9ae
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jul 24 21:32:32 2014 +0900
+
+    Output table of polygenic morphism instances
+
+commit 18127e7ae950234b0c58ec92dbedd5907b2b7991
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Jul 24 00:45:02 2014 +0900
+
+    Add output verbosity parameter
+
+commit c0026a218aacfefc07c492b62f013a2797a1bd1a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Jul 23 16:38:43 2014 +0900
+
+    Output the generation of last instance of polygenic benefical
+
+commit ac84a9b9bc1fc617b47173c6811bb3fb34958a3a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Jul 21 21:34:58 2014 +0900
+
+    Add $use_templates in config file to turn templates on/off
+
+commit ddf86fe232ec2bb3adbe46dab0b0a3a1376ed046
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sun Jul 20 22:16:22 2014 +0900
+
+    Rename engine to enginef
+
+commit 68793cc7039e501baa06b03a15e8e41cbba460bd
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sun Jul 20 22:13:54 2014 +0900
+
+    Allow num_generations to go > 999,999
+
+commit 3c2607a8caa29cf0d594ebc5fd83de54b6f65c51
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 12 17:59:42 2014 +0900
+
+    Add Java source code into distribution
+
+commit 6f4cca6a20d6b3175478bf16d3c247babbcd60d1
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 12 17:19:10 2014 +0900
+
+    Cleanup output of polygenic beneficials
+
+commit 7ecb5a4a19d8f474c94da7bb5660486c23332ca8
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 12 15:52:13 2014 +0900
+
+    Rename cmendel>>enginec; jmendel>>enginej
+
+commit 3407fa38e873d2330deb0d1be867deb73e2d79ec
+Merge: 08931a2 5330047
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 12 15:19:04 2014 +0900
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel-back
+    mering changes made on hs84 with changes made on my local machine
+
+commit 08931a22376e927c985a55ca8f9fbdc016f7a016
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 12 15:18:12 2014 +0900
+
+    Compute group selection intensity
+
+commit 5330047e93abe2cfdc47cfba15dc9ff7eec21175
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 5 11:16:11 2014 -0400
+
+    Cleanup one line
+
+commit f8b3427faca6f36812bedab088ea9a57f0b553cb
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 5 09:16:07 2014 -0400
+
+    Add ability to run jmendel with PBS queue
+
+commit 8a553f4f29830d501411aba777a2540f90beddfc
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sat Jul 5 19:32:31 2014 +0900
+
+    Add jmendel to repo
+
+commit 5de4935a8de56b1101ac1a94a829d575b7f8837a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Jul 1 17:25:19 2014 +0900
+
+    Add ability to use Java and C engines with interface
+
+commit 836c23ab63ebc9922071aaa1eb6f7996d91f6d49
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Jun 11 12:41:44 2014 +0800
+
+    Implement polygenic_effect to specify fitness
+
+commit 5c72755e43ea35c0196e42af81972020d723c78e
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Mar 6 10:06:26 2014 -0500
+
+    Enable polymorphism plot for equal effect fitness
+
+commit fbe64fce00c7c43a0e3434819ce4cc3d4eec521a
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Mar 6 22:33:25 2014 +0800
+
+    Fix equal effect fitness polymorphism analysis bug
+
+commit e47d66bbd378dcbfda06a9bf239127c53fe7a7ee
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Feb 28 14:35:18 2014 +0900
+
+    Simplify output for polygenic beneficials
+
+commit 406a921bb0f2451da46b3e10682835924fa94591
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Mon Feb 17 12:02:43 2014 -0500
+
+    Polygenic: stop 100 gens after fixation
+
+commit 88ae9ad50eb7ae7dd18e2be94219c45df035055e
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Sun Feb 16 00:26:53 2014 -0500
+
+    Fix equal effect fitness_distrib_type with polygenics
+
+commit 9a5f5fd42a1dd2ed371f899eb64625a4f5dd0544
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Thu Feb 13 12:42:16 2014 -0500
+
+    Third version of polygenic beneficials (inc parallel)
+
+commit f86f1d762d8ce1ecc0cd8fe5d8d56d4f8bbcc1fe
+Author: Wesley Brewer <wes@hs84.nysaes.cornell.edu>
+Date:   Wed Feb 5 14:08:20 2014 -0500
+
+    Second version polygenic beneficials
+
+commit 547ec79414cb8eddfa2d2bef189cf3a20fb00312
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Tue Feb 4 19:02:15 2014 -0500
+
+    First version of polygenic beneficials implementation
+
+commit 8bc949fad882522f7312dc9551f63a6f55e65557
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Fri Jan 31 11:48:55 2014 -0500
+
+    Get some polygenic test functions working
+
+commit 2b3a50f438398b93be2ea6fd9456dab839cb74fd
+Author: Wesley Brewer <wes@fluidphysics.com>
+Date:   Wed Jan 15 12:37:35 2014 -0600
+
+    Some changes... dont remember what
+
+commit 9a00ca7734c611613819b1dd4616bc629d4605a1
+Merge: f3486db e4a7f20
+Author: Wesley Brewer <wes@hs84.nysaes.cornell.edu>
+Date:   Thu Aug 15 00:57:43 2013 -0400
+
+    Merge branch 'master' of bitbucket.org:whbrewer/mendel
+
+commit f3486db06a75d7f3581c2f6cd876d6228eee2b3f
+Author: Wes <wes@hs84.nysaes.cornell.edu>
+Date:   Thu Aug 15 00:57:05 2013 -0400
+
+    A few cosmetic changes related to navbar
+
+commit e4a7f20171f65760cc0b49e8e93525d061a1b55b
+Author: whbrewer <ycompute@gmail.com>
+Date:   Wed Jul 31 10:46:31 2013 +0900
+
+    Cleanup a couple files
+
+commit c8b7366a3dfe6c4aa3e50a0e751d32a65a8db064
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 29 17:18:53 2013 +0900
+
+    Close mendel.in file after reading
+
+commit eee4ef2bdc9ccd8763ce0a149147c3d098f0195d
+Author: whbrewer <ycompute@gmail.com>
+Date:   Fri Jul 26 16:40:16 2013 +0900
+
+    Fix bug int(work_fitness) was causing crash
+
+commit 7e147d7fc0d2efd45dba4425c34a416ce40ffebc
+Author: whbrewer <ycompute@gmail.com>
+Date:   Fri Jul 26 15:36:05 2013 +0900
+
+    add navbar and $fepath var
+
+commit 118a57cab33fc711eda7841d9f0ca9971f8b0eca
+Author: whbrewer <ycompute@gmail.com>
+Date:   Fri Jul 26 02:08:19 2013 +0900
+
+    Add oo-code for genome representation in engine
+
+commit 64bce9135e8ec75ebd63b92d3e4b1ee61eb10ad4
+Author: whbrewer <ycompute@gmail.com>
+Date:   Thu Jul 25 17:53:13 2013 +0900
+
+    module selection ... unit testing framework
+
+commit 3717b4773f11896ac63dc2e816c8832c1947ac10
+Author: whbrewer <ycompute@gmail.com>
+Date:   Thu Jul 25 14:49:26 2013 +0900
+
+    add start.js ... start work on btc.py
+
+commit ade3d7cb54a60ac4d9fefcbc4ef4fa4fff966eca
+Author: whbrewer <ycompute@gmail.com>
+Date:   Tue Jul 23 23:32:16 2013 +0900
+
+    Renamed .cgi files .pl -- take two.
+
+commit 5179f8ec22a79dc9ff8fa2a2c55639503b70d1ef
+Author: whbrewer <ycompute@gmail.com>
+Date:   Tue Jul 23 15:43:00 2013 +0900
+
+    Rename all .cgi files to .pl
+
+commit eb1a6be1a51d6ee8693c9a0b5d5afffd4ad0cb99
+Author: whbrewer <ycompute@gmail.com>
+Date:   Tue Jul 23 15:15:56 2013 +0900
+
+    Renamed fmendel to engine.
+
+commit 7e54c3c7530d3f5ca7b68de02732ea2ecf5ce214
+Author: whbrewer <ycompute@gmail.com>
+Date:   Tue Jul 23 15:14:51 2013 +0900
+
+    Rename fmendel to engine.  Doing more cleanup and rearranging.
+
+commit 00e12d33027607e71b397daa752e65821f072a43
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 22 23:22:24 2013 +0900
+
+    Modfy README.md and move over some unit test files from the Johann repository.
+
+commit 3ae3007c026133d4070a4b88c84b77fe0d3f7136
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 22 17:28:04 2013 +0900
+
+    Remove .o files
+
+commit 3c0510b87b67f858c4d5f9c1bb8f72620c85f92c
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 22 17:25:57 2013 +0900
+
+    Modify files so that can use mendel-x.y.z format.
+
+commit 9af39a431b2b2ffa9999c9867ec1448c71f56169
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 22 16:41:02 2013 +0900
+
+    First git commit...
+
+commit 54c9cb800880dab61d68d3972d67e8d441f0294f
+Author: whbrewer <ycompute@gmail.com>
+Date:   Mon Jul 22 16:15:32 2013 +0900
+
+    First commit. Adding a README.
+
 NOTE: This is the change log for just the Fortran engine 
 before the revision control system was changed to git instead of CVS.
 --------------------------------------------------------------------------------
