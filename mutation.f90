@@ -44,7 +44,11 @@ if(tracking_threshold /= 1.0) then  ! if we're tracking the mutations
    elseif (mutn_type == del) then
       mutn = min(lb_modulo-2, int(x/del_scale))
    else  ! neutral mutations have zero effect on fitness
-      mutn = min(4, 1 + int(4.*randomnum(1)))
+      if(polygenic_beneficials) then
+         mutn = min(4, 1 + int(4.*randomnum(1)))
+      else
+         mutn = int(x*(lb_modulo-2))
+      end if
    end if
 else  ! not tracking mutations
    mutn = 1 

@@ -12,8 +12,8 @@ FC = /usr/bin/ifort
 # Comment out if compiling with mpif90
 # or if making serial version.
 # MPICH
-LIBS = -lmpich -lpthread -lmpl
-LIBS = -L/usr/local/lib -lmpich -lpthread -lmpl
+#LIBS = -lmpich -lpthread -lmpl
+#LIBS = -L/usr/local/lib -lmpich -lpthread -lmpl
 # Open MPI
 #LIBS = -L/usr/lib64/mpi/gcc/openmpi/lib64 -lopen-rte -lmpi
 
