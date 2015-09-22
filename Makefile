@@ -5,8 +5,8 @@ INSTALL_DIR = /usr/local/bin
 #FC = /opt/intel.old/composer_xe_2013.1.119/bin/intel64/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 
 #FC = /usr/local/bin/mpif90
-#FC = gfortran
-FC = /usr/bin/ifort
+FC = gfortran
+#FC = /usr/bin/ifort
 
 # Following are needed for building parallel version
 # Comment out if compiling with mpif90
