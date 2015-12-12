@@ -191,8 +191,6 @@ print *, 'nmutn size:'   , sizeof(nmutn)/x
 print *, 'lb_mutn_count size:',sizeof(lb_mutn_count)/x
 print *, 'linkage_block_fitness size:',sizeof(linkage_block_fitness)/x
 print *, '-------------------------------------'
-print *
-print *, 'Initializing data arrays... please wait....'
 
 ! If this is a restart case, read the restart dump file and
 ! set the current dump number to the restart dump number.
@@ -920,12 +918,7 @@ if(polygenic_beneficials) then
       write(i,*) '-----------------------------------------------------'
       write(i,*) 'POLYGENIC BENEFICIALS SUMMARY:'
       write(i,*)
-      write(i,*) 'First_inst_gen, Last_inst_gen, Fix_gen, Total_inst'
-      write(i,'(2i15,i9,i12)') poly_gen_first_instance, &
-                               poly_gen_last_instance,  & 
-                               poly_stop_gen-plot_allele_gens, & 
-                               num_polys_cumulative
-      write(i,*) '# instance     gen_enter    gen_exit    duration     string_id'
+      write(i,*) '# instance     gen_enter    gen_exit    duration    string_id'
       write(i,*)
       poly_not_selected = 0
       do j=1,num_polys_cumulative
@@ -955,6 +948,12 @@ if(polygenic_beneficials) then
       if(polygenic_fixed) then
          write(i,*) '# fixed polygenic id:', poly_fixed_fmutn
       endif
+      write(i,*)
+      write(i,*) 'First_inst_gen, Last_inst_gen, Fix_gen, Total_inst'
+      write(i,'(2i15,i9,i12)') poly_gen_first_instance, &
+                               poly_gen_last_instance,  & 
+                               poly_stop_gen-plot_allele_gens, & 
+                               num_polys_cumulative
       write(i,*) '-----------------------------------------------------'
    end do
    close(12)

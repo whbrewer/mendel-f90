@@ -109,6 +109,7 @@ open (10, file=data_file_path(1:npath)//case_id// &
 read(10,*) num_uploaded_mutn
 write(*,*) 'Reading mutation file with ', num_uploaded_mutn, &
            'mutations'
+write(*,*) '#     id, linkage_block, haplotype, fitness, dominant/recessive, mutn_id'
 read(10,*) ! header
 
 w = multiplicative_weighting
@@ -116,9 +117,9 @@ w = multiplicative_weighting
 do i=1,num_uploaded_mutn
 
    read(10,*) id,lb,hap_id,fitness,dominance
-   write(*,*) id,lb,hap_id,fitness,dominance
    mutn = encode_mutn(fitness,lb,dominance)
    uploaded_mutn(i) = mutn
+   write(*,*) id,lb,hap_id,fitness,dominance,mutn
 
    if(fitness > 0.) then
       fmutn(1,hap_id,id) = fmutn(1,hap_id,id) + 1

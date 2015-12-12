@@ -2,11 +2,9 @@ INSTALL_DIR = /usr/local/bin
 
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
-#FC = /opt/intel.old/composer_xe_2013.1.119/bin/intel64/ifort
-#FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 
-#FC = /usr/local/bin/mpif90
-FC = gfortran
-#FC = /usr/bin/ifort
+#FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
+FC = /usr/local/bin/mpif90
+#FC = gfortran
 
 # Following are needed for building parallel version
 # Comment out if compiling with mpif90
@@ -20,21 +18,16 @@ FC = gfortran
 # when using Open MPI
 #INCLUDE = /usr/lib64/mpi/gcc/openmpi/include 
 # when using MPICH
-INCLUDE = /usr/local/lib
+#INCLUDE = /usr/local/lib
 
 INCLUDE = /usr/local/include
 # Compiler flags
 DBUGFLAGS = -g -traceback -check # debug version
-#FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version
-FCFLAGS = -O3 -I$(INCLUDE) # release version
+FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version
 # note use flag -fpe:0 to handle floating point exceptions
 
 # Linker flags (gfortran on OSX)
 #LDFLAGS = -static-libgfortran -static-libgcc
-# note to statically compile in libgfortran and libquadmath, had to use the following
-# flags on compile, but also remove the libquadmath.so files so that it would be forced
-# to pick up the .a files
-#-static-libgfortran /usr/local/Cellar/gcc/4.9.2_1/lib/gcc/4.9/libquadmath.a -static-libgcc
 
 SERIALFN = mendel_serial
 
@@ -42,11 +35,11 @@ SERIALFN = mendel_serial
 TARGET = mendel
 
 MODULES = sort.o random_pkg.o inputs.o genome.o profile.o polygenic.o \
-          selection.o
+          init.o selection.o
 
 OTHERS = $(MODULES) mutation.o mating.o fileio.o 
 
-POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o init.o
+POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o 
 
 SOBJECTS = $(OTHERS) $(SERIALFN).o init_serial.o
 

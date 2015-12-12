@@ -4,6 +4,7 @@ implicit none
 ! this corresponds to MNP in diagnostics_polymorphism_plot()
 integer, parameter :: max_polys = 50000
 integer, parameter :: A=1, C=2, G=3, T=4
+integer :: global_num_polys_this_gen, global_num_polys_cumulative
 integer :: num_polys_cumulative, num_polys_this_gen, poly_str_len
 integer :: poly_gen_first_instance, poly_gen_last_instance
 integer :: poly_stop_gen, duration, npoly

@@ -397,7 +397,7 @@ integer function encode_mutn(fitness,lb,dominance)
 include 'common.h'
 real fitness
 integer lb, dominance 
-encode_mutn = dominance*((lb-1)*lb_modulo+lb_modulo*fitness)
+encode_mutn = dominance*((lb-1)*lb_modulo+lb_modulo*abs(fitness))
 return
 end function encode_mutn
 
