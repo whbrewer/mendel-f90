@@ -557,6 +557,7 @@ real initial_allele_effects(num_linkage_subunits)
 real w, effect, expressed
 integer h1_id, h2_id, lb, mutn, mutn_indx
 integer m, n, nskp
+integer np
 
 w = multiplicative_weighting
 
@@ -595,12 +596,13 @@ do n=1,num_contrasting_alleles
    h1_id = min(2, 1 + int(2.*randomnum(1)))
    h2_id = 3 - h1_id
 
+   np = pop_size/2
    m = dmutn(1,h1_id,1) + 1
-   dmutn(m+1,h1_id,:) = mutn_indx
-   dmutn(  1,h1_id,:) = m
+   dmutn(m+1,h1_id,1:np) = mutn_indx
+   dmutn(  1,h1_id,1:np) = m
    m = fmutn(1,h2_id,1) + 1
-   fmutn(m+1,h2_id,:) = mutn_indx
-   fmutn(  1,h2_id,:) = m
+   fmutn(m+1,h2_id,1:np) = mutn_indx
+   fmutn(  1,h2_id,1:np) = m
 
 !  Generate the uniformly distributed random fitness effect
 !  associated with the allele pair. 
@@ -628,11 +630,11 @@ do n=1,num_contrasting_alleles
 !  linkage blocks.
 
    expressed = recessive_hetero_expression*effect
-   linkage_block_fitness(lb,h1_id,:) = (1.d0 - (1.-w)*expressed) &
+   linkage_block_fitness(lb,h1_id,1:np) = (1.d0 - (1.-w)*expressed) &
                                          * (1.d0 - w *expressed)
 
    expressed =  dominant_hetero_expression*effect
-   linkage_block_fitness(lb,h2_id,:) = (1.d0 + (1.-w)*expressed) &
+   linkage_block_fitness(lb,h2_id,1:np) = (1.d0 + (1.-w)*expressed) &
                                          * (1.d0 + w *expressed)
 
 end do

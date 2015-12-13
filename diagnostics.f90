@@ -109,7 +109,7 @@ if(tracked_del_mutn > 0) frac_recessive = &
 ! fitness, the average number of mutations per individual, and 
 ! the number of fixed favorable mutations.
 
-if(mod(gen,hst_gens)==0) then
+if(mod(gen,hst_gens)==0 .or. gen <= 10) then
    if(tribal_competition) then
    !  Unit 7 are the .001, .002, etc. invidual tribal files
       write(7,'(i12,2e16.4,1p3e14.4,3e14.4)') gen, post_sel_fitness, &
@@ -133,7 +133,7 @@ endif
 if(is_parallel) &
    call mpi_isum(current_pop_size,current_global_pop_size,1)
 
-if(is_parallel .and. myid==0 .and. mod(gen,hst_gens)==0) then
+if(is_parallel .and. myid==0 .and. (mod(gen,hst_gens)==0 .or. gen <=10) ) then
 !  Unit 17 the .000 file which contains the averaged global data
    write(17,'(i12,2e16.4,1p3e14.4,i12,2e10.2)') gen,  &
          par_post_sel_fitness, par_post_sel_geno_sd,  &
@@ -147,7 +147,7 @@ end if
 
 if (.not.print_flag) return
 
-if(mod(gen,output_gens)==0 .or. percent_pop_poly >= 99.) then
+if(mod(gen,output_gens)==0 .or. gen <= 10 .or. percent_pop_poly >= 99.) then
    call write_status(9, gen, current_pop_size,            &
         frac_recessive, total_del_mutn, tracked_del_mutn, &
         total_fav_mutn, total_neu_mutn, pre_sel_fitness,  &
@@ -196,7 +196,7 @@ if(is_parallel) then
 
 else
 
-   if(mod(gen,output_gens)==0 .or. percent_pop_poly >= 99.) then
+   if(mod(gen,output_gens)==0 .or. gen <= 10 .or. percent_pop_poly >= 99.) then
       call write_status(6, gen, current_pop_size,                 &
            frac_recessive, total_del_mutn, tracked_del_mutn,      &
            total_fav_mutn, total_neu_mutn, pre_sel_fitness,       &

@@ -743,7 +743,7 @@ do gen=gen_0+1,gen_0+num_generations
    call second(tin_diagnostics)
 
    if(mod(gen, 10) == 0 .or. (.not.bottleneck_yes .and. & 
-      current_pop_size <= pop_size/20) .or. gen < 4) then
+      current_pop_size <= pop_size/20) .or. gen <= 10) then
       print_flag = .true.
    else
       print_flag = .false.
