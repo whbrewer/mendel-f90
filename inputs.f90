@@ -170,8 +170,8 @@ write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
                           haploid_chromosome_number      
 write(nf,'(a32,i12)')   ' num_linkage_subunits = ' , num_linkage_subunits
 write(nf,'(a32,i12)')   ' pop_growth_model = '     , pop_growth_model
-write(nf,'(a32,i12)')   ' carrying_capacity = '    , carrying_capacity
 write(nf,'(a32,f12.7)') ' pop_growth_rate = '      , pop_growth_rate
+write(nf,'(a32,i12)')   ' carrying_capacity = '    , carrying_capacity
 write(nf,'(a32,l)')     ' bottleneck_yes = '       , bottleneck_yes
 write(nf,'(a32,i12)')   ' bottleneck_generation = ', bottleneck_generation
 write(nf,'(a32,i12)')   ' bottleneck_pop_size = '  , bottleneck_pop_size
