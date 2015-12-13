@@ -597,6 +597,16 @@
       </div>
        
       <div class="form-group">
+        <label for="carrying_capacity" style="left:20px" class="control-label col-xs-6">
+          :: carrying capacity:</label>      
+        <div class="col-xs-6">
+          <input type="number" name="carrying_capacity" class="form-control"
+                 min="0" max="10000" step="100" onchange="validate(this)"
+                 value="{{carrying_capacity}}">
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="bottleneck_yes" class="control-label col-xs-6">
           5. Bottleneck?</label>      
         <div class="col-xs-6">
