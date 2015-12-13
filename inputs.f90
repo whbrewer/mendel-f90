@@ -15,7 +15,7 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         selection_scheme, migration_generations,                  &
         migration_model, num_contrasting_alleles,                 &
         pop_growth_model, plot_allele_gens, verbosity,            &
-        poisson_method, recombination_model
+        poisson_method, recombination_model, carrying_capacity
 
 real    reproductive_rate, mutn_rate,                             &
         genome_size, high_impact_mutn_fraction,                   &
@@ -74,7 +74,8 @@ namelist /population/ recombination_model, clonal_haploid, &
      fraction_self_fertilization, num_linkage_subunits, &
      pop_growth_model, pop_growth_rate, bottleneck_yes, &
      bottleneck_generation, bottleneck_pop_size, &
-     num_bottleneck_generations, initial_alleles_mean_effect
+     num_bottleneck_generations, initial_alleles_mean_effect, &
+     carrying_capacity
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
@@ -169,6 +170,7 @@ write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
                           haploid_chromosome_number      
 write(nf,'(a32,i12)')   ' num_linkage_subunits = ' , num_linkage_subunits
 write(nf,'(a32,i12)')   ' pop_growth_model = '     , pop_growth_model
+write(nf,'(a32,i12)')   ' carrying_capacity = '    , carrying_capacity
 write(nf,'(a32,f12.7)') ' pop_growth_rate = '      , pop_growth_rate
 write(nf,'(a32,l)')     ' bottleneck_yes = '       , bottleneck_yes
 write(nf,'(a32,i12)')   ' bottleneck_generation = ', bottleneck_generation

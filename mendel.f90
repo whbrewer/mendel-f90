@@ -41,8 +41,7 @@ integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
 
 real*8 accum(50), reproductive_advantage_factor
-real selection_coefficient, aoki, migration_rate
-real carrying_capacity, x
+real selection_coefficient, aoki, migration_rate, x
 real tribal_score, random_effects, genetic_effects, social_effects
 real fraction_elimination, fraction_selected_away
 real random, num_offspring, fav_mutn_per_gen, d
@@ -876,8 +875,6 @@ do gen=gen_0+1,gen_0+num_generations
       if(pop_growth_model == 1) then
          pop_size = ceiling(pop_growth_rate*pop_size)
       else if (pop_growth_model == 2) then
-!        pass carrying capacity through num_generations
-         carrying_capacity = num_generations
          pop_size = ceiling(pop_size*(1. + pop_growth_rate* &
                     (1. - pop_size/carrying_capacity)))
       else 
