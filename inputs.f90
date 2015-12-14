@@ -30,7 +30,7 @@ real    reproductive_rate, mutn_rate,                             &
         se_linked_scaling, pop_growth_rate,                       &
         tc_scaling_factor, group_heritability, fraction_neutral,  &
         social_bonus_factor, max_total_fitness_increase,          &
-        polygenic_effect 
+        polygenic_effect, initial_alleles_pop_frac 
 
 real*8 :: tracking_threshold, extinction_threshold
 
@@ -75,7 +75,7 @@ namelist /population/ recombination_model, clonal_haploid, &
      pop_growth_model, pop_growth_rate, bottleneck_yes, &
      bottleneck_generation, bottleneck_pop_size, &
      num_bottleneck_generations, initial_alleles_mean_effect, &
-     carrying_capacity
+     carrying_capacity, initial_alleles_pop_frac
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
@@ -165,6 +165,8 @@ write(nf,'(a32,i12)')   ' num_contrasting_alleles = ',     &
                           num_contrasting_alleles        
 write(nf,'(a32,f12.7)') ' initial_alleles_mean_effect = ', &
                           initial_alleles_mean_effect    
+write(nf,'(a32,f12.7)') ' initial_alleles_pop_frac = ', &
+                          initial_alleles_pop_frac    
 write(nf,'(a32,l)')     ' dynamic_linkage = '      , dynamic_linkage
 write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
                           haploid_chromosome_number      

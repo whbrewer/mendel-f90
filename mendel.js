@@ -22,7 +22,6 @@ function fxn_init() {
   fxn_init_tracking_threshold();
   show_hide_mutation_upload_form();
   fxn_auto_malloc();
-  // force the following because boxes are greyed out
   dmi.num_contrasting_alleles.readOnly = false;
   dmi.max_total_fitness_increase.readOnly = false;
   //document.getElementById("tribediv").style.display = "none";
@@ -680,27 +679,11 @@ function check_back_mutn() {
 }
 
 function fxn_pop_growth_model(i) {
-  // the Fortran engine does not support dynamic population sizes
-  // so change the engine if dynamic population is turned on
-  //if(i == 1 || i == 2) {
-  //   document.getElementById("engine").selectedIndex = 1;
-  //   status("NOTE: Changed simulation engine to C");
-  //}
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true;
-     document.getElementById("gen_label").innerText =
-                        "Generations:";
-     document.getElementById("pop_size_label").innerText =
-                        "Population size (per subpopulation):";
      status("");
   } else if (i == 1) {
      dmi.pop_growth_rate.readOnly = false;
-     document.getElementById("pgr_label").innerText =
-                        ":: intrinsic growth rate:";
-     document.getElementById("gen_label").innerText =
-                        "Max population size:";
-     document.getElementById("pop_size_label").innerText =
-                        "Starting population size (per subpopulation):";
      dmi.pop_size.value = "2"; 
      dmi.num_generations.value = "2000"; 
      dmi.pop_growth_rate.value = "1.01"; 
@@ -708,12 +691,6 @@ function fxn_pop_growth_model(i) {
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 2) {
      dmi.pop_growth_rate.readOnly = false;
-     document.getElementById("pgr_label").innerText =
-                        "    :: maximum reproductive rate of an individual:";
-     document.getElementById("gen_label").innerText =
-                        "Carrying capacity:";
-     document.getElementById("pop_size_label").innerText =
-                        "Starting population size (per subpopulation):";
      dmi.pop_size.value = "2"; 
      dmi.num_generations.value = "1000"; 
      dmi.pop_growth_rate.value = "0.1"; 

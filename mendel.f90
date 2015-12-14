@@ -33,7 +33,7 @@ integer :: status2(MPI_Status_size,2), requests(2)
 ! END_MPI
 integer :: total_offspring, offspring_count, empty, red, green, blue
 integer :: ica_count(3), cumulative_offspring, mutn_indx
-integer :: max_pop_size, pop_size_allocation, current_global_pop_size
+integer :: pop_size_allocation, current_global_pop_size
 integer :: global_pop, mean_pop, delta_pop, delta, nie, mm, id
 integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
@@ -140,9 +140,7 @@ if(is_parallel .and. tribal_competition) then
    write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
                 pop_size_allocation
 elseif (pop_growth_model > 0) then
-!  Pass in max_pop_size through num_generations input parameter 
-   max_pop_size = num_generations
-   pop_size_allocation = max_pop_size       
+   pop_size_allocation = carrying_capacity*100.
 else
    pop_size_allocation = pop_size
 endif
@@ -190,6 +188,8 @@ print *, 'nmutn size:'   , sizeof(nmutn)/x
 print *, 'lb_mutn_count size:',sizeof(lb_mutn_count)/x
 print *, 'linkage_block_fitness size:',sizeof(linkage_block_fitness)/x
 print *, '-------------------------------------'
+print *
+print *, 'Initializing data arrays... please wait....'
 
 ! If this is a restart case, read the restart dump file and
 ! set the current dump number to the restart dump number.

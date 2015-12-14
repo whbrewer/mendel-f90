@@ -596,7 +596,8 @@ do n=1,num_contrasting_alleles
    h1_id = min(2, 1 + int(2.*randomnum(1)))
    h2_id = 3 - h1_id
 
-   np = pop_size/2
+   np = int(initial_alleles_pop_frac*pop_size)
+
    m = dmutn(1,h1_id,1) + 1
    dmutn(m+1,h1_id,1:np) = mutn_indx
    dmutn(  1,h1_id,1:np) = m
@@ -669,8 +670,8 @@ else
    return
 end if
 
-write(30,*) "#      Distribution of Contrasting Alleles"
-write(30,*) "#   block      del       fav    fitness effect  "
+!write(30,*) "#      Distribution of Contrasting Alleles"
+!write(30,*) "#   block      del       fav    fitness effect  "
 
 do n=1,num_contrasting_alleles
 
@@ -712,8 +713,8 @@ do n=1,num_contrasting_alleles
 
    end do
 
-   write(30,'(3i10,f15.10)') lb, ndel, nfav, &
-                             initial_allele_effects(lb)
+   !write(30,'(3i10,f15.10)') lb, ndel, nfav, &
+   !                          initial_allele_effects(lb)
 
 end do
 

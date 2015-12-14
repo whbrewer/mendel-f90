@@ -1156,6 +1156,11 @@ else
          6x,"allele   linkage  favorable  homozygous"/ &
          15x,"subunit  frequency    effect")')
 
+   write(30,'("#",3x,"List of initial contrasting allele freqencies"/ &
+         "#     and fitness effect values at end of run:"// &
+         "#",6x,"allele   linkage  favorable  homozygous"/ &
+         "#",15x,"subunit  frequency    effect")')
+
    indx = 0
    do lb=1,num_linkage_subunits
       if(abs(initial_allele_effects(lb)) > 0.) then
@@ -1165,6 +1170,8 @@ else
             write(6,'(i10,i10,f12.4,f11.4,6x,a3)') indx, lb, freq, &
                   abs(initial_allele_effects(lb))
          write(9,'(i10,i10,f12.4,f11.4,6x,a3)') indx, lb, freq, &
+               abs(initial_allele_effects(lb))
+         write(30,'(i10,i10,f12.4,f11.4,6x,a3)') indx, lb, freq, &
                abs(initial_allele_effects(lb))
       end if
    end do

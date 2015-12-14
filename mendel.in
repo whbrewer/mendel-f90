@@ -46,6 +46,7 @@
   fraction_self_fertilization = 0.0
       num_contrasting_alleles = 0
    max_total_fitness_increase = 0
+     initial_alleles_pop_frac = 0.5
               dynamic_linkage = T
     haploid_chromosome_number = 23
          num_linkage_subunits = 989
