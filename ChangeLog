@@ -1,5 +1,6 @@
 Following are git commits to Perl-based full Mendel repo
-
+Run "git log" to see changes since July 12, 2015
+===========================================================
 commit 9cfb552aeb39ad8736e5c0b5ecdc07bbc5608b75
 Author: Wesley Brewer <wes@fluidphysics.com>
 Date:   Sun Jul 12 19:09:21 2015 +0900

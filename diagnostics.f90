@@ -1577,11 +1577,25 @@ else
    if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
        write(11,'("# generation = ",i8)') gen
        write(11,'("# frequency del_normalized fav_normalized ", &
-                  "  del_count fav_count neu_normalized  neu_count")')
-       write(11,'(i11,2f15.11,2f11.0,f15.11,f11.0)')  (k, dpbin(k),  &
-                 fpbin(k), dpbin_count(k), fpbin_count(k), npbin(k), &
+                  "  neu_normalized del_count fav_count neu_count")')
+       write(11,'(i11,3f15.11,3f11.0)')  (k, dpbin(k),  &
+                 fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
                            npbin_count(k), k=1,NB)
-   endif
+   end if
+
+   ! correct data for total diversity by multiplying by each bin
+   rewind(12)
+   if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+       write(12,'("# generation = ",i8)') gen
+       write(12,'("# frequency del_normalized fav_normalized ", &
+                  "  neu_normalized del_count fav_count neu_count")')
+       write(12,'(i11,3f15.11,3f11.0)')  (k, k*dpbin(k),  &
+           k*fpbin(k), k*npbin(k), k*dpbin_count(k), k*fpbin_count(k), &
+                           k*npbin_count(k), k=1,NB/2)
+       write(12,'(i11,3f15.11,3f11.0)')  (k, (NB-k)*dpbin(k), &
+              (NB-k)*fpbin(k), (NB-k)*npbin(k), (NB-k)*dpbin_count(k),     &
+              (NB-k)*fpbin_count(k), (NB-k)*npbin_count(k), k=NB/2,NB)
+   end if
 
 end if
 
@@ -1591,10 +1605,9 @@ if (verbosity > 0) then
    rewind(13)
    write(13,'("# generation = ",i8)') gen
    write(13,'("# frequency del_normalized fav_normalized ", &
-              "  del_count fav_count neu_normalized  neu_count")')
-   write(13,'(i11,2f15.11,2f11.0,f15.11,f11.0)')  (k, dpbin(k),  &
-             fpbin(k), dpbin_count(k), fpbin_count(k), npbin(k), &
-                       npbin_count(k), k=1,NB)
+              "  neu_normalized del_count fav_count neu_count")')
+   write(13,'(i11,3f15.11,3f11.0)')  (k, dpbin(k), fpbin(k), npbin(k), &
+        dpbin_count(k), fpbin_count(k), npbin_count(k), k=1,NB)
    call flush(13)
 end if
 

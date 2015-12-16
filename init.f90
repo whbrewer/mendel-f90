@@ -100,6 +100,8 @@ if (verbosity > 0) then
    if(.not.is_parallel) then
       open(11, file=data_file_path(1:npath)//case_id//'.'//myid_str &
            //'.plm',status='unknown')
+      open(12, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+           //'.plmcor',status='unknown')
    end if
 
    ! Maintain a separate file for windows which just has a snapshot
@@ -140,8 +142,6 @@ if (verbosity == 2) then
            "time_offspring(s)",2x,"time_selection(s)")')
    open(26, file=data_file_path(1:npath)//case_id//'.'//myid_str &
         //'.acc',status='unknown')
-   ! open(20, file=data_file_path(1:npath)//case_id//'.'//myid_str &
-   !          //'.sam',status='unknown')
 endif
 
 ! If parallel, write additional average files with name-tag 000.
