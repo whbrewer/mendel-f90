@@ -1019,8 +1019,8 @@ subroutine diagnostics_contrasting_alleles(dmutn, nmutn, fmutn, &
 use inputs
 include 'common.h'
 
-integer max_size, count(num_linkage_subunits,3)
-! note: we were sending in lb_offsprng_mutn_count as the count buffer
+integer max_size, icount(num_linkage_subunits,3)
+! note: we were sending in lb_offsprng_mutn_count as the icount buffer
 ! to be able to reuse already existing memory.  However, now
 ! this routines have moved to the mating subroutine.  In the future,
 ! we should pass in an unused array to reuse the space.
@@ -1037,7 +1037,7 @@ logical list
 
 w = multiplicative_weighting
 
-count = 0
+icount = 0
 cum_effect = 1.d0
 
 do i=1,current_pop_size
@@ -1061,12 +1061,12 @@ do i=1,current_pop_size
    do lb=1,num_linkage_subunits
       if(zygous(lb) == 1) then
          effect = initial_allele_effects(lb)*recessive_hetero_expression
-         count(lb,1) = count(lb,1) + 1
+         icount(lb,1) = icount(lb,1) + 1
          cum_effect(i) = (cum_effect(i) - (1.d0 - w)*effect) &
                                         * (1.d0 - w *effect)
       elseif(zygous(lb) == 2) then
          effect = initial_allele_effects(lb)
-         count(lb,1) = count(lb,1) + 2
+         icount(lb,1) = icount(lb,1) + 2
          cum_effect(i) = (cum_effect(i) - (1.d0 - w)*effect) &
                                         * (1.d0 - w *effect)
       end if
@@ -1091,12 +1091,12 @@ do i=1,current_pop_size
    do lb=1,num_linkage_subunits
       if(zygous(lb) == 1) then
          effect = initial_allele_effects(lb)*dominant_hetero_expression
-         count(lb,2) = count(lb,2) + 1
+         icount(lb,2) = icount(lb,2) + 1
          cum_effect(i) = (cum_effect(i) + (1.d0 - w)*effect) &
                                         * (1.d0 + w *effect)
       elseif(zygous(lb) == 2) then
          effect = initial_allele_effects(lb)
-         count(lb,2) = count(lb,2) + 2
+         icount(lb,2) = icount(lb,2) + 2
          cum_effect(i) = (cum_effect(i) + (1.d0 - w)*effect) &
                                         * (1.d0 + w *effect)
       end if
@@ -1107,9 +1107,9 @@ end do
 ica_count = 0
 
 do lb=1,num_linkage_subunits
-   ica_count(1) = ica_count(1) + count(lb,1)
-   ica_count(2) = ica_count(2) + count(lb,2)
-   ica_count(3) = ica_count(3) + count(lb,3)
+   ica_count(1) = ica_count(1) + icount(lb,1)
+   ica_count(2) = ica_count(2) + icount(lb,2)
+   ica_count(3) = ica_count(3) + icount(lb,3)
 end do
 
 if(.not.list) then
@@ -1132,10 +1132,10 @@ if(.not.list) then
    fav_mean_freq = 0
 
    do lb=1,num_linkage_subunits
-      fav_mean_freq = fav_mean_freq + count(lb,2)
+      fav_mean_freq = fav_mean_freq + icount(lb,2)
       if(abs(initial_allele_effects(lb)) > 0.) then
-         if(count(lb,2) == 2*current_pop_size) fav_fixed = fav_fixed + 1
-         if(count(lb,2) == 0) fav_lost = fav_lost + 1
+         if(icount(lb,2) == 2*current_pop_size) fav_fixed = fav_fixed + 1
+         if(icount(lb,2) == 0) fav_lost = fav_lost + 1
       end if
    end do
 
@@ -1165,7 +1165,7 @@ else
    do lb=1,num_linkage_subunits
       if(abs(initial_allele_effects(lb)) > 0.) then
          indx = indx + 1
-         freq = 0.5*real(count(lb,2))/real(current_pop_size)
+         freq = 0.5*real(icount(lb,2))/real(current_pop_size)
          if(.not. is_parallel) &
             write(6,'(i10,i10,f12.4,f11.4,6x,a3)') indx, lb, freq, &
                   abs(initial_allele_effects(lb))
@@ -1507,7 +1507,7 @@ do j=1,NB
    end if
 end do
 
-num_dalleles(1) = dpbin(1)
+num_dalleles(1) = dpbin(1) 
 num_nalleles(1) = npbin(1)
 num_falleles(1) = fpbin(1)
 num_dalleles(3) = dpbin(NB)

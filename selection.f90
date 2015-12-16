@@ -39,7 +39,7 @@ real*8  :: homozygous_fitness_gain, fitness_loss, covariance
 real*8  :: max_work_fitness, min_work_fitness, score_cutoff
 real*8  :: geno_fitness_variance, pheno_fitness_variance, hetero_effect
 real*8  :: mean_pheno_fitness, se_linked, se_nonlinked, x, e, sumesq
-real    :: w, p, count, effect, factor, bonus
+real    :: w, p, effect, factor, bonus
 
 w = multiplicative_weighting
 
@@ -745,7 +745,7 @@ real*8  :: homozygous_fitness_gain, fitness_loss, covariance
 real*8  :: max_work_fitness, min_work_fitness, score_cutoff
 real*8  :: geno_fitness_variance, pheno_fitness_variance
 real*8  :: mean_pheno_fitness, se_linked, se_nonlinked, x, e, sumesq
-real    :: w, p, count, effect, factor
+real    :: w, p, effect, factor
 
 w = multiplicative_weighting
 

@@ -42,7 +42,7 @@
 /
 
 &population
-          recombination_model = 2 
+          recombination_model = 3 
   fraction_self_fertilization = 0.0
       num_contrasting_alleles = 0
    max_total_fitness_increase = 0
