@@ -127,10 +127,10 @@ function fxn_dynamic_linkage() {
         fxn_dynamic_linkage_able();
     if (dmi.dynamic_linkage.checked) {
         //mendel_input.num_linkage_subunits.value = 1000;
-                if (dmi.haploid_chromosome_number.value = "0")
+        if (dmi.haploid_chromosome_number.value = "0")
                dmi.haploid_chromosome_number.value = "23";
     } else {
-        //dmi.num_linkage_subunits.value = 1000;
+        dmi.num_linkage_subunits.value = 1000;
     }
 }
 function fxn_dynamic_linkage_able() {
@@ -681,9 +681,11 @@ function check_back_mutn() {
 function fxn_pop_growth_model(i) {
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true;
+     dmi.carrying_capacity.readOnly = true;
      status("");
   } else if (i == 1) {
      dmi.pop_growth_rate.readOnly = false;
+     dmi.carrying_capacity.readOnly = true;
      dmi.pop_size.value = "2"; 
      dmi.num_generations.value = "2000"; 
      dmi.pop_growth_rate.value = "1.01"; 
@@ -691,11 +693,15 @@ function fxn_pop_growth_model(i) {
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 2) {
      dmi.pop_growth_rate.readOnly = false;
+     dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
      dmi.num_generations.value = "1000"; 
      dmi.pop_growth_rate.value = "0.1"; 
      dmi.pop_growth_rate.title = "0.0 - 1.0"; 
      status("WARNING: dynamic populations are experimental and largely untested");
+  } else if (i == 3) {
+     dmi.pop_growth_rate.readOnly = true;
+     dmi.carrying_capacity.readOnly = true;
   } else {
      dmi.pop_growth_rate.readOnly = false;
      status("");

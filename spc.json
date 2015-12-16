@@ -92,6 +92,14 @@
              { "filename": "<cid>.000.plm", "cols": "1:5", "line_range": "-109:100000", "data_def": "{ label: 'Favorable', data: d2, bars: { show: true }, color: 'rgb(0,200,0)'}" }, 
              { "filename": "<cid>.000.plm", "cols": "1:7", "line_range": "-109:100000", "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}" }
          ]
+      }, 
+      { 
+         "ptype": "plotly-hist", 
+         "title": "Initial Contrasting Alleles",
+         "options": "legend: { position: 'nw'}, xaxis: { axisLabel: 'x'}, yaxis: { axisLabel: 'y'}",
+         "datasource": [ 
+             { "filename": "<cid>.000.ica", "cols": "3", "line_range": "6:989", "data_def": "{label: 'Initial contrasting alleles', data: d1, lines: { show: true }, color: 'rgb(200,0,0)'}" }
+         ]
       } 
    ]
 }

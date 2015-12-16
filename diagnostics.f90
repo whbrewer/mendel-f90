@@ -1791,7 +1791,9 @@ subroutine count_alleles(xmutn,max_mutn_per_indiv,MNP,mutn_limit, &
 use inputs
 use polygenic
 include 'common.h'
+!START_MPI
 include 'mpif.h'
+!END_MPI
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
 integer, intent(in)    :: xmutn(max_mutn_per_indiv/2,2,*)
@@ -1825,7 +1827,8 @@ do i=1,current_pop_size
       do while(xmutn(m,j,i) < mutn_limit .and. &
            m <=  xmutn(1,j,i)+1 .and. list_count < MNP)
          mutn = mod(abs(xmutn(m,j,i)), lb_modulo)
-         if(mutn /= lb_modulo-1) then
+         ! lb_modulo-1 represents an initial contrasting allele
+         !if(mutn /= lb_modulo-1) then
             if(upload_mutations) then
                do k=1,num_uploaded_mutn
                   if(xmutn(m,j,i) == uploaded_mutn(k)) then
@@ -1849,7 +1852,7 @@ do i=1,current_pop_size
                   mutn_count(list_count) = 1
                end if
             end if
-         end if
+         !end if
          m = m + 1
       end do
       mfirst(j,i) = m
@@ -1908,7 +1911,6 @@ subroutine count_string_alleles(xmutn,max_mutn_per_indiv,MNP, &
 use inputs
 use polygenic
 include 'common.h'
-include 'mpif.h'
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
 integer, intent(in)    :: xmutn(max_mutn_per_indiv/2,2,*)

@@ -574,7 +574,7 @@
           <select id="pop_growth_model" name="pop_growth_model" accesskey="5"
                   class="form-control" style="width:auto" 
                   onchange="fxn_pop_growth_model(this.value)">
-            %opts = {'0': 'Off (fixed population size)', '1': 'Exponential growth', '2': 'Carrying capacity model'}
+            %opts = {'0': 'Off (fixed population size)', '1': 'Exponential growth', '2': 'Carrying capacity model', '3': 'Prescribed growth'}
             %for key, value in opts.iteritems():
               %if key == pop_growth_model:
                 <option selected value="{{key}}">{{value}}

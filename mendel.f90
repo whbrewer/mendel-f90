@@ -45,7 +45,7 @@ real selection_coefficient, aoki, migration_rate, x
 real tribal_score, random_effects, genetic_effects, social_effects
 real fraction_elimination, fraction_selected_away
 real random, num_offspring, fav_mutn_per_gen, d
-real real_pop_size
+real real_pop_size, old_pop_size, growth_rate
 real tin_migration, tout_migration, tin_gen, tout_gen, tin_run
 real tin_offspring, tout_offspring, tgen, par_tgen
 real tin_diagnostics, tout_diagnostics, tin_selection, tout_selection
@@ -54,6 +54,9 @@ real par_time_offspring, par_time_selection, tsub
 logical found, print_flag, am_parallel, file_exists, winner, create_fav_mutn
 character*3 myid_str
 character(len=128) :: arg, filename
+integer, dimension(20) :: prescribed_pop_growth
+! prescribed growth array starts with generation 2
+prescribed_pop_growth = (/16,128,1024,8192,10000,10000,10000,10000,10000,6,24,96,384,1536,6144,10000,10000,10000,10000,10000/)
 
 call second(tin_run)
 
@@ -319,8 +322,7 @@ do gen=gen_0+1,gen_0+num_generations
    if(cyclic_bottlenecking.and.                                   &
       (mod(gen,bottleneck_modulo)==0                              &
       .and.gen>gen_0+1+bottleneck_modulo)) then                   
-      bottleneck_generation = bottleneck_generation +             &
-                              bottleneck_modulo
+      bottleneck_generation = bottleneck_generation + bottleneck_modulo
    end if
 
    if(bottleneck_yes .and. gen >= bottleneck_generation .and.     &
@@ -353,7 +355,7 @@ do gen=gen_0+1,gen_0+num_generations
       selection_coefficient = 1.d0 - fertility_factor
 
       if(mod(gen,10)==0) then
-         write(*,'("myid =",i2," fertility_factor =",f7.4," selection_coefficient =",f7.4)')      &
+         write(*,'("myid =",i2," fertility_factor =",f7.4," selection_coefficient =",f7.4)') &
                myid, fertility_factor, selection_coefficient
       end if
 
@@ -874,9 +876,24 @@ do gen=gen_0+1,gen_0+num_generations
    if(pop_growth_model > 0) then
       if(pop_growth_model == 1) then
          pop_size = ceiling(pop_growth_rate*pop_size)
+         current_pop_size = pop_size
       else if (pop_growth_model == 2) then
          pop_size = ceiling(pop_size*(1. + pop_growth_rate* &
                     (1. - pop_size/carrying_capacity)))
+         current_pop_size = pop_size
+      else if (pop_growth_model == 3) then
+         old_pop_size = pop_size
+         if (gen > 20) then
+            pop_size = prescribed_pop_growth(size(prescribed_pop_growth))
+         else
+            pop_size = prescribed_pop_growth(gen)
+         end if 
+         growth_rate = pop_size/real(old_pop_size)
+         if (growth_rate > reproductive_rate) then
+            print *, 'ERROR: INCREASE REPRODUCTION RATE'
+            stop
+         end if 
+         current_pop_size = pop_size
       else 
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
                     'not supported'
