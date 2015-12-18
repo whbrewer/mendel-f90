@@ -699,9 +699,14 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.value = "0.1"; 
      dmi.pop_growth_rate.title = "0.0 - 1.0"; 
      status("WARNING: dynamic populations are experimental and largely untested");
-  } else if (i == 3) {
+  } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
+     dmi.carrying_capacity.value = 10000;
+  } else if (i == 4) { // Adam & Eve Scenario
+     dmi.pop_growth_rate.readOnly = false;
+     dmi.carrying_capacity.readOnly = false;
+     dmi.pop_size.value = "2"; 
   } else {
      dmi.pop_growth_rate.readOnly = false;
      status("");

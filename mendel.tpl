@@ -574,7 +574,7 @@
           <select id="pop_growth_model" name="pop_growth_model" accesskey="5"
                   class="form-control" style="width:auto" 
                   onchange="fxn_pop_growth_model(this.value)">
-            %opts = {'0': 'Off (fixed population size)', '1': 'Exponential growth', '2': 'Carrying capacity model', '3': 'Prescribed growth'}
+            %opts = {'0': 'Off (fixed population size)', '1': 'Exponential growth', '2': 'Carrying capacity model', '3': 'Prescribed growth', '4': 'Adam & Eve scenario'}
             %for key, value in opts.iteritems():
               %if key == pop_growth_model:
                 <option selected value="{{key}}">{{value}}
@@ -827,7 +827,7 @@
         <div class="col-xs-6">
           <input type="number" name="max_del_mutn_per_indiv"
                    onchange="compute_memory(); validate(this)" 
-                   min="1000" max="5000000" step="1000"
+                   min="2" max="5000000" step="1000"
                    value="{{max_del_mutn_per_indiv}}" class="form-control">
         </div>
       </div>
@@ -838,7 +838,7 @@
         <div class="col-xs-6">
           <input type="number" name="max_fav_mutn_per_indiv" accesskey="0"
                      onchange="compute_memory(); validate(this)"
-                     min="1000" max="5000000" step="1000"
+                     min="2" max="5000000" step="1000"
                      value="{{max_fav_mutn_per_indiv}}" class="form-control">
         </div>
       </div>
@@ -849,7 +849,7 @@
         <div class="col-xs-6">
           <input type="number" name="max_neu_mutn_per_indiv" accesskey="0"
                      onchange="compute_memory(); validate(this)"
-                     min="1000" max="5000000" step="1000"
+                     min="2" max="5000000" step="1000"
                      value="{{max_neu_mutn_per_indiv}}" class="form-control">
         </div>
       </div>

@@ -45,7 +45,7 @@ real selection_coefficient, aoki, migration_rate, x
 real tribal_score, random_effects, genetic_effects, social_effects
 real fraction_elimination, fraction_selected_away
 real random, num_offspring, fav_mutn_per_gen, d
-real real_pop_size, old_pop_size, growth_rate
+real real_pop_size, old_pop_size, growth_rate, gr1, gr2
 real tin_migration, tout_migration, tin_gen, tout_gen, tin_run
 real tin_offspring, tout_offspring, tgen, par_tgen
 real tin_diagnostics, tout_diagnostics, tin_selection, tout_selection
@@ -143,7 +143,7 @@ if(is_parallel .and. tribal_competition) then
    write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
                 pop_size_allocation
 elseif (pop_growth_model > 0) then
-   pop_size_allocation = carrying_capacity*100.
+   pop_size_allocation = carrying_capacity*1.2
 else
    pop_size_allocation = pop_size
 endif
@@ -894,6 +894,18 @@ do gen=gen_0+1,gen_0+num_generations
             stop
          end if 
          current_pop_size = pop_size
+      else if (pop_growth_model == 4) then
+         gr1 = int(pop_growth_rate)
+         gr2 = (pop_growth_rate - gr1)*10.
+         if (gen < 10 .and. pop_size < carrying_capacity) then
+            pop_size = max(ceiling(gr1*pop_size),carrying_capacity)
+         else if (gen == 10) then
+            pop_size = 6 ! Shem, Ham, Japeth and wives
+         else if (gen > 10 .and. pop_size < carrying_capacity) then
+            pop_size = max(ceiling(gr2*pop_size),carrying_capacity)
+         else 
+            pop_size = carrying_capacity
+         end if
       else 
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
                     'not supported'
@@ -902,6 +914,7 @@ do gen=gen_0+1,gen_0+num_generations
 
       this_size = int((1.1*reproductive_rate*pop_size &
                   *(1. - fraction_random_death)))
+      !print *, 'this_size, max_size', this_size, max_size
       if(this_size > max_size) then
          write(0,*) "OUT OF MEMORY! SHUTTING DOWN!"
          goto 20
