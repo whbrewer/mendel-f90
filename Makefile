@@ -3,8 +3,8 @@ INSTALL_DIR = /usr/local/bin
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
-FC = /usr/local/bin/mpif90
-#FC = gfortran
+#FC = /usr/local/bin/mpif90
+FC = gfortran
 
 # Following are needed for building parallel version
 # Comment out if compiling with mpif90
@@ -23,11 +23,12 @@ FC = /usr/local/bin/mpif90
 INCLUDE = /usr/local/include
 # Compiler flags
 DBUGFLAGS = -g -traceback -check # debug version
-FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version
+#FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
+FCFLAGS = -O3 -I$(INCLUDE) # release version gfortran
 # note use flag -fpe:0 to handle floating point exceptions
 
 # Linker flags (gfortran on OSX)
-#LDFLAGS = -static-libgfortran -static-libgcc
+LDFLAGS = -static-libgfortran -static-libgcc
 
 SERIALFN = mendel_serial
 

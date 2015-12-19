@@ -73,18 +73,18 @@
   <!-- Nav tabs -->
   <!--<ul class="nav nav-tabs" role="tablist">-->
   <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" class="active hidden-xs"><a href="#basic" aria-controls="home" role="tab"    data-toggle="tab">Basic</a></li>
-    <li role="presentation" class="hidden-xs"><a href="#mutation" aria-controls="profile" role="tab" 
+    <li role="presentation" class="active"><a href="#basic" aria-controls="home" role="tab"    data-toggle="tab">Basic</a></li>
+    <li role="presentation"><a href="#mutation" aria-controls="profile" role="tab" 
         data-toggle="tab">Mutation</a></li>
-    <li role="presentation" class="hidden-xs"><a href="#selection" aria-controls="messages" role="tab" 
+    <li role="presentation"><a href="#selection" aria-controls="messages" role="tab" 
         data-toggle="tab">Selection</a></li>
-    <li role="presentation" class="hidden-xs"><a href="#population" aria-controls="settings" role="tab" 
+    <li role="presentation"><a href="#population" aria-controls="settings" role="tab" 
         data-toggle="tab">Population</a></li>
     <!-- <li role="presentation"><a href="#substructure" aria-controls="settings" role="tab" 
         data-toggle="tab">Substructure</a></li> -->
-    <li role="presentation" class="hidden-xs"><a href="#computation" aria-controls="settings" role="tab" 
+    <li role="presentation"><a href="#computation" aria-controls="settings" role="tab" 
         data-toggle="tab">Computation</a></li>
-    <li role="presentation" class="hidden-xs"><a href="#special" aria-controls="settings" role="tab" 
+    <li role="presentation"><a href="#special" aria-controls="settings" role="tab" 
         data-toggle="tab">Special Applications</a></li>
   </ul>
 
