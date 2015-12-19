@@ -3,6 +3,7 @@
 <html lang=en>
 <head>
 <title>Mendel - web interface</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="text/javascript" src="/static/apps/mendel/mendel.js"></script>
 <style>
   .form-horizontal .control-label{
