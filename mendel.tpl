@@ -80,8 +80,8 @@
         data-toggle="tab">Selection</a></li>
     <li role="presentation"><a href="#population" aria-controls="settings" role="tab" 
         data-toggle="tab">Population</a></li>
-    <!-- <li role="presentation"><a href="#substructure" aria-controls="settings" role="tab" 
-        data-toggle="tab">Substructure</a></li> -->
+    <li role="presentation"><a href="#substructure" aria-controls="settings" role="tab"
+        data-toggle="tab">Substructure</a></li> 
     <li role="presentation"><a href="#computation" aria-controls="settings" role="tab" 
         data-toggle="tab">Computation</a></li>
     <li role="presentation"><a href="#special" aria-controls="settings" role="tab" 

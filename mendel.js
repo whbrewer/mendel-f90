@@ -682,6 +682,7 @@ function fxn_pop_growth_model(i) {
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
+     dmi.bottleneck_yes.disabled = false;
      status("");
   } else if (i == 1) {
      dmi.pop_growth_rate.readOnly = false;
@@ -690,6 +691,7 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "2000"; 
      dmi.pop_growth_rate.value = "1.01"; 
      dmi.pop_growth_rate.title = "1.00 - 1.26"; 
+     dmi.bottleneck_yes.disabled = false;
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 2) {
      dmi.pop_growth_rate.readOnly = false;
@@ -698,15 +700,20 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "1000"; 
      dmi.pop_growth_rate.value = "0.1"; 
      dmi.pop_growth_rate.title = "0.0 - 1.0"; 
+     dmi.bottleneck_yes.disabled = false;
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
      dmi.carrying_capacity.value = 10000;
+     dmi.bottleneck_yes.disabled = true;
+     status("WARNING: disabling bottleneck option");
   } else if (i == 4) { // Adam & Eve Scenario
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
+     dmi.bottleneck_yes.disabled = true;
+     status("WARNING: disabling bottleneck option");
   } else {
      dmi.pop_growth_rate.readOnly = false;
      status("");
