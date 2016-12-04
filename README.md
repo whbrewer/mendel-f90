@@ -8,7 +8,7 @@ For more information visit http://www.mendelsaccountant.info or http://sourcefor
 
 * Build instructions: (1) edit Makefile, (2) run "make"
 
-#### DEPENDENCIES ####
+### DEPENDENCIES ###
 
 * Fortran compiler is required for compiling.  A free gfortran compile can easily by installed on a Linux system by executing the command "sudo apt-get install gfortran" on Debian/Ubuntu systems, and "sudo yum install gfortran" on Redhat/Centos/SuSe systems.  gfortran can also easily on Mac OS X using Homebrew (see brew.sh) by running "brew install gcc" (gfortran is included with gcc).
 
