@@ -14,7 +14,9 @@ For more information visit http://www.mendelsaccountant.info or http://sourcefor
 
 * MPICH (optional). Since mendel uses mpich libraries, for parallel computations, you may download and install mpich from www.mpich.org/downloads/.  
 
-* However, it is possible to install mendel without installing the parallel libs, which means all options will work, but will be limited to running a single tribe/deme at a time. In order to compile Mendel without the parallel libs, first remove all MPICH code by running "make preserial", then run "make serial". 
+* However, it is possible to install mendel without installing the parallel libs, which means all options will work, but will be limited to running a single tribe/deme at a time. In order to compile Mendel without the parallel libs, first remove all MPICH code by running "make preserial", then run "make serial".  It will croak when it tries to do the final linking.  So run this command after it fails:
+
+gfortran -O3 -I/usr/local/include -static-libgfortran -static-libgcc -o mendel_serial sort.o random_pkg.o inputs.o genome.o profile.o polygenic.o selection.o mutation.o mating.o fileio.o  mendel_serial.o init_serial.o
 
 ### INTERFACE ###
 
