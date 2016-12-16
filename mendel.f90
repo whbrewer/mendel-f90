@@ -156,6 +156,9 @@ if(tribal_competition) then
    nmax = 12.*(1. - fraction_random_death) + 0.999
 !  Limit the minimum value of heritability to be 10**-20.
    group_heritability = max(1.e-20, group_heritability)
+elseif (pop_growth_model == 4) then
+   max_size = int(pop_size_allocation*(1. - fraction_random_death))
+   nmax = 2.*reproductive_rate*(1. - fraction_random_death) + 0.999
 else
    max_size = int(1.1*reproductive_rate*pop_size_allocation &
                      *(1. - fraction_random_death))
