@@ -708,7 +708,7 @@ function fxn_pop_growth_model(i) {
      dmi.carrying_capacity.value = 10000;
      dmi.bottleneck_yes.disabled = true;
      status("WARNING: disabling bottleneck option");
-  } else if (i == 4) { // Adam & Eve Scenario
+  } else if (i == 4) { // Founder effects
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 

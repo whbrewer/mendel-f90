@@ -3,8 +3,8 @@ INSTALL_DIR = /usr/local/bin
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
-#FC = /usr/local/bin/mpif90
-FC = gfortran
+FC = /usr/local/bin/mpif90
+#FC = gfortran
 
 # Following are needed for building parallel version
 # Comment out if compiling with mpif90
@@ -18,17 +18,17 @@ FC = gfortran
 # when using Open MPI
 #INCLUDE = /usr/lib64/mpi/gcc/openmpi/include 
 # when using MPICH
-#INCLUDE = /usr/local/lib
+INCLUDE = /usr/local/lib
 
 INCLUDE = /usr/local/include
 # Compiler flags
-DBUGFLAGS = -g -traceback -check # debug version
+#DBUGFLAGS = -g -traceback -check # debug version
 #FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
 FCFLAGS = -O3 -I$(INCLUDE) # release version gfortran
 # note use flag -fpe:0 to handle floating point exceptions
 
 # Linker flags (gfortran on OSX)
-LDFLAGS = -static-libgfortran -static-libgcc
+#LDFLAGS = -static-libgfortran -static-libgcc
 
 SERIALFN = mendel_serial
 
@@ -87,8 +87,8 @@ cln:
 	\rm -f mendel.o migration.o mendel
 
 clean:
-	\rm -f *.o *.mod $(TARGET) test mendel_serial.f90 migration_serial.f90 *.f90-e a.out\
-	       success
+	\rm -f *.o *.mod $(TARGET) test0* *_serial.f90 *.f90-e a.out\
+	       success mendel_serial
 
 ###########################################
 # dependencies
