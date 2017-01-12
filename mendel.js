@@ -383,7 +383,7 @@ function fxn_polygenic_beneficials(init) {
       dmi.frac_fav_mutn.value = 0.0
       dmi.dynamic_linkage.checked = false
       dmi.num_linkage_subunits.value = dmi.polygenic_target.value.length;
-      //document.getElementById("recombination_model").selectedIndex = 2
+      // document.getElementById("recombination_model").selectedIndex = 2
       document.getElementById("fitness_distrib_type").selectedIndex = 1
       fxn_fitness_distrib_type_init()
       dmi.uniform_fitness_effect_fav.readOnly = true;
@@ -582,18 +582,18 @@ function fxn_migration() {
 }
 
 function fxn_tribes(max_tribes) {
-   myobject = dmi.num_tribes;
-   num_tribes = myobject.value;
+   myobject = dmi.num_procs;
+   num_procs = myobject.value;
 
    // set max number of tribes for server from setting in config.inc
-   if(num_tribes > max_tribes) { 
+   if(num_procs > max_tribes) { 
       myobject.value = max_tribes;
-      num_tribes = max_tribes;
+      num_procs = max_tribes;
    }
    // set min number of tribes 
-   if(num_tribes < 2) {
+   if(num_procs < 2) {
       myobject.value = 2; 
-      num_tribes = 2;
+      num_procs = 2;
    }
 
    if (dmi.homogenous_tribes.checked) {
@@ -616,10 +616,10 @@ function fxn_tribes(max_tribes) {
       status("");
    }
 
-   dmi.num_tribes.title = "2 - " + max_tribes;
+   dmi.num_procs.title = "2 - " + max_tribes;
    // Add options to tribe_id select statement
    dmi.tribe_id.options.length=0;
-   for (i = 0; i < num_tribes; i++) {
+   for (i = 0; i < num_procs; i++) {
       a = (i+1)/1000 + ''; // compute number of tribe as a string
       b = a.substring(1);  // remove the leading 0 from 0.001, 0.002, etc.
       if((i+1)%10==0) b += '0'; // every 10 tribes: 0.01->0.010, 0.02->0.020, etc.
