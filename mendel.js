@@ -1,5 +1,5 @@
 function fxn_init() {
-  fxn_tribes(8);
+  fxn_tribes(16);
   fxn_fitness_distrib_type_init();
   //fxn_selection_init();
   // assign values that were parsed from input file to JS vars
@@ -383,7 +383,7 @@ function fxn_polygenic_beneficials(init) {
       dmi.frac_fav_mutn.value = 0.0
       dmi.dynamic_linkage.checked = false
       dmi.num_linkage_subunits.value = dmi.polygenic_target.value.length;
-      document.getElementById("recombination_model").selectedIndex = 2
+      //document.getElementById("recombination_model").selectedIndex = 2
       document.getElementById("fitness_distrib_type").selectedIndex = 1
       fxn_fitness_distrib_type_init()
       dmi.uniform_fitness_effect_fav.readOnly = true;
@@ -682,7 +682,6 @@ function fxn_pop_growth_model(i) {
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
-     dmi.bottleneck_yes.disabled = false;
      status("");
   } else if (i == 1) {
      dmi.pop_growth_rate.readOnly = false;
@@ -691,7 +690,6 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "2000"; 
      dmi.pop_growth_rate.value = "1.01"; 
      dmi.pop_growth_rate.title = "1.00 - 1.26"; 
-     dmi.bottleneck_yes.disabled = false;
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 2) {
      dmi.pop_growth_rate.readOnly = false;
@@ -700,20 +698,15 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "1000"; 
      dmi.pop_growth_rate.value = "0.1"; 
      dmi.pop_growth_rate.title = "0.0 - 1.0"; 
-     dmi.bottleneck_yes.disabled = false;
      status("WARNING: dynamic populations are experimental and largely untested");
   } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
      dmi.carrying_capacity.value = 10000;
-     dmi.bottleneck_yes.disabled = true;
-     status("WARNING: disabling bottleneck option");
-  } else if (i == 4) { // Founder effects
+  } else if (i == 4) { // Adam & Eve Scenario
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
-     dmi.bottleneck_yes.disabled = true;
-     status("WARNING: disabling bottleneck option");
   } else {
      dmi.pop_growth_rate.readOnly = false;
      status("");

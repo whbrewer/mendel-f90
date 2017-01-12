@@ -682,7 +682,7 @@
             1. Homogeneous subpopulations?</label>
           <div class="col-xs-6">
             <input type="checkbox" name="homogenous_tribes"
-                   onclick="fxn_tribes(8)" value="on" 
+                   onclick="fxn_tribes(16)" value="on" 
                    %if homogenous_tribes=='T':
                        checked
                    %end
@@ -695,7 +695,7 @@
             2. Number of subpopulations:</label>
           <div class="col-xs-6">
             <input type="number" name="num_tribes" class="form-control"
-                   min="2" max="100" step="1" onchange="fxn_tribes(8)"
+                   min="2" max="100" step="1" onchange="fxn_tribes(16)"
                    value="{{num_tribes}}" title="2 - 100">
           </div>
         </div>
@@ -738,7 +738,7 @@
             5. Competition between subpopulations?</label>
           <div class="col-xs-6">
             <input type="checkbox" name="tribal_competition" 
-              id="tribal_competition" onchange="fxn_tribes(8)" value="on"
+              id="tribal_competition" onchange="fxn_tribes(16)" value="on"
               %if tribal_competition=='T':
                  checked
               %end
@@ -901,7 +901,7 @@
           4. Random number generator (RNG) seed:</label>
         <div class="col-xs-6">
           <input type="number" name="random_number_seed" title="1 - 1000" 
-                 min="0" max="1e9" step="1" onchange="validate(this)"
+                 min="1" max="1e9" step="1" onchange="validate(this)"
                  class="form-control" value="{{random_number_seed}}">
         </div>
       </div>

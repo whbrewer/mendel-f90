@@ -143,7 +143,7 @@ if(is_parallel .and. tribal_competition) then
    write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
                 pop_size_allocation
 elseif (pop_growth_model > 0) then
-   pop_size_allocation = carrying_capacity*1.2
+   pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
 else
    pop_size_allocation = pop_size
 endif
@@ -903,7 +903,7 @@ do gen=gen_0+1,gen_0+num_generations
          if (gen < 10 .and. pop_size < carrying_capacity) then
             pop_size = max(ceiling(gr1*pop_size),carrying_capacity)
          else if (gen == 10) then
-            pop_size = 6 ! Shem, Ham, Japeth and wives
+            pop_size = 6 
          else if (gen > 10 .and. pop_size < carrying_capacity) then
             pop_size = max(ceiling(gr2*pop_size),carrying_capacity)
          else 
@@ -919,7 +919,7 @@ do gen=gen_0+1,gen_0+num_generations
                   *(1. - fraction_random_death)))
       !print *, 'this_size, max_size', this_size, max_size
       if(this_size > max_size) then
-         write(0,*) "OUT OF MEMORY! SHUTTING DOWN!"
+         write(0,*) "OUT OF MEMORY! SHUTTING DOWN!", this_size, max_size
          goto 20
       end if 
 
