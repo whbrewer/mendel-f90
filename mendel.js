@@ -159,6 +159,7 @@ function fxn_haploid() {
 function fxn_is_parallel() {
    if (dmi.is_parallel.checked) {
       document.getElementById("psdiv").style.display = "block";
+      document.getElementById("num_procs").value = 2;
       window.scrollBy(0,500);
       //document.getElementById("engine").selectedIndex = 1;
       //status("NOTE: Changed engine to C");
@@ -166,6 +167,7 @@ function fxn_is_parallel() {
       //status("Setting fraction_neutral to 0. Neutral mutations not supported in parallel runs.");
    } else {
       document.getElementById("psdiv").style.display = "none";
+      document.getElementById("num_procs").value = 1;
       status("");
    }
 }
