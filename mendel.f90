@@ -804,9 +804,11 @@ do gen=gen_0+1,gen_0+num_generations
       endif
    endif
 
-   if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
-       call diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
-                             work_fitness, max_size, gen)
+   if (plot_allele_gens > 0) then
+      if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
+         call diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
+                                work_fitness, max_size, gen)
+   endif
 
    call second(tout_diagnostics)
    sec(8) = sec(8) + tout_diagnostics - tin_diagnostics
@@ -996,12 +998,14 @@ if(num_contrasting_alleles > 0) then
           linkage_block_fitness, initial_allele_effects, max_size)
 end if
 
-if(tracking_threshold /= 1.0) then
-   call diagnostics_polymorphisms_plot(dmutn,nmutn,fmutn, &
-                       work_fitness, max_size, gen-1)
-! if(recombination_model /= clonal)
-! &      call diagnostics_heterozygosity(dmutn, fmutn)
-end if
+if (plot_allele_gens > 0) then
+   if(tracking_threshold /= 1.0) then
+      call diagnostics_polymorphisms_plot(dmutn,nmutn,fmutn, &
+                          work_fitness, max_size, gen-1)
+      ! if(recombination_model /= clonal)
+      ! &      call diagnostics_heterozygosity(dmutn, fmutn)
+   end if
+endif
 
 call second(tout_diagnostics)
 sec(8) = sec(8) + tout_diagnostics - tin_diagnostics

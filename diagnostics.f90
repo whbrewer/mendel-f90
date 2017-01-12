@@ -1749,11 +1749,12 @@ else
     oneortwo = 1
 end if 
 
-fid = 24
+fid = 34
 
 do i = 1, oneortwo
-   if(oneortwo==2) then
-      fid = 34
+
+   if(oneortwo==1) then
+      fid = 24
       sel_bins = par_sel_bins
       pre_sel_fitness  = par_pre_sel_fitness
       post_sel_fitness = par_post_sel_fitness
