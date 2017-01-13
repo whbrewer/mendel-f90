@@ -1745,15 +1745,15 @@ end if
 ! and caseid.000.sel which contains data averaged from all tribes.
 if (is_parallel .and. myid==0) then
     oneortwo = 2
-else 
+    fid = 34
+else ! non-parallel
     oneortwo = 1
+    fid = 24
 end if 
-
-fid = 34
 
 do i = 1, oneortwo
 
-   if(oneortwo==1) then
+   if(is_parallel .and. oneortwo==1) then
       fid = 24
       sel_bins = par_sel_bins
       pre_sel_fitness  = par_pre_sel_fitness
