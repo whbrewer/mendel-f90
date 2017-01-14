@@ -159,7 +159,10 @@ function fxn_haploid() {
 function fxn_is_parallel() {
    if (dmi.is_parallel.checked) {
       document.getElementById("psdiv").style.display = "block";
-      document.getElementById("num_procs").value = 2;
+      np = document.getElementById("num_procs")
+      if (np.value == 1) {
+         np.value = 2
+      }
       window.scrollBy(0,500);
       //document.getElementById("engine").selectedIndex = 1;
       //status("NOTE: Changed engine to C");
