@@ -1008,6 +1008,19 @@
           </div>
       </div>
 
+      <div class="form-group">
+        <label for="write_vcf" class="control-label col-xs-10 col-sm-6">             
+          9. Output VCF File?</label>
+        <div class="col-xs-2 col-sm-3">
+          <input type="checkbox" name="write_vcf" accesskey="4"
+            onclick="write_vcf()" value="on" 
+            %if write_vcf=='T':
+                checked
+            %end
+          >
+        </div>
+      </div>      
+
     </div>
 
     <!--*********************** SPECIAL APPLICATIONS TAB *************************-->

@@ -82,6 +82,7 @@
                    reseed_rng = F
                track_neutrals = F
                    write_dump = F
+                    write_vcf = F
                  restart_case = F
           restart_dump_number = 0
              plot_allele_gens = 100

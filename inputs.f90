@@ -37,7 +37,7 @@ real*8 :: tracking_threshold, extinction_threshold
 logical :: fitness_dependent_fertility, dynamic_linkage,             &
            synergistic_epistasis, is_parallel, bottleneck_yes,       &
            restart_case, write_dump, homogenous_tribes,              &
-           clonal_haploid,                                           &
+           clonal_haploid, write_vcf,                                &
            upload_mutations, altruistic, allow_back_mutn,            &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
            polygenic_beneficials, tribal_fission, reseed_rng
@@ -83,7 +83,7 @@ namelist /substructure/ is_parallel, homogenous_tribes, &
 namelist /computation/ tracking_threshold, extinction_threshold, &
      max_del_mutn_per_indiv, max_fav_mutn_per_indiv, &
      max_neu_mutn_per_indiv, random_number_seed, reseed_rng, &
-     track_neutrals, write_dump, restart_case, &
+     track_neutrals, write_dump, write_vcf, restart_case, &
      restart_dump_number, data_file_path, plot_allele_gens, &
      verbosity, poisson_method
 
@@ -205,6 +205,7 @@ write(nf,'(a32,i12)')   ' poisson_method = '        , poisson_method
 write(nf,'(a32,l)')     ' reseed_rng = '            , reseed_rng
 write(nf,'(a32,l)')     ' track_neutrals = '        , track_neutrals
 write(nf,'(a32,l)')     ' write_dump = '            , write_dump
+write(nf,'(a32,l)')     ' write_vcf = '             , write_vcf
 write(nf,'(a32,l)')     ' restart_case = '          , restart_case
 write(nf,'(a32,i12)')   ' restart_dump_number = '   , restart_dump_number
 write(nf,'(a32,i12)')   ' plot_allele_gens = '      , plot_allele_gens
@@ -294,6 +295,7 @@ reseed_rng = .false.
 poisson_method = 0 ! Numerical Recipes
 track_neutrals = .false.
 write_dump = .false.
+write_vcf = .false.
 restart_case = .false.
 restart_dump_number = 0
 plot_allele_gens = 100

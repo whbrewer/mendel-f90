@@ -124,13 +124,13 @@ function fxn_combine_mutns_able() {
 }
 
 function fxn_dynamic_linkage() {
-        fxn_dynamic_linkage_able();
+    fxn_dynamic_linkage_able();
     if (dmi.dynamic_linkage.checked) {
-        //mendel_input.num_linkage_subunits.value = 1000;
+        //mendel_input.num_linkage_subunits.value = 989;
         if (dmi.haploid_chromosome_number.value = "0")
                dmi.haploid_chromosome_number.value = "23";
     } else {
-        dmi.num_linkage_subunits.value = 1000;
+        dmi.num_linkage_subunits.value = 989;
     }
 }
 function fxn_dynamic_linkage_able() {
@@ -716,6 +716,13 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = false;
      status("");
   }
-
 }
 
+function write_vcf() {
+   
+   if(dmi.write_vcf.checked) {
+      continue     
+   } else {
+      continue     
+   }
+}

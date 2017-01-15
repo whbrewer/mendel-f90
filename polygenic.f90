@@ -79,8 +79,7 @@ end select
 end function int_to_nucl
 
 ! return ASCII code which corresponds to either A,C,G,T
-character function random_nucl(n)
-integer, intent(in) :: n
+character function random_nucl()
 real :: x
 integer :: i
 character*1 nucl(4)

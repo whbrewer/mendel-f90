@@ -213,6 +213,66 @@ call second(tout)
 sec(10) = sec(10) + tout - tin
 end subroutine write_output_dump
 
+subroutine write_vcf_file(dmutn)
+
+use inputs
+use polygenic
+include 'common.h'
+
+integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
+integer :: npath, i, j, k, lb, dominance
+integer :: chrom, lb_per_chrom, pos, id
+real*8 :: x, fitness
+character*5 :: chrom_str
+character*3 :: myid_str
+character*1 :: dot = ".", ref, alt
+npath = index(data_file_path,' ') - 1
+
+if (is_parallel) then
+   write(myid_str,'(i3.3)') myid+1
+else
+   write(myid_str,'(i3.3)') 0
+   myid = 0
+end if
+
+open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+//'.vcf',status='unknown')
+
+write(27,'("##fileformat=VCFv4.1")')
+write(27,'("##contig=<ID=1,length=249250621,assembly=b37>")')
+write(27,'(a, a)') "####reference=case_id:", case_id
+write(27,'("#CHROM  POS ID  REF ALT QUAL    FILTER  INFO")')
+
+lb_per_chrom = num_linkage_subunits/haploid_chromosome_number
+
+do k = 1, pop_size
+   do j = 1, 2
+      do i = 2, dmutn(1,j,k) 
+         call decode_mutn_del(dmutn(i,j,k), lb, dominance, fitness)
+         if (lb == 0) cycle ! if for some reason the linkage block number
+                            ! is zero ignore for now... for some reason about
+                            ! 3 out of every 11,000 show up as zero... not sure why
+         x = lb/real(lb_per_chrom)
+         chrom = ceiling(x)
+         pos = ceiling((x - chrom + 1)*lb_per_chrom)*lb_modulo
+         id = dmutn(i,j,k)
+         ref = mutn_to_nucl(dmutn(i,j,k))
+         alt = random_nucl()
+         do while(ref == alt) ! generate a value of alt that is different than ref
+            alt = random_nucl()
+         end do
+         write(chrom_str, '(a, i2.2)') "chr", chrom
+         write(27, 100) chrom_str, pos, id, ref, alt, dot, dot !, chrom, lb, x
+      end do
+   end do 
+enddo
+
+100 format(a5, 2i12, 4a5, 2i10, f12.7)
+
+close(27)
+
+end subroutine write_vcf_file
+
 subroutine write_sample(dmutn,fmutn,lb_mutn_count, &
                         linkage_block_fitness,fitness, &
                         defect,improve,effect,del_mutn, &

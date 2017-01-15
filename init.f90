@@ -142,6 +142,13 @@ if (verbosity == 2) then
            "time_offspring(s)",2x,"time_selection(s)")')
    open(26, file=data_file_path(1:npath)//case_id//'.'//myid_str &
         //'.acc',status='unknown')
+   open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+        //'.vcf',status='unknown')
+   write(27,'("##fileformat=VCFv4.1")')
+   write(27,'("##contig=<ID=1,length=249250621,assembly=b37>")')
+   write(27,'("####reference=file:///path/to/human_g1k_v37.fasta")')
+   write(27,'("#CHROM  POS ID  REF ALT QUAL    FILTER  INFO")')
+
 endif
 
 ! If parallel, write additional average files with name-tag 000.

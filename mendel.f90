@@ -1016,6 +1016,8 @@ sec(8) = sec(8) + tout_diagnostics - tin_diagnostics
 
 dump_number = dump_number + 1
 
+if (write_vcf) call write_vcf_file(dmutn)
+
 if(write_dump) call write_output_dump(dmutn,nmutn,fmutn,lb_mutn_count, &
                     linkage_block_fitness,initial_allele_effects, &
                     shutdown_gen,myid_str)
