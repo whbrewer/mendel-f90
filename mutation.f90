@@ -406,7 +406,7 @@ include 'common.h'
 real*8 fitness, x
 integer mutn, lb, dominance 
 dominance = sign(1,mutn)
-lb  = abs(mutn)/lb_modulo + 1
+lb  = abs(mutn)/lb_modulo
 x   = mod(abs(mutn), lb_modulo)*del_scale
 fitness = -dexp(-alpha_del*x**gamma_del)
 if(x >= 1.d0) fitness = 0.d0
@@ -416,7 +416,7 @@ end subroutine decode_mutn_del
 integer function decode_lb(mutn)
 include 'common.h'
 integer mutn
-decode_lb = abs(mutn)/lb_modulo + 1
+decode_lb = abs(mutn)/lb_modulo
 return
 end function decode_lb
 
