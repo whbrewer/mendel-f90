@@ -240,8 +240,8 @@ open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
 
 write(27,'("##fileformat=VCFv4.1")')
 write(27,'("##contig=<ID=1,length=249250621,assembly=b37>")')
-write(27,'(a, a)') "####reference=case_id:", case_id
-write(27,'("#CHROM  POS ID  REF ALT QUAL    FILTER  INFO")')
+write(27,'(a, a)') "####reference=", case_id
+write(27,'("#CHROM  POS  ID   REF   ALT   QUAL   FILTER   INFO")')
 
 lb_per_chrom = num_linkage_subunits/haploid_chromosome_number
 
@@ -255,19 +255,19 @@ do k = 1, pop_size
          x = lb/real(lb_per_chrom)
          chrom = ceiling(x)
          pos = ceiling((x - chrom + 1)*lb_per_chrom)*lb_modulo
-         id = dmutn(i,j,k)
-         ref = mutn_to_nucl(dmutn(i,j,k))
-         alt = random_nucl()
+         id = k !dmutn(i,j,k)
+         ref = "X" !random_nucl()
+         alt = mutn_to_nucl(dmutn(i,j,k))
          do while(ref == alt) ! generate a value of alt that is different than ref
             alt = random_nucl()
          end do
          write(chrom_str, '(a, i2.2)') "chr", chrom
-         write(27, 100) chrom_str, pos, id, ref, alt, dot, dot !, chrom, lb, x
+         write(27, 100) chrom_str, pos, id, ref, alt, dot, dot, dot, "  " !, chrom, lb, x
       end do
    end do 
 enddo
 
-100 format(a5, 2i12, 4a5, 2i10, f12.7)
+100 format(a5, 2i12, 6a5, 2i10, f12.7)
 
 close(27)
 
