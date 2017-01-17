@@ -137,11 +137,11 @@ function fxn_dynamic_linkage_able() {
     if (dmi.dynamic_linkage.checked) {
        dmi.haploid_chromosome_number.readOnly = false;
            document.getElementById("num_linkage_subunits").innerText = 
-            ":: number of linkage subunits:";
+            "b. number of linkage subunits:";
     } else {
        dmi.haploid_chromosome_number.readOnly = true;
        document.getElementById("num_linkage_subunits").innerText = 
-            ":: fixed block linkage number:";
+            "b. fixed block linkage number:";
     }
 }
 
@@ -710,6 +710,7 @@ function fxn_pop_growth_model(i) {
      dmi.carrying_capacity.value = 10000;
   } else if (i == 4) { // Founder effects
      dmi.pop_growth_rate.readOnly = false;
+     dmi.pop_growth_rate.value = "8";
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
      dmi.bottleneck_yes.checked = true;
