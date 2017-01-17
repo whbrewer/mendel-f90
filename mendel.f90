@@ -51,6 +51,7 @@ real tin_offspring, tout_offspring, tgen, par_tgen
 real tin_diagnostics, tout_diagnostics, tin_selection, tout_selection
 real total_time_offspring, time_offspring, time_selection
 real par_time_offspring, par_time_selection, tsub
+real reproductive_rate_saved
 logical found, print_flag, am_parallel, file_exists, winner, create_fav_mutn
 character*3 myid_str
 character(len=128) :: arg, filename
@@ -142,7 +143,13 @@ if(is_parallel .and. tribal_competition) then
    pop_size_allocation = global_pop_size
    write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
                 pop_size_allocation
-elseif (pop_growth_model > 0) then
+elseif (pop_growth_model==2 .or. pop_growth_model==3) then
+   pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
+elseif (pop_growth_model == 4) then
+   gr1 = int(pop_growth_rate)
+   gr2 = (pop_growth_rate - gr1)*10.
+   reproductive_rate_saved = reproductive_rate
+   reproductive_rate = gr1
    pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
 else
    pop_size_allocation = pop_size
@@ -900,16 +907,17 @@ do gen=gen_0+1,gen_0+num_generations
          end if 
          current_pop_size = pop_size
       else if (pop_growth_model == 4) then
-         gr1 = int(pop_growth_rate)
-         gr2 = (pop_growth_rate - gr1)*10.
          if (gen < 10 .and. pop_size < carrying_capacity) then
-            pop_size = max(ceiling(gr1*pop_size),carrying_capacity)
+            pop_size = min(ceiling(gr1*pop_size),carrying_capacity)
+            reproductive_rate = gr1
          else if (gen == 10) then
             pop_size = 6 
          else if (gen > 10 .and. pop_size < carrying_capacity) then
-            pop_size = max(ceiling(gr2*pop_size),carrying_capacity)
+            pop_size = min(ceiling(gr2*pop_size),carrying_capacity)
+            reproductive_rate = gr2 
          else 
             pop_size = carrying_capacity
+            reproductive_rate = reproductive_rate_saved
          end if
       else 
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
