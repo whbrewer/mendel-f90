@@ -640,7 +640,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div id="nbg" class="form-group">
           <label for="num_bottleneck_generations" class="control-label col-xs-12 col-sm-6">
             &nbsp;&nbsp;&nbsp; :: duration of bottleneck - generations:</label>
           <div class="col-xs-12 col-sm-3">

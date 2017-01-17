@@ -55,9 +55,9 @@ real reproductive_rate_saved
 logical found, print_flag, am_parallel, file_exists, winner, create_fav_mutn
 character*3 myid_str
 character(len=128) :: arg, filename
-integer, dimension(20) :: prescribed_pop_growth
+integer, dimension(5) :: prescribed_pop_growth
 ! prescribed growth array starts with generation 2
-prescribed_pop_growth = (/16,128,1024,8192,10000,10000,10000,10000,10000,6,24,96,384,1536,6144,10000,10000,10000,10000,10000/)
+prescribed_pop_growth = (/16,128,1024,8192,10000/)
 
 call second(tin_run)
 
@@ -146,6 +146,7 @@ if(is_parallel .and. tribal_competition) then
 elseif (pop_growth_model==2 .or. pop_growth_model==3) then
    pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
 elseif (pop_growth_model == 4) then
+   bottleneck_yes = .false.
    gr1 = int(pop_growth_rate)
    gr2 = (pop_growth_rate - gr1)*10.
    reproductive_rate_saved = reproductive_rate
@@ -224,7 +225,7 @@ end if
 ! If the bottleneck flag, bottleneck_yes, is false, set the value
 ! of bottleneck_generation beyond the generation range for this run.
 
-if(.not.bottleneck_yes) &
+if(.not.bottleneck_yes .and. pop_growth_model /= 4) &
    bottleneck_generation = 1 + gen_0 + num_generations
 
 ! Initialize the population size to be equal to the parameter
@@ -886,14 +887,14 @@ do gen=gen_0+1,gen_0+num_generations
 !  For dynamic population sizes compute new pop_size
 
    if(pop_growth_model > 0) then
-      if(pop_growth_model == 1) then
+      if(pop_growth_model == 1) then ! exponential growth
          pop_size = ceiling(pop_growth_rate*pop_size)
          current_pop_size = pop_size
-      else if (pop_growth_model == 2) then
+      else if (pop_growth_model == 2) then ! carrying capacity model
          pop_size = ceiling(pop_size*(1. + pop_growth_rate* &
                     (1. - pop_size/carrying_capacity)))
          current_pop_size = pop_size
-      else if (pop_growth_model == 3) then
+      else if (pop_growth_model == 3) then 
          old_pop_size = pop_size
          if (gen > 20) then
             pop_size = prescribed_pop_growth(size(prescribed_pop_growth))
@@ -906,13 +907,13 @@ do gen=gen_0+1,gen_0+num_generations
             stop
          end if 
          current_pop_size = pop_size
-      else if (pop_growth_model == 4) then
-         if (gen < 10 .and. pop_size < carrying_capacity) then
+      else if (pop_growth_model == 4) then ! Founder effects
+         if (gen < bottleneck_generation .and. pop_size < carrying_capacity) then
             pop_size = min(ceiling(gr1*pop_size),carrying_capacity)
             reproductive_rate = gr1
-         else if (gen == 10) then
-            pop_size = 6 
-         else if (gen > 10 .and. pop_size < carrying_capacity) then
+         else if (gen == bottleneck_generation) then
+            pop_size = bottleneck_pop_size
+         else if (gen > bottleneck_generation .and. pop_size < carrying_capacity) then
             pop_size = min(ceiling(gr2*pop_size),carrying_capacity)
             reproductive_rate = gr2 
          else 

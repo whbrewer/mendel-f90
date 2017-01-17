@@ -16,7 +16,7 @@ function fxn_init() {
   fxn_migration();
   fxn_clone();
   fxn_fraction_neutral();
-  fxn_polygenic_beneficials();
+  //fxn_polygenic_beneficials();
   fxn_track_neutrals();
   fxn_track_all_mutn();
   fxn_init_tracking_threshold();
@@ -688,7 +688,7 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = true;
      dmi.carrying_capacity.readOnly = true;
      status("");
-  } else if (i == 1) {
+  } else if (i == 1) { // Exponential growth
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = true;
      dmi.pop_size.value = "2"; 
@@ -696,7 +696,7 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.value = "1.01"; 
      dmi.pop_growth_rate.title = "1.00 - 1.26"; 
      status("WARNING: dynamic populations are experimental and largely untested");
-  } else if (i == 2) {
+  } else if (i == 2) { // Carrying capacity
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
@@ -712,6 +712,11 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = false;
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = "2"; 
+     dmi.bottleneck_yes.checked = true;
+     dmi.bottleneck_generation.value = dmi.num_generations.value + 1;
+     dmi.bottleneck_pop_size.value = 10;
+     document.getElementById("bydiv").style.display = "block";
+     document.getElementById("nbg").style.display = "none";
   } else {
      dmi.pop_growth_rate.readOnly = false;
      status("");
