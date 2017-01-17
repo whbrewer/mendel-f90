@@ -329,7 +329,7 @@
       <div id="mwdiv" style="display:none">
         <div class="form-group">
           <label for="multiplicative_weighting" class="control-label col-xs-12 col-sm-6">
-                &nbsp;&nbsp;&nbsp; :: fraction multiplicative effect:</label>
+                &nbsp;&nbsp;&nbsp; a. fraction multiplicative effect:</label>
           <div class="col-xs-12 col-sm-3">         
             <input type="number" name="multiplicative_weighting"
                    id="multiplicative_weighting" class="form-control"
@@ -482,7 +482,7 @@
         <div class="form-group">
           <label for="partial_truncation_value" class="control-label col-xs-12 col-sm-6">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-               :: partial truncation parameter, k</label>
+               a. partial truncation parameter, k</label>
           <div class="col-xs-12 col-sm-3">
               <input type="number" name="partial_truncation_value"
                   class="form-control" value="{{partial_truncation_value}}" 
@@ -538,7 +538,7 @@
 
       <div class="form-group">
         <label for="haploid_chromosome_number" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          :: haploid chromosome number:</label>      
+          a. haploid chromosome number:</label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="haploid_chromosome_number" title="1 - 100"
                  min="1" max="100" step="1" onchange="validate(this)" class="form-control"
@@ -549,7 +549,7 @@
       <div class="form-group">
         <label id="num_linkage_subunits" style="left:20px" for="num_linkage_subunits" 
                class="control-label col-xs-12 col-sm-6">
-          :: number of linkage subunits:</label>      
+          b. number of linkage subunits:</label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="num_linkage_subunits" title="1 - 10,000"
                  min="1" max="10000" data-warning="1000" step="1" 
@@ -565,7 +565,7 @@
 
       <div class="form-group">
         <label for="pop_growth_model" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          :: population growth model:</label>      
+          a. population growth model:</label>      
         <div class="col-xs-12 col-sm-3">
           <select id="pop_growth_model" name="pop_growth_model" accesskey="5"
                   class="form-control"  onchange="fxn_pop_growth_model(this.value)">
@@ -583,7 +583,7 @@
 
       <div class="form-group">
         <label for="pop_growth_rate" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          :: population growth rate:</label>      
+          b. population growth rate:</label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="pop_growth_rate" class="form-control"
                  min="1" max="1.26" step="0.02" onchange="validate(this)"
@@ -593,7 +593,7 @@
        
       <div class="form-group">
         <label for="carrying_capacity" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          :: carrying capacity:</label>      
+          c. carrying capacity:</label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="carrying_capacity" class="form-control"
                  min="0" max="10000" step="100" onchange="validate(this)"
@@ -619,7 +619,7 @@
         <div class="form-group">
           <label for="bottleneck_generation" class="control-label col-xs-12 col-sm-6">
                    &nbsp;&nbsp;&nbsp;
-               :: generation when bottleneck starts:<br>
+               a. generation when bottleneck starts:<br>
                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                        <font size="-2"><em>note: negative values enable cyclic 
                                            bottlenecking</em></font></label>
@@ -633,7 +633,7 @@
 
         <div class="form-group">
           <label for="bottleneck_pop_size" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp; :: population size during bottleneck:</label>
+            &nbsp;&nbsp;&nbsp; b. population size during bottleneck:</label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" class="form-control" name="bottleneck_pop_size"
                    value="{{bottleneck_pop_size}}"  title="2 - 1,000">
@@ -642,7 +642,7 @@
 
         <div id="nbg" class="form-group">
           <label for="num_bottleneck_generations" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp; :: duration of bottleneck - generations:</label>
+            &nbsp;&nbsp;&nbsp; c. duration of bottleneck - generations:</label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="num_bottleneck_generations" class="form-control"
                    min="1" max="5000" step="10" onchange="validate(this)"
@@ -818,7 +818,7 @@
 
       <div id="max_del_mutn_per_indiv" class="form-group">
         <label for="max_del_mutn_per_indiv" class="control-label col-xs-12 col-sm-6">
-          &nbsp;&nbsp;&nbsp; :: maximum deleterious mutations per individual:</label>
+          &nbsp;&nbsp;&nbsp; a. maximum deleterious mutations per individual:</label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="max_del_mutn_per_indiv"
                    onchange="compute_memory(); validate(this)" 
@@ -829,7 +829,7 @@
 
       <div id="max_fav_mutn_per_indiv" class="form-group">
         <label for="max_fav_mutn_per_indiv" class="control-label col-xs-12 col-sm-6">
-          &nbsp;&nbsp;&nbsp; :: maximum favorable mutations per individual:</label>
+          &nbsp;&nbsp;&nbsp; b. maximum favorable mutations per individual:</label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="max_fav_mutn_per_indiv" accesskey="0"
                      onchange="compute_memory(); validate(this)"
@@ -840,7 +840,7 @@
 
       <div id="max_neu_mutn_per_indiv" class="form-group">
         <label for="max_neu_mutn_per_indiv" class="control-label col-xs-12 col-sm-6">
-          &nbsp;&nbsp;&nbsp; :: maximum neutral mutations per individual:</label>
+          &nbsp;&nbsp;&nbsp; c. maximum neutral mutations per individual:</label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="max_neu_mutn_per_indiv" accesskey="0"
                      onchange="compute_memory(); validate(this)"
@@ -903,7 +903,7 @@
        
       <div class="form-group">
         <label for="reseed_rng" class="control-label col-xs-10 col-sm-6">
-          &nbsp;&nbsp;&nbsp; :: Reseed the RNG every gen using PID&#8853;Time:<br>
+          &nbsp;&nbsp;&nbsp; a. Reseed the RNG every gen using PID&#8853;Time:<br>
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
           <font size="-1">(Warning: if checked, runs will not be repeatable)</font>
         </label>
@@ -948,7 +948,7 @@
 
         <div class="form-group">
           <label for="restart_dump_number" class="control-label col-xs-12 col-sm-6">    
-            &nbsp;&nbsp;&nbsp; :: restart from which phase of run:</label>
+            &nbsp;&nbsp;&nbsp; a. restart from which phase of run:</label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="restart_dump_number" title="1 - 100"
                    min="1" max="100" step="1" onchange="validate(this)"
@@ -958,7 +958,7 @@
 
         <div class="form-group">
           <label for="restart_case_id" class="control-label col-xs-12 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: restart from which case ID:</label>
+          &nbsp;&nbsp;&nbsp; b. restart from which case ID:</label>
           <div class="col-xs-12 col-sm-3">
             <input type="text" name="restart_case_id"
                    title="must be six letters" value="{{restart_case_id}}">
@@ -967,7 +967,7 @@
 
         <div class="form-group">
           <label for="restart_append" class="control-label col-xs-10 col-sm-6">    
-            &nbsp;&nbsp;&nbsp; :: append data to previous case:</label>
+            &nbsp;&nbsp;&nbsp; c. append data to previous case:</label>
           <div class="col-xs-2 col-sm-3">
             <input type="checkbox" name="restart_append" value="on" 
               %if restart_append=='T':
@@ -1033,10 +1033,8 @@
 
       <div class="form-group">
         <label for="num_contrasting_alleles" class="control-label col-xs-12 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: number of initial contrasting alleles:<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <font size="-1">Note: fraction_recessive must be &gt; 0.0
-          to work properly.</font> </label>
+          &nbsp;&nbsp;&nbsp; a. number of initial contrasting alleles:<br>
+        </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="num_contrasting_alleles" title="1 - 1000"
                  min="1" max="1000" step="1" value="{{num_contrasting_alleles}}" 
@@ -1046,7 +1044,7 @@
 
       <div class="form-group">
         <label for="max_total_fitness_increase" class="control-label col-xs-12 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: maximum total fitness increase:<br>
+          &nbsp;&nbsp;&nbsp; b. maximum total fitness increase:<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <font size="-1">Note: this value must be &gt; 0 for ICA to work.</font> </label>
         <div class="col-xs-12 col-sm-3">
@@ -1059,7 +1057,7 @@
 
       <div class="form-group">
         <label for="initial_alleles_pop_frac" class="control-label col-xs-12 col-sm-6">
-          &nbsp;&nbsp;&nbsp; :: fraction of population which has allele:<br>
+          &nbsp;&nbsp;&nbsp; c. fraction of population which has allele:<br>
         </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="initial_alleles_pop_frac" title="0 - 1"
@@ -1084,7 +1082,7 @@
       <div class="form-group">
         <label for="fraction_neutral" class="control-label col-xs-12 col-sm-6">    
           &nbsp;&nbsp;&nbsp;    
-          :: fraction of genome which is non-functional <em>junk</em>:</label>
+          a. fraction of genome which is non-functional <em>junk</em>:</label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="fraction_neutral" id="fmun"
                  value="{{fraction_neutral}}" class="form-control"
@@ -1096,7 +1094,7 @@
 
       <div class="form-group">
         <label for="uneu" class="control-label col-xs-12 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: neutral mutation rate: </label>
+          &nbsp;&nbsp;&nbsp; b. neutral mutation rate: </label>
         <div class="col-xs-12 col-sm-3">
           <input name="uneu" type="number" class="form-control" readOnly=true>
         </div>
@@ -1117,7 +1115,7 @@
 
       <div class="form-group">
         <label for="polygenic_init" class="control-label col-xs-6 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: initialization sequence:</label>
+          &nbsp;&nbsp;&nbsp; a. initialization sequence:</label>
         <div class="col-xs-6 col-sm-3">
           <input type="text" name="polygenic_init" id="polygenic_init" 
                  value="{{polygenic_init}}" class="form-control"
@@ -1127,7 +1125,7 @@
 
       <div class="form-group">
         <label for="polygenic_target" class="control-label col-xs-6 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: target sequence:</label>
+          &nbsp;&nbsp;&nbsp; b. target sequence:</label>
         <div class="col-xs-6 col-sm-3">
           <input type="text" name="polygenic_target" id="pbnr"
                  value="{{polygenic_target}}" class="form-control"
@@ -1137,7 +1135,7 @@
 
       <div class="form-group">
         <label for="polygenic_effect" class="control-label col-xs-12 col-sm-6">    
-          &nbsp;&nbsp;&nbsp; :: fitness effect associated with target:</label>
+          &nbsp;&nbsp;&nbsp; c. fitness effect associated with target:</label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="polygenic_effect" id="pbnr" class="form-control"
                  min="0" max="1" step="0.001" onchange="validate(this)"
@@ -1164,8 +1162,8 @@
       </table>
 
       <font size="+1">
-        <a href="/static/apps/mendel/upload_mutations.xlsx">download worksheet</a> ::
-        <label name="upload_mutn_link"><a href="javascript:cid=dmi.case_id.value;popUp('mutn_upload.pl?run_dir=/Library/WebServer/Documents/mendel_user_data&user_id=wes&case_id=' + cid + '&mutn_file_id=',600,600);">upload mutations</a></label> ::
+        <a href="/static/apps/mendel/upload_mutations.xlsx">download worksheet</a> 
+        <label name="upload_mutn_link"><a href="javascript:cid=dmi.case_id.value;popUp('mutn_upload.pl?run_dir=/Library/WebServer/Documents/mendel_user_data&user_id=wes&case_id=' + cid + '&mutn_file_id=',600,600);">upload mutations</a></label> 
         <label name="upload_mutn_link"><a href="javascript:cid=dmi.case_id.value;mfid=dmi.mutn_file_id.value;popUp('more.pl?user_id=wes&case_id='+cid+'&file_name='+mfid+'&nothing=',600,600);">view mutations</a></label> 
       </font>
     </fieldset>
