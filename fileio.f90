@@ -221,11 +221,13 @@ include 'common.h'
 
 integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
 integer :: npath, i, j, k, lb, dominance
-integer :: chrom, lb_per_chrom, pos, id
-real*8 :: x, fitness
+integer :: chrom, lb_per_chrom, pos
+real*8 :: x, fitness, id
 character*5 :: chrom_str
 character*3 :: myid_str
 character*1 :: dot = ".", ref, alt
+integer, external :: decode_mutn_id
+
 npath = index(data_file_path,' ') - 1
 
 if (is_parallel) then
@@ -255,7 +257,8 @@ do k = 1, pop_size
          x = lb/real(lb_per_chrom)
          chrom = ceiling(x)
          pos = ceiling((x - chrom + 1)*lb_per_chrom)*lb_modulo
-         id = k !dmutn(i,j,k)
+         !id = decode_mutn_id(dmutn(i,j,k), -1) ! don't know why I'm having so much trouble w/this!!
+         id = real(mod(dmutn(i,j,k), lb_modulo))*del_scale
          ref = "X" !random_nucl()
          alt = mutn_to_nucl(dmutn(i,j,k))
          do while(ref == alt) ! generate a value of alt that is different than ref
@@ -267,7 +270,7 @@ do k = 1, pop_size
    end do 
 enddo
 
-100 format(a5, 2i12, 6a5, 2i10, f12.7)
+100 format(a5, i12, f12.7, 6a5, 2i10, f12.7)
 
 close(27)
 

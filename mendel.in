@@ -1,7 +1,7 @@
 &basic
                       case_id = test00
                     mutn_rate = 10.0
-                frac_fav_mutn = 0.0
+                frac_fav_mutn = 0.001
             reproductive_rate = 2.0
                      pop_size = 1000
               num_generations = 500
@@ -14,7 +14,7 @@
     high_impact_mutn_fraction = 0.001
    high_impact_mutn_threshold = 0.1
          num_initial_fav_mutn = 0
-         max_fav_fitness_gain = 0.01
+         max_fav_fitness_gain = 0.1
    uniform_fitness_effect_del = 0.0
    uniform_fitness_effect_fav = 0.0
            fraction_recessive = 0.0

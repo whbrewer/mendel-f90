@@ -214,6 +214,7 @@ function fxn_bottleneck() {
 function fxn_bottleneck_able() {
    if (dmi.bottleneck_yes.checked) {
       document.getElementById("bydiv").style.display = "block";
+      document.getElementById("nbg").style.display = "block";
    } else {
       document.getElementById("bydiv").style.display = "none";
    }
@@ -260,6 +261,10 @@ function fxn_auto_malloc() {
     dmi.max_fav_mutn_per_indiv.readOnly = false;
     dmi.max_del_mutn_per_indiv.select();
   }
+}
+
+function auto_malloc_able() {
+    
 }
 
 function compute_memory() {

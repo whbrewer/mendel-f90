@@ -443,3 +443,15 @@ end if
 return
 end function decode_fitness_del
 
+integer function decode_mutn_id(mutn, mutn_type) 
+include 'common.h'
+integer mutn, mutn_type ! -1 = deleterious, 0 = neutral, 1 = favorable
+real*8 x
+if (mutn_type < 0) then
+   decode_mutn_id = mod(abs(mutn), lb_modulo)*del_scale
+else if (mutn_type == 0) then
+   decode_mutn_id = mod(abs(mutn), lb_modulo)
+else
+   decode_mutn_id = mod(abs(mutn), lb_modulo)*fav_scale
+end if
+end function decode_mutn_id
