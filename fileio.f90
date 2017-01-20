@@ -226,6 +226,7 @@ real*8 :: x, fitness, id
 character*5 :: chrom_str
 character*3 :: myid_str
 character*1 :: dot = ".", ref, alt
+character*1 :: tab = char(9)
 integer, external :: decode_mutn_id
 
 npath = index(data_file_path,' ') - 1
@@ -243,7 +244,9 @@ open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
 write(27,'("##fileformat=VCFv4.1")')
 write(27,'("##contig=<ID=1,length=249250621,assembly=b37>")')
 write(27,'(a, a)') "####reference=", case_id
-write(27,'("#CHROM  POS  ID   REF   ALT   QUAL   FILTER   INFO")')
+!write(27,'("#CHROM   POS        ID          REF  ALT QUAL FILTER INFO")')
+write(27,'("#CHROM",a1,"POS",a1,"ID",a1,"REF",a1,"ALT",a1,"QUAL",a1,"FILTER",a1,"INFO")') &
+           tab, tab, tab, tab, tab, tab, tab
 
 lb_per_chrom = num_linkage_subunits/haploid_chromosome_number
 
@@ -265,12 +268,12 @@ do k = 1, pop_size
             alt = random_nucl()
          end do
          write(chrom_str, '(a, i2.2)') "chr", chrom
-         write(27, 100) chrom_str, pos, id, ref, alt, dot, dot, dot, "  " !, chrom, lb, x
+         write(27, *) chrom_str, tab, pos, tab, id, tab, ref, tab, alt, tab, dot, tab, dot, tab, dot
       end do
    end do 
 enddo
 
-100 format(a5, i12, f12.7, 6a5, 2i10, f12.7)
+!100 format(a5, i12, f12.7, 6a5, 2i10, f12.7)
 
 close(27)
 

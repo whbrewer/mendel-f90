@@ -1196,7 +1196,7 @@
 
 <script>
   $(document).ready(function() {    
-    $('#desc').tagsinput('add', 'v2.6.0');
+    $('#desc').tagsinput('add', 'v2.6.1');
     $('[data-toggle="tooltip"]').tooltip(); 
   });
   dmi = document.mendel_input;
