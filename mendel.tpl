@@ -1029,6 +1029,13 @@
       <div class="form-group">
         <label class="control-label col-xs-12 col-sm-6">    
             1. Initial heterozygous alleles (ICA):</label>
+        <div class="col-xs-2 col-sm-3">
+          <input type="checkbox" name="initial_alleles" onclick="fxn_initial_alleles(this.value)"
+            %if track_neutrals=='T':
+            checked
+            %end
+          >
+        </div>
       </div>
 
       <div class="form-group">

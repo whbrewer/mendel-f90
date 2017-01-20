@@ -22,8 +22,7 @@ function fxn_init() {
   fxn_init_tracking_threshold();
   show_hide_mutation_upload_form();
   fxn_auto_malloc();
-  dmi.num_contrasting_alleles.readOnly = false;
-  dmi.max_total_fitness_increase.readOnly = false;
+  fxn_initial_alleles_init()
   //document.getElementById("tribediv").style.display = "none";
   //dmi.case_id.focus();
 }
@@ -33,21 +32,53 @@ function fxn_set_caseid() {
         //parent.frames.contents.caseidform.case_id.value = dmi.case_id.value;
 }
 
-function set_random_caseid() {
-        var c; var n;
-        //var s=65; n=25; //for all caps
-        var s=97; n=25;   //for all lowercase
-        c = ''
-        for (var i=0; i<6; i++) { 
-           c += String.fromCharCode(s + Math.round(Math.random() * n));
-        }
-        dmi.case_id.value = c;
+function fxn_initial_alleles() {
+  if (dmi.initial_alleles.checked) {
+    dmi.num_contrasting_alleles.readOnly = false
+    dmi.max_total_fitness_increase.readOnly = false
+    dmi.initial_alleles_pop_frac.readOnly = false
+    dmi.num_contrasting_alleles.value = "1000"
+    dmi.max_total_fitness_increase.value = "1.0"
+    dmi.initial_alleles_pop_frac.value = "1.0"
+    dmi.num_contrasting_alleles.focus()
+  } else {
+    dmi.num_contrasting_alleles.readOnly = true
+    dmi.max_total_fitness_increase.readOnly = true
+    dmi.initial_alleles_pop_frac.readOnly = true
+    dmi.num_contrasting_alleles.value = 0
+  }
 }
 
-function fxn_set_this_caseid() {
-    dmi.case_id.focus();
-    set_random_caseid();
+function fxn_initial_alleles_init() {
+  if (dmi.num_contrasting_alleles.value == 0) { 
+    dmi.num_contrasting_alleles.readOnly = true
+    dmi.max_total_fitness_increase.readOnly = true
+    dmi.initial_alleles_pop_frac.readOnly = true
+  } else {
+    dmi.num_contrasting_alleles.readOnly = false
+    dmi.max_total_fitness_increase.readOnly = false
+    dmi.initial_alleles_pop_frac.readOnly = false
+    dmi.initial_alleles.checked = true
+  }
 }
+
+// following functions no longer necessary
+//
+// function set_random_caseid() {
+//         var c; var n;
+//         //var s=65; n=25; //for all caps
+//         var s=97; n=25;   //for all lowercase
+//         c = ''
+//         for (var i=0; i<6; i++) { 
+//            c += String.fromCharCode(s + Math.round(Math.random() * n));
+//         }
+//         dmi.case_id.value = c;
+// }
+
+// function fxn_set_this_caseid() {
+//     dmi.case_id.focus();
+//     set_random_caseid();
+// }
 
 function fxn_opf(x, min, max) {
    var opf = 2*x;
