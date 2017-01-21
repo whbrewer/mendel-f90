@@ -223,6 +223,8 @@ integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
 integer :: npath, i, j, k, lb, dominance
 integer :: chrom, lb_per_chrom, pos
 real*8 :: x, fitness, id
+character*8 :: pos_str
+character*7 :: id_str
 character*5 :: chrom_str
 character*3 :: myid_str
 character*1 :: dot = ".", ref, alt
@@ -268,7 +270,9 @@ do k = 1, pop_size
             alt = random_nucl()
          end do
          write(chrom_str, '(a, i2.2)') "chr", chrom
-         write(27, *) chrom_str, tab, pos, tab, id, tab, ref, tab, alt, tab, dot, tab, dot, tab, dot
+         write(pos_str, '(i0.8)') pos
+         write(id_str, '(f7.5)') id
+         write(27,'(15a)') chrom_str//tab//pos_str//tab//id_str//tab//ref//tab//alt//tab//dot//tab//dot//tab//dot
       end do
    end do 
 enddo
