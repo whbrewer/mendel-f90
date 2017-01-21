@@ -195,8 +195,6 @@ function fxn_is_parallel() {
          np.value = 2
       }
       window.scrollBy(0,500);
-      //document.getElementById("engine").selectedIndex = 1;
-      //status("NOTE: Changed engine to C");
       //dmi.fraction_neutral.value = 0;
       //status("Setting fraction_neutral to 0. Neutral mutations not supported in parallel runs.");
    } else {
