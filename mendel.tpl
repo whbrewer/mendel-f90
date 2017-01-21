@@ -262,10 +262,7 @@
           </div>
         </div>
 
-        <input type="hidden" name="max_fav_fitness_gain" 
-               value="{{max_fav_fitness_gain}}">
-        <input type="hidden" name="num_initial_fav_mutn" 
-               value="{{num_initial_fav_mutn}}">
+        <input type="hidden" name="num_initial_fav_mutn" value="{{num_initial_fav_mutn}}">
 
       </div> <!-- weibull_div -->
 
@@ -1169,8 +1166,6 @@
     </fieldset>
   </div>
 
-  <input type="hidden" name="run_queue" value="builtin">
-  <input type="hidden" name="engine" value="f">
   <input type="hidden" name="data_file_path" value="{{data_file_path}}">
   <br>
 
