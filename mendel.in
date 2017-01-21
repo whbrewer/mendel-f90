@@ -91,11 +91,8 @@
 /
 
 &interface
-                  auto_malloc = 1
+                  auto_malloc = T
                     num_procs = 1
-                plot_avg_data = 0
               restart_case_id = 'test00'
                restart_append = F
-                    run_queue = 'noq'
-                       engine = 'f'
 /
