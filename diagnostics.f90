@@ -295,7 +295,7 @@ integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer gen, i, j, k, k0, accum_gen
 integer fid, oneortwo
-real*8 fitness_bins(200,2), par_fitness_bins(100,2), work(100,2)
+real*8 fitness_bins(200,2), par_fitness_bins(200,2), work(100,2)
 real*8 bin_fitness_boxwidth(101), bin_fitness_midpoint(101)
 real*8 refr_bins(100), bin_fitness(101), del_bin_width, b0, b1
 real*8 d, x, x0, x1, y0, y1, s, mutn_sum, fav_bin_width
@@ -566,7 +566,7 @@ call flush(8)
 
 !START_MPI
 if(is_parallel) then
-   call mpi_davg(fitness_bins,par_fitness_bins,200)
+   call mpi_davg(fitness_bins,par_fitness_bins,400)
    if(myid==0) then
       rewind (18)
       write(18,'("# generation = ",i8)') gen
