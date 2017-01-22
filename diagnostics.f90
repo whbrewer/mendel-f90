@@ -1597,7 +1597,7 @@ end if
 
 ! correct data for total diversity by multiplying by each bin
 rewind(12)
-if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+if (.not.is_parallel.and.mod(gen,plot_allele_gens)==0.and.verbosity>0) then
     write(12,'("# generation = ",i8)') gen
     write(12,'("# frequency del_normalized fav_normalized ", &
                "  neu_normalized del_count fav_count neu_count")')
