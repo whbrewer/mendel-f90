@@ -97,9 +97,10 @@ if (verbosity > 0) then
    open (8, file=data_file_path(1:npath)//case_id//'.'//myid_str &
          //'.dst',status='unknown')
 
+   open(11, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+         //'.plm',status='unknown')
+
    if(.not.is_parallel) then
-      open(11, file=data_file_path(1:npath)//case_id//'.'//myid_str &
-           //'.plm',status='unknown')
       open(12, file=data_file_path(1:npath)//case_id//'.'//myid_str &
            //'.plmcor',status='unknown')
    end if

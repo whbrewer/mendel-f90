@@ -836,8 +836,10 @@ do gen=gen_0+1,gen_0+num_generations
       call mpi_ravg(time_offspring,par_time_offspring,3)
       call mpi_ravg(time_selection,par_time_selection,1)
       if (myid==0) then
-         write(23,'(i12,f17.7,2f19.7)') gen, par_tgen, &
-           par_time_offspring, par_time_selection
+         if (verbosity == 2) then
+            write(23,'(i12,f17.7,2f19.7)') gen, par_tgen, &
+               par_time_offspring, par_time_selection
+         end if
          if (myid==0.and.(mod(gen,10)==0.or.gen<4)) then
             write(*,'("iteration time: ",i6,"  milliseconds")') &
                  int(1000.*tgen)

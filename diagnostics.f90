@@ -1302,7 +1302,7 @@ integer global_mutn_list(MNP,num_tribes)
 integer global_list_count(num_tribes)
 integer num_falleles(3), num_dalleles(3), lb_limit, dwarn, fwarn
 integer par_num_falleles(3), par_num_dalleles(3), mutn_limit
-integer ncount, par_ncount, num_nalleles(3), par_nalleles(3)
+integer ncount, par_ncount, num_nalleles(3), par_num_nalleles(3)
 integer nwarn, mutn_thres, mutn, jmax
 real*8 dpbin(NB), dpbin_count(NB), dpbin_max, pbin_width
 real*8 npbin(NB), npbin_count(NB), npbin_max, x
@@ -1321,11 +1321,7 @@ real   bin_fitness(11), bin_center(10)
 ! mutation is the population size.  The polymorphism bin width
 ! pbin_width value reflects this difference.
 
-if (is_parallel) then 
-   pbin_width = 2.*current_pop_size/NB*num_tribes
-else
-   pbin_width = 2.*current_pop_size/NB
-end if
+pbin_width = 2.*current_pop_size/NB
 
 if(recombination_model == clonal) pbin_width = pbin_width/2.
 
@@ -1549,15 +1545,31 @@ endif
 ! Output global statistics to file caseid.000.plm
 if(is_parallel) then
 
+   call mpi_davg(dpbin, par_dpbin, NB) 
+   call mpi_davg(fpbin, par_fpbin, NB) 
+   call mpi_davg(npbin, par_npbin, NB) 
+
+   call mpi_davg(dpbin_count, par_dpbin_count, NB) 
+   call mpi_davg(fpbin_count, par_fpbin_count, NB) 
+   call mpi_davg(npbin_count, par_npbin_count, NB) 
+
+   call mpi_davg(num_dalleles, par_num_dalleles, 3) 
+   call mpi_davg(num_falleles, par_num_falleles, 3) 
+   call mpi_davg(num_nalleles, par_num_nalleles, 3) 
+
+   dcount = par_num_dalleles(1) + par_num_dalleles(2) + par_dpbin(NB)
+   ncount = par_num_nalleles(1) + par_num_nalleles(2) + par_npbin(NB)
+   fcount = par_num_falleles(1) + par_num_falleles(2) + par_fpbin(NB)
+
    if(myid.eq.0 .and. mod(gen,diagnostic_gens)==0 ) then
       rewind(21)
       write(21,'("# Number of tribes = ",i4)') num_tribes
       write(21,'("# generation = ",i8)') gen
       write(21,'("# frequency del_normalized fav_normalized", &
-           "  del_count fav_count neu_normalized  neu_count")')
-      write(21,'(i11,2f15.11,2f11.0,f15.11,f11.0)') (k, dpbin(k), &
-          fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
-          npbin_count(k), k=1,NB)
+           "  neu_normalized, del_count fav_count neu_count")')
+      write(21,'(i11,2f15.11,2f11.0,f15.11,f11.0)') (k, par_dpbin(k), &
+          par_fpbin(k), par_npbin(k), par_dpbin_count(k), &
+          par_fpbin_count(k), par_npbin_count(k), k=1,NB)
       write(21,'("# Allele summary statistics:")')
       write(21,'("#  Very rare",6x,"Polymorphic",9x,"Fixed", &
                  11x,"Total")')
@@ -1571,32 +1583,30 @@ if(is_parallel) then
       call flush(21)
    end if 
 
-else 
+end if
 
-   rewind(11)
-   if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
-       write(11,'("# generation = ",i8)') gen
-       write(11,'("# frequency del_normalized fav_normalized ", &
-                  "  neu_normalized del_count fav_count neu_count")')
-       write(11,'(i11,3f15.11,3f11.0)')  (k, dpbin(k),  &
-                 fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
-                           npbin_count(k), k=1,NB)
-   end if
+rewind(11)
+if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+    write(11,'("# generation = ",i8)') gen
+    write(11,'("# frequency del_normalized fav_normalized ", &
+               "  neu_normalized del_count fav_count neu_count")')
+    write(11,'(i11,3f15.11,3f11.0)')  (k, dpbin(k),  &
+              fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
+                        npbin_count(k), k=1,NB)
+end if
 
-   ! correct data for total diversity by multiplying by each bin
-   rewind(12)
-   if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
-       write(12,'("# generation = ",i8)') gen
-       write(12,'("# frequency del_normalized fav_normalized ", &
-                  "  neu_normalized del_count fav_count neu_count")')
-       write(12,'(i11,3f15.11,3f11.0)')  (k, k*dpbin(k),  &
-           k*fpbin(k), k*npbin(k), k*dpbin_count(k), k*fpbin_count(k), &
-                           k*npbin_count(k), k=1,NB/2)
-       write(12,'(i11,3f15.11,3f11.0)')  (k, (NB-k)*dpbin(k), &
-              (NB-k)*fpbin(k), (NB-k)*npbin(k), (NB-k)*dpbin_count(k),     &
-              (NB-k)*fpbin_count(k), (NB-k)*npbin_count(k), k=NB/2,NB)
-   end if
-
+! correct data for total diversity by multiplying by each bin
+rewind(12)
+if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+    write(12,'("# generation = ",i8)') gen
+    write(12,'("# frequency del_normalized fav_normalized ", &
+               "  neu_normalized del_count fav_count neu_count")')
+    write(12,'(i11,3f15.11,3f11.0)')  (k, k*dpbin(k),  &
+        k*fpbin(k), k*npbin(k), k*dpbin_count(k), k*fpbin_count(k), &
+                        k*npbin_count(k), k=1,NB/2)
+    write(12,'(i11,3f15.11,3f11.0)')  (k, (NB-k)*dpbin(k), &
+           (NB-k)*fpbin(k), (NB-k)*npbin(k), (NB-k)*dpbin_count(k),     &
+           (NB-k)*fpbin_count(k), (NB-k)*npbin_count(k), k=NB/2,NB)
 end if
 
 ! Keep a "snapshot" file of latest polymorphism data.
@@ -1611,7 +1621,7 @@ if (verbosity > 0) then
    call flush(13)
 end if
 
-if(.not.is_parallel .and. mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
    write(11,"('#',11x,'Allele summary statistics (tracked mutations only):'/ &
       '#   (Statistics are based on ',i12,' tracked deleterious mutations'/  &
       '#                            ',i12,' tracked   favorable mutations'/  &
@@ -1872,51 +1882,6 @@ do i=1,current_pop_size
       mfirst(j,i) = m
    end do
 end do
-
-! START_MPI
-if(is_parallel) then
-   
-   ! For parallel cases, gather all the data together
-   ! and do a single global analysis on processor 0.
-   
-   call mpi_gather(mutn_list,MNP,mpi_integer,  &
-            global_mutn_list,MNP,mpi_integer,0,mycomm,ierr)
-   call mpi_gather(mutn_count,MNP,mpi_integer, &
-            global_mutn_count,MNP,mpi_integer,0,mycomm,ierr)
-   call mpi_gather(list_count,1,mpi_integer,   &
-            global_list_count,1,mpi_integer,0,mycomm,ierr)
-   call mpi_barrier(mycomm,ierr)
-
-   if(myid.eq.0) then
-
-      ! Rebuild mutn_list and mutn_count arrays from data 
-      ! aggregated from all the tribes.
-      
-      mutn_list  = 0
-      mutn_count = 0
-      list_count = 0
-      
-      do m = 1,num_tribes
-         do i = 1, global_list_count(m)
-            new_mutn = .true.
-            do k = 1, list_count
-               if(global_mutn_list(i,m).eq.mutn_list(k)) then
-                  mutn_count(k) = mutn_count(k) + global_mutn_count(i,m)
-                  new_mutn = .false.
-               end if
-            end do
-            if(new_mutn) then
-               list_count = min(MNP, list_count + 1)
-               mutn_list(list_count)  = global_mutn_list(i,m)
-               mutn_count(list_count) = global_mutn_count(i,m)
-            end if
-         end do
-      end do
-      
-   end if
-   
-end if
-! END_MPI
 
 end subroutine count_alleles
 
