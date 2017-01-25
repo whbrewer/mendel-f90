@@ -240,7 +240,7 @@ function fxn_auto_malloc() {
   var uneu = dmi.uneu.value
 
   var ng = dmi.num_generations.value
-  var min = 1000
+  var min = 100
   var est_max_del = Math.max(ng*udel*2, min)
   var est_max_neu = Math.max(ng*uneu*2, min)
   var est_max_fav = Math.max(ng*uben*2, min)
