@@ -779,7 +779,7 @@
             7. Upload altruistic mutations?</label>
           <div class="col-xs-2 col-sm-3">
             <input type="checkbox" name="altruistic" value="on" 
-                   onclick="show_hide_mutation_upload_form(2)" ></td>
+                   onclick="show_hide_mutation_upload_form(2)" disabled="true"></td>
           </div>
         </div>
 
