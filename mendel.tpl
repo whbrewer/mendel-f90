@@ -45,17 +45,17 @@
 <div class="col-sm-12 hidden-xs" style="height:5px"></div>
 <div class="visible-xs" style="height:10px"></div>
 
+<div class="row">
 <div class="form-group">
   <div class="hidden-xs col-sm-2">
     <button type="submit" class="btn btn-success"> <!-- pull-right -->
       Continue <em class="glyphicon glyphicon-forward"></em> </button>
   </div>
-  <label for="desc" style="text-align:right" class="control-label col-sm-4 hidden-xs">
-    <a href="#" data-toggle="tooltip" title="Separate labels by commas">Labels:</a></label>
-  <div class="hidden-xs col-sm-3">
-    <input type="text" id="desc" name="desc" class="form-control" style="width:100%"
-           data-role="tagsinput" title="e.g. v2.5.1,bottleneck">
+  <div class="hidden-xs col-sm-10">
+    <input type="text" id="desc" name="desc" class="form-control input-lg"
+           data-role="tagsinput" title="e.g. v2.5.1,bottleneck" placeholder="enter tag...">
   </div>
+</div>
 </div>
 
 <div class="tribe" id="tribediv" style="display:none">
@@ -1199,6 +1199,9 @@
 <script>
   $(document).ready(function() {    
     $('#desc').tagsinput('add', 'v2.6.1');
+    %if defined('tags'):
+      $('#desc').tagsinput('add', '{{tags}}');
+    %end
     $('[data-toggle="tooltip"]').tooltip(); 
   });
   dmi = document.mendel_input;

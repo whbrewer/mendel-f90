@@ -163,9 +163,6 @@ function fxn_is_parallel() {
       if (np.value == 1) {
          np.value = 2
       }
-      window.scrollBy(0,500)
-      //dmi.fraction_neutral.value = 0
-      //status("Setting fraction_neutral to 0. Neutral mutations not supported in parallel runs.")
    } else {
       document.getElementById("psdiv").style.display = "none"
       document.getElementById("num_procs").value = 1
@@ -259,10 +256,6 @@ function fxn_auto_malloc() {
     dmi.max_fav_mutn_per_indiv.readOnly = false
     dmi.max_del_mutn_per_indiv.select()
   }
-}
-
-function auto_malloc_able() {
-    
 }
 
 function compute_memory() {
