@@ -673,7 +673,7 @@
           <label for="homogenous_tribes" class="control-label col-xs-10 col-sm-6">
             1. Homogeneous subpopulations?</label>
           <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="homogenous_tribes"
+            <input type="checkbox" name="homogenous_tribes" disabled="true"
                    onclick="fxn_tribes(16)" value="on" 
                    %if homogenous_tribes=='T':
                        checked
