@@ -39,7 +39,7 @@
       { 
          "ptype": "flot-line", 
          "title": "Distribution of accumulated mutations (beneficial)",
-         "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, inverseTransform: function (x) { return Math.exp(x);}, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: 0.010000 },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelOffset: -220, axisLabelFontSizePixels: 12, max: 10}, legend: { position: 'nw' }",
+         "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: <max_fav_fitness_gain> },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelOffset: -220, axisLabelFontSizePixels: 12}, legend: { position: 'nw' }",
          "datasource": [ 
              { "filename": "<cid>.000.dst", "cols": "1:3", "line_range": "55:105", "data_def": "{ label: 'Dominant', data: d1, bars: { show: true, autoWidth: true }, color: 'rgb(0,200,0)' }" }, 
              { "filename": "<cid>.000.dst", "cols": "1:2", "line_range": "55:105", "data_def": "{ label: 'Recessive', data: d2, bars: { show: true, autoWidth: true }, color: 'rgb(200,0,0)'}" }

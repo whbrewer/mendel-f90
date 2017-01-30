@@ -108,7 +108,6 @@ function fxn_combine_mutns() {
   if (dmi.combine_mutns.checked) {
     dmi.multiplicative_weighting.value = 0.5
     dmi.multiplicative_weighting.select()
-    window.scrollBy(0,50)
   } else {
     dmi.multiplicative_weighting.value = 0.0
   }
@@ -196,7 +195,6 @@ function fxn_bottleneck() {
   if (dmi.bottleneck_yes.checked) {
     if (dmi.bottleneck_generation.value = "0") {
         dmi.bottleneck_generation.value = "1000"
-        window.scrollBy(0,500)
     }
     if (dmi.bottleneck_pop_size.value = "0") {
         dmi.bottleneck_pop_size.value = "100"
@@ -491,7 +489,6 @@ function fxn_fitness_distrib_type_init() {
       document.getElementById("crdiv").style.display = "block"
       dmi.combine_mutns.readOnly = false
       dmi.synergistic_epistasis.readOnly = false
-      window.scrollBy(0,500)
    // Weibull distribution
    } else if (fdt == 1) {
       document.getElementById("ufe_div").style.display = "none"
@@ -499,7 +496,6 @@ function fxn_fitness_distrib_type_init() {
       document.getElementById("crdiv").style.display = "block"
       dmi.combine_mutns.readOnly = false
       dmi.synergistic_epistasis.readOnly = false
-      window.scrollBy(0,500)
    // All Neutral
    } else if (fdt == 2) {
       document.getElementById("ufe_div").style.display = "none"
@@ -508,7 +504,6 @@ function fxn_fitness_distrib_type_init() {
       dmi.combine_mutns.readOnly = true
       dmi.synergistic_epistasis.readOnly = true
       fxn_disable_synergistic_epistasis()
-      window.scrollBy(0,500)
    // Bi-modal
    } else if (fdt == 3) {
       document.getElementById("ufe_div").style.display = "block"
@@ -516,7 +511,6 @@ function fxn_fitness_distrib_type_init() {
       document.getElementById("crdiv").style.display = "block"
       dmi.combine_mutns.readOnly = false
       dmi.synergistic_epistasis.readOnly = false
-      window.scrollBy(0,500)
    } else {
       document.getElementById("ufe_div").style.display = "none"
       document.getElementById("weibull_div").style.display = "block"
@@ -539,7 +533,6 @@ function fxn_fitness_distrib_type_change() {
 function show_hide_advanced() {
     if (dmi.advsel.checked) {
            document.getElementById("tab-pane-1").style.display = "block"
-           window.scrollBy(0,500)
         } else {
            document.getElementById("tab-pane-1").style.display = "none"
         }
@@ -548,7 +541,6 @@ function show_hide_advanced() {
 function show_hide_parser() {
     if (document.parsed_data.show_data.checked) {
            document.getElementById("parser").style.display = "block"
-           //window.scrollBy(0,500)
         } else {
            document.getElementById("parser").style.display = "none"
         }
@@ -572,7 +564,6 @@ function show_hide_mutation_upload_form(i) {
     if (dmi.upload_mutations.checked) {
            document.getElementById("upload_mutations_div").style.display = "block"
            //dmi.mutn_file_id.readOnly = false
-           window.scrollBy(0,500)
         } else if (dmi.altruistic.checked) {
            document.getElementById("upload_mutations_div").style.display = "block"
         } else {
@@ -609,11 +600,11 @@ function fxn_tribes(max_tribes) {
       num_procs = 2
    }
 
-   if (dmi.homogenous_tribes.checked) {
-      document.getElementById("tribediv").style.display = "none"
-   } else {
-      document.getElementById("tribediv").style.display = "block"
-   }
+   //if (dmi.homogenous_tribes.checked) {
+   //   document.getElementById("tribediv").style.display = "none"
+   //} else {
+   //   document.getElementById("tribediv").style.display = "block"
+   //}
 
    if (dmi.tribal_competition.checked) {
       dmi.tc_scaling_factor.readOnly = false
@@ -730,12 +721,4 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = false
      status("")
   }
-}
-
-function write_vcf() {
-   if(dmi.write_vcf.checked) {
-      continue     
-   } else {
-      continue     
-   }
 }
