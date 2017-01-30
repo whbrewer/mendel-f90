@@ -7,14 +7,9 @@
 <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 <title>User Manual for Mendels Accountant</title>
 <style>
-	#toc:before, #basic_param:before, #adv_mutn:before, #adv_sel:before, #adv_pop:before, #adv_parallel:before, #adv_comp:before, #special:before, #output:before, #glossary:before {
-	    display: block;
-	    content: "";
-	    height: 50px;
-	    margin: -50px 0 0;
-	}
-	body { 
-	    padding-top: 65px; 
+	:target {
+	   background: #fff2a8;
+	   transition: background-color 1s linear;
 	}
 </style>
 </head>
@@ -23,7 +18,7 @@
 <div class="container">
 
 <!-- The navbar - The <a> elements are used to jump to a section in the scrollable area -->
-<nav class="navbar navbar-inverse navbar-fixed-top hidden-xs">
+<nav class="navbar navbar-inverse navbar-fixed-bottom	 hidden-xs">
   	<ul class="nav navbar-nav">
 		<li> <a href="#toc">Contents</a>
 		<li> <a href="#basic_param">Basic</a>
@@ -591,7 +586,7 @@ interactions, se_linked_scaling, should be much larger (for example,
 by a factor of 1000) than the one for non-linked interactions,
 se_nonlinked_scaling.</p>
 
-<p>Let us now consider how Mendel actually treats the linked SE
+<p id="linked_se">Let us now consider how Mendel actually treats the linked SE
 interactions.  We assume the amplitude of the linked SE effect of each
 pair-wise interaction to be proportional to the product of
 non-epistatic fitness effects of the two mutations in the pair.  This
@@ -619,7 +614,7 @@ negative SE contributions add to the negative non-epistatic fitness
 effects of the mutations on each linkage block, and in effect make the
 non-epistatic effects even more negative.</p>
 
-<p>Mendel treats the non-linked SE interactions in a similar manner.
+<p id="nonlinked_se">Mendel treats the non-linked SE interactions in a similar manner.
 Let M be the total number of mutations in the genome of a given member
 of the population and n be the number of equal-sized linkage blocks.
 The total number of unique pair-wise interactions between mutations is
@@ -968,7 +963,7 @@ The rate of migration can be specified. The rate of migration can be
 less than one (one migration event every X generations), and also can be
 zero.</p>
 
-<li> <p name="tc" id="tc">
+<li> <p id="tc">
 <b>Tribal competiton</b>
 &mdash; Tribal competition can be specified (differential
 growth/shrinkage of tribes).  Tribal competition works by first computing 
@@ -986,7 +981,7 @@ computed by multiplying the fertility_factor times the reproductive_rate.
 One caveat: with a reproductive_rate of 1, and a low tc_scaling_factor 
 (e.g. 0.1), the the tribes will actually start shrinking over time.
 If this is undesireable, one may solve this problem by increasing the
-reproductive_rate.
+reproductive_rate.</p>
 
 <ul>
   <li id="gssf"> A scaling factor specifies the strength of tribal competition. 
