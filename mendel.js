@@ -609,11 +609,11 @@ function fxn_tribes(max_tribes) {
       num_procs = 2
    }
 
-   if (dmi.homogenous_tribes.checked) {
-      document.getElementById("tribediv").style.display = "none"
-   } else {
-      document.getElementById("tribediv").style.display = "block"
-   }
+   //if (dmi.homogenous_tribes.checked) {
+   //   document.getElementById("tribediv").style.display = "none"
+   //} else {
+   //   document.getElementById("tribediv").style.display = "block"
+   //}
 
    if (dmi.tribal_competition.checked) {
       dmi.tc_scaling_factor.readOnly = false
