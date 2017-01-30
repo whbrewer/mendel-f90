@@ -603,7 +603,7 @@
 
       <div class="form-group">
         <label for="bottleneck_yes" class="control-label col-xs-10 col-sm-6">
-          <a data-toggle="popover" title="dynamic_linkage" data-content='Population bottlenecks can dramatically affect mutation accumulation and mutation fixation.  MENDEL allows the modeling of population bottlenecks.   The researcher can cause a bottleneck to automatically begin after a specified number of generations, resulting in a specified reduction in population size, and ending after a specified number of bottleneck generations. The reduction of population size occurs immediately at the beginning of the bottleneck, by selecting a random sub-sample of the population. When the bottleneck ends, the original offspring number/female does not change but half of the population excess (i.e. all offspring exceeding 2 per female) is used to increase population size, and half of the excess continues to be eliminated by selection. When the original population size is reached, normal selection is restored.'>5. Bottleneck?</a></label>      
+          <a data-toggle="popover" title="bottleneck_yes" data-content='Population bottlenecks can dramatically affect mutation accumulation and mutation fixation.  MENDEL allows the modeling of population bottlenecks.   The researcher can cause a bottleneck to automatically begin after a specified number of generations, resulting in a specified reduction in population size, and ending after a specified number of bottleneck generations. The reduction of population size occurs immediately at the beginning of the bottleneck, by selecting a random sub-sample of the population. When the bottleneck ends, the original offspring number/female does not change but half of the population excess (i.e. all offspring exceeding 2 per female) is used to increase population size, and half of the excess continues to be eliminated by selection. When the original population size is reached, normal selection is restored.'>5. Bottleneck?</a></label>      
         <div class="col-xs-2 col-sm-3">
           <input type="checkbox" name="bottleneck_yes" value="on"
                  class="checkbox" onclick="fxn_bottleneck()" 
@@ -1219,9 +1219,6 @@
 
   $(document).ready(function(){
       $('[data-toggle="popover"]').popover(); 
-  });
-  $('[data-toggle="popover"]').popover({
-      container: 'body'
   });
 
   dmi = document.mendel_input;
