@@ -9,14 +9,22 @@
   .form-horizontal .control-label{
     text-align:left;
   }
+
   .tab-content {
     background-color: #fff; 
     border: 1px solid #ddd;
     padding: 10px;
   }
+
   body { 
     background: #f5f5f5 !important; 
   }
+
+  label {
+      /*font-weight: normal !important;*/
+      /*font-size: 120%;*/
+  }
+
   a { text-decoration: none !important }
   label > a { color:MidnightBlue !important }
   label > a:hover { color:OrangeRed !important; cursor: pointer !important }
@@ -48,8 +56,8 @@
       Continue <em class="glyphicon glyphicon-forward"></em> </button>
   </div>
   <div class="hidden-xs col-sm-10">
-    <input type="text" id="desc" name="desc" class="form-control input-lg"
-           data-role="tagsinput" title="e.g. v2.5.1,bottleneck" placeholder="enter tag...">
+    <input type="text" id="desc" name="desc" class="form-control"
+           data-role="tagsinput" placeholder="enter tag...">
   </div>
 </div>
 </div>
@@ -268,7 +276,7 @@
       <hr>
 
       <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-3">
+        <label class="control-label col-xs-12">
           <a data-toggle="popover" title="dominant vs. recessive" data-content="It is widely agreed that in diploid species, most mutations are recessive, while a small fraction are dominant. However, because modeling recessives and dominants can become computationally more intense, and because the output figures can become hard to read when plotting both dominant and recessive mutations, the default setting is co-dominance. This means that all mutations behave additively (a heterozygote will always have half the effect of a homozygote). However, for greatest realism, the majority of mutations should be made recessive, with a minority being dominant by default, as described below.">2. Mutations &mdash; dominant vs. recessive?</a></label>
       </div>
 
