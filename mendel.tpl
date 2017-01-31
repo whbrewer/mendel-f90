@@ -386,28 +386,28 @@
       </div>
 
       <hr>
+
       <div class="form-group">
-        <label for="upload_mutations" class="control-label col-xs-10 col-sm-6">               
-          <a data-toggle="popover" title="upload_mutations" data-content="A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This options is currently not implemented in this SPC version.">5. Upload set of custom mutations?</a></label>
+        <label for="allow_back_mutn" class="control-label col-xs-10 col-sm-6">               
+          <a data-toggle="popover" title="allow_back_mutn" data-content="In a large genome, the rate of back mutations (mutations that arise at nucleoside sides that have already mutated), is vanishingly small and of no consequence, but in small genomes (i.e., viruses), a significant fraction of the genome can become mutated, such that this parameter becomes useful.">5. Allow back mutations?</a></label>
         <div class="col-xs-2 col-sm-3">
-          <input type="checkbox" name="upload_mutations"
-                 value="on" onclick="show_hide_mutation_upload_form(1)" disabled="true"
-                   %if upload_mutations=='T':
+          <input type="checkbox" name="allow_back_mutn"
+                 value="on" onclick="check_back_mutn()"
+                   %if allow_back_mutn=='T':
                     checked
                    %end
           >
         </div>
       </div>
 
-      <hr>
-
-      <div class="form-group">
-        <label for="allow_back_mutn" class="control-label col-xs-10 col-sm-6">               
-          <a data-toggle="popover" title="allow_back_mutn" data-content="In a large genome, the rate of back mutations (mutations that arise at nucleoside sides that have already mutated), is vanishingly small and of no consequence, but in small genomes (i.e., viruses), a significant fraction of the genome can become mutated, such that this parameter becomes useful.">6. Allow back mutations?</a></label>
+      <div class="form-group" style="display:none">
+        <hr>
+        <label for="upload_mutations" class="control-label col-xs-10 col-sm-6">               
+          <a data-toggle="popover" title="upload_mutations" data-content="A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This options is currently not implemented in this SPC version.">6. Upload set of custom mutations?</a></label>
         <div class="col-xs-2 col-sm-3">
-          <input type="checkbox" name="allow_back_mutn"
-                 value="on" onclick="check_back_mutn()"
-                   %if allow_back_mutn=='T':
+          <input type="checkbox" name="upload_mutations"
+                 value="on" onclick="show_hide_mutation_upload_form(1)" disabled="true"
+                   %if upload_mutations=='T':
                     checked
                    %end
           >
@@ -533,7 +533,7 @@
        
       <div class="form-group">
         <label for="dynamic_linkage" class="control-label col-xs-10 col-sm-6">
-          <a data-toggle="popover" title="dynamic_linkage" data-content='Linkage has a major effect on selection, and must be modeled as accurately as possible. MENDEL’s default mode involves dynamic linkage. This requires specification of the haploid chromosome number and assumes two random crossovers within each chromosome, at random locations between linkage blocks - every generation. Because tracking every linkage block can become computationally expensive, the number of linkage blocks must be limited (default = 989, min=1, max=100,000). Furthermore, the number of linkage blocks should be an integer multiple of the number of chromosome (e.g. the default value of 989 is 43 times the default 23 chromosomes). MENDEL will automatically adjust to the nearest integer multiple (e.g. if you input 1000 and 23 chromosomes, MENDEL will use a value of 989). The number of linkage blocks is evenly distributed over a user-specified haploid number of chromosomes (default=23).  We also offer the researcher the option (turn off "dynamic linkage") of a simpler model involving the specification of a fixed number of linkage blocks and fully randomized recombination between all linkage blocks each generation (no chromosome number is required).'>3. Dynamic linkage?</a></label>
+          <a data-toggle="popover" title="dynamic_linkage" data-html="true" data-content='Because tracking every linkage block can become computationally expensive, the number of linkage blocks must be limited (default = 989, min=1, max=100,000). We also offer the researcher the option (turn off "dynamic linkage") of a simpler model involving the specification of a fixed number of linkage blocks and fully randomized recombination between all linkage blocks each generation (no chromosome number is required). <a target="_blank" href="/static/apps/mendel/help.html#dl">Read more...</a>'>3. Dynamic linkage?</a></label>
         <div class="col-xs-2 col-sm-3">
           <input type="checkbox" name="dynamic_linkage" accesskey="2"
                  value="on" onclick="fxn_dynamic_linkage()"
@@ -546,7 +546,7 @@
 
       <div class="form-group">
         <label for="haploid_chromosome_number" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          a. haploid chromosome number:</label>      
+          <a data-toggle="popover" title="haploid_chromosome_number" data-content='The number of linkage blocks is evenly distributed over a user-specified haploid number of chromosomes (default=23).  If dynamic linkage is turned off, this number is not required and will be disabled.'>a. haploid chromosome number:</a></label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="haploid_chromosome_number" title="1 - 100"
                  min="1" max="100" step="1" onchange="validate(this)" class="form-control"
@@ -555,9 +555,8 @@
       </div>
 
       <div class="form-group">
-        <label id="num_linkage_subunits" style="left:20px" for="num_linkage_subunits" 
-               class="control-label col-xs-12 col-sm-6">
-          b. number of linkage subunits:</label>      
+        <label style="left:20px" class="control-label col-xs-12 col-sm-6">
+          <a id="num_linkage_subunits" data-toggle="popover" title="num_linkage_subunits" data-content='Enter the number of linkage blocks. The number of linkage blocks should be an integer multiple of the number of chromosome (e.g. the default value of 989 is 43 times the default 23 chromosomes). MENDEL will automatically adjust to the nearest integer multiple (e.g. if you input 1000 and 23 chromosomes, MENDEL will use a value of 989).'>b. number of linkage subunits:</a></label>      
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="num_linkage_subunits" title="1 - 10,000"
                  min="1" max="10000" data-warning="1000" step="1" 
