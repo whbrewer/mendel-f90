@@ -10,18 +10,15 @@
     text-align:left;
   }
   .tab-content {
-    /*background-color: #dfdfdf;*/ 
+    background-color: #fff; 
     border: 1px solid #ddd;
     padding: 10px;
   }
   body { 
-    /* background: #dfdfdf !important; */
-    /*padding-top: 65px;*/ 
+    background: #f5f5f5 !important; 
   }
-  tr:hover { background-color: #fff }
-  tr { background-color: #fff }
   a { text-decoration: none !important }
-  label > a { color:black !important }
+  label > a { color:MidnightBlue !important }
   label > a:hover { color:OrangeRed !important; cursor: pointer !important }
 </style>
 </head>
@@ -416,7 +413,7 @@
 
       <div class="form-group">
         <label for="fraction_random_death" class="control-label col-xs-12 col-sm-6">
-          <ol><li><a data-toggle="popover" title="fraction_random_death" data-content="A certain fraction of any population fails to reproduce, independent of phenotype. This can be expressed as the percentage of the population subject to random death. This is a useful parameter conceptually, but the same effect can be obtained by proportionately decreasing the number of offspring/female, so the default is zero.">Fraction of offspring lost apart from selection ("random death"):</a></ol>
+          <a data-toggle="popover" title="fraction_random_death" data-content="A certain fraction of any population fails to reproduce, independent of phenotype. This can be expressed as the percentage of the population subject to random death. This is a useful parameter conceptually, but the same effect can be obtained by proportionately decreasing the number of offspring/female, so the default is zero.">1. Fraction of offspring lost apart from selection ("random death"):</a>
         </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="fraction_random_death" class="form-control"
@@ -429,7 +426,8 @@
 
       <div class="form-group">
         <label for="heritability" class="control-label col-xs-12 col-sm-6">
-          <ol start=2><li><a data-toggle="popover" title="heritability" data-content="Because a large part of phenotypic performance is affected by an individual’s circumstances (the “environment”), selection in nature is less effective than would be predicted simply from genotypic fitness values. Non-heritable environmental effects on phenotypic performance must be modeled realistically. MENDEL’s default value for the heritability is 0.2. This implies that on average, only 20% of an individual’s phenotypic performance is passed on to the next generation, with the rest being due to non-heritable factors. For a very general character such as reproductive fitness, 0.2 is an extremely generous heritability value. In most field contexts, it is in fact usually lower than this, typically being below the limit of detection.">Heritability:</a></ol> </label>
+          <a data-toggle="popover" title="heritability" data-content="Because a large part of phenotypic performance is affected by an individual’s circumstances (the “environment”), selection in nature is less effective than would be predicted simply from genotypic fitness values. Non-heritable environmental effects on phenotypic performance must be modeled realistically. MENDEL’s default value for the heritability is 0.2. This implies that on average, only 20% of an individual’s phenotypic performance is passed on to the next generation, with the rest being due to non-heritable factors. For a very general character such as reproductive fitness, 0.2 is an extremely generous heritability value. In most field contexts, it is in fact usually lower than this, typically being below the limit of detection.">2. Heritability:</a>
+        </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="heritability" title="0 - 1"
                  min="0" max="1" step="0.1"
@@ -440,7 +438,7 @@
 
       <div class="form-group">
         <label for="non_scaling_noise" class="control-label col-xs-12 col-sm-6">
-          <ol start=3><li><a data-toggle="popover" title="non_scaling_noise" data-html="true" data-content='If a population’s fitness is increasing or declining, heritability (as calculated in the normal way), tends to scale with fitness, and so the implied “environmental noise” diminishes or increases as fitness diminishes or increases. This seems counter-intuitive. Also, with truncation selection, phenotypic variance becomes un-naturally small. For these reasons, it is desirable to model a component of environmental noise that does not scale with fitness variation. The units for this non-scaling noise parameter are based upon standard deviations from the initial fitness of 1.0. For simplicity, the default value is 0.05, but reasonable values probably exceed 0.01 and might exceed 0.1. <a target="_blank" href="/static/apps/mendel/help.html#nsn">Read more...</a>'>Non-scaling noise:</a></ol></label>
+          <a data-toggle="popover" title="non_scaling_noise" data-html="true" data-content='If a population’s fitness is increasing or declining, heritability (as calculated in the normal way), tends to scale with fitness, and so the implied “environmental noise” diminishes or increases as fitness diminishes or increases. This seems counter-intuitive. Also, with truncation selection, phenotypic variance becomes un-naturally small. For these reasons, it is desirable to model a component of environmental noise that does not scale with fitness variation. The units for this non-scaling noise parameter are based upon standard deviations from the initial fitness of 1.0. For simplicity, the default value is 0.05, but reasonable values probably exceed 0.01 and might exceed 0.1. <a target="_blank" href="/static/apps/mendel/help.html#nsn">Read more...</a>'>3. Non-scaling noise:</a></label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="non_scaling_noise" title="0 - 1"
                  min="0" max="1" step="0.1"
@@ -451,7 +449,7 @@
 
       <div class="form-group">
         <label for="fitness_dependent_fertility" class="control-label col-xs-10 col-sm-6">
-          <ol start=4><li><a data-toggle="popover" title="fitness_dependent_fertility" data-content='It is widely recognized that when fitness declines, fertility also declines. This in turn affects population surplus, which affects selection efficiency, and can eventually result in “mutational meltdown”. To model this, we have included an option wherein fertility declines proportional to the square of the fitness decline. The resulting fertility decline is initially very subtle, but becomes increasingly severe as fitness approaches zero. The default value is “Yes”, which means that fertility declines with fitness, especially as fitness approaches zero.'>Fitness-dependent fecundity decline?</a></ol></label>
+          <a data-toggle="popover" title="fitness_dependent_fertility" data-content='It is widely recognized that when fitness declines, fertility also declines. This in turn affects population surplus, which affects selection efficiency, and can eventually result in “mutational meltdown”. To model this, we have included an option wherein fertility declines proportional to the square of the fitness decline. The resulting fertility decline is initially very subtle, but becomes increasingly severe as fitness approaches zero. The default value is “Yes”, which means that fertility declines with fitness, especially as fitness approaches zero.'>4. Fitness-dependent fecundity decline?</a></label>
         <div class="col-xs-2 col-sm-3">
           <input type="checkbox" name="fitness_dependent_fertility"
                  accesskey="4" value="on"
@@ -464,7 +462,7 @@
 
       <div class="form-group">
         <label for="selection_scheme" class="control-label col-xs-12 col-sm-6">
-          <ol start=5><li><a data-toggle="popover" title="selection_scheme" data-html="true" data-content='MENDEL’s default mode for type of selection is probability selection, wherein the probability of reproduction is proportional to an individual’s fitness ranking within the population. Two forms of probability selection are provided‐ classic and unrestricted.  In classic (textbook) probability selection, rather counter-intuitively, strict proportionality (relative to the most-fit individual) can combine with high average fitness and mild selection (low reproductive rates) to cause reductions in fitness and relatively rapid extinction.   In unrestricted probability selection, with certain combinations of average fitness and offspring/female, a range of the highest fitness values are “guaranteed” survival in order to maintain population size. <a target="_blank" href="/static/apps/mendel/help.html#ss">Read more...</a>'>Selection scheme:</a></ol></label>
+          <a data-toggle="popover" title="selection_scheme" data-html="true" data-content='MENDEL’s default mode for type of selection is probability selection, wherein the probability of reproduction is proportional to an individual’s fitness ranking within the population. Two forms of probability selection are provided‐ classic and unrestricted.  In classic (textbook) probability selection, rather counter-intuitively, strict proportionality (relative to the most-fit individual) can combine with high average fitness and mild selection (low reproductive rates) to cause reductions in fitness and relatively rapid extinction.   In unrestricted probability selection, with certain combinations of average fitness and offspring/female, a range of the highest fitness values are “guaranteed” survival in order to maintain population size. <a target="_blank" href="/static/apps/mendel/help.html#ss">Read more...</a>'>5. Selection scheme:</a></label>
         <div class="col-xs-12 col-sm-3">
           <select id="selection_scheme" name="selection_scheme" accesskey="5"
                   class="form-control"  onchange="fxn_selection(this.value)">
