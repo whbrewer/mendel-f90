@@ -21,6 +21,8 @@
   tr:hover { background-color: #fff }
   tr { background-color: #fff }
   a { text-decoration: none !important }
+  label > a { color:black !important }
+  label > a:hover { color:OrangeRed !important; cursor: pointer !important }
 </style>
 </head>
 
