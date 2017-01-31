@@ -65,7 +65,7 @@
   </select>
 </div> 
 
-<a href="/static/apps/mendel/help.html" class="help btn btn-info" target="status"><span class="glyphicon glyphicon-question-sign"></span></a>
+<a target="_blank" href="/static/apps/mendel/help.html" class="help btn btn-info" ><span class="glyphicon glyphicon-question-sign"></span></a>
 <!-- data-toggle="modal" data-target="#myModal" -->
 <div>
 
