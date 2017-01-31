@@ -814,7 +814,7 @@ real*8 d, x, x0, x0r, x1, z0, z1, del_bin_width, fav_bin_width
    
 haplotype_bin_width = 1.e-04
 del_bin_width = haplotype_bin_width
-fav_bin_width = 0.01*min(0.01, max_fav_fitness_gain)
+fav_bin_width = 0.01d0*max(0.01, max_fav_fitness_gain)
 
 x0 = 1.
 do k=100,1,-1
@@ -957,9 +957,13 @@ write(4,'("# generation = ",i8)') gen
 write(4,'("# effect-bin",2x,"theory(red)",1x,"lb-fitns(g)", &
           2x,"dominants",2x,"recessives")')
 
-write(4, '(5e12.4)') ((k - 100.5)*haplotype_bin_width, &
+write(4, '(5e12.4)') ((k - 100.5)*del_bin_width, &
         expn_bins(k), haplotype_bins(k),  &
-        bins_mutns(k,2), bins_mutns(k,1), k=1,200)
+        bins_mutns(k,2), bins_mutns(k,1), k=1,100)
+
+write(4, '(5e12.4)') ((k - 100.5)*fav_bin_width, &
+        expn_bins(k), haplotype_bins(k),  &
+        bins_mutns(k,2), bins_mutns(k,1), k=101,200)
 
 avg_lb_effect = (post_sel_fitness - 1.d0)/(2*num_linkage_subunits)
 

@@ -67,7 +67,7 @@
       { 
          "ptype": "flot-line", 
          "title": "Near neutral beneficial effects",
-         "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, yaxis: { axisLabel: 'Frequency', axisLabelOffset: -50, axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+         "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: <max_fav_fitness_gain> }, yaxis: { axisLabel: 'Frequency', axisLabelOffset: -50, axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
          "datasource": [ 
              { "filename": "<cid>.000.hap", "cols": "1:2", "line_range": "103:204", "data_def": "{ label: 'Theoretical', data: d1, color: 'rgb(200,0,0)' }" }, 
              { "filename": "<cid>.000.hap", "cols": "1:4", "line_range": "103:204", "data_def": "{ label: 'Dominant', bars: { show: true, barWidth: 0.0001 }, data: d2, color: 'rgb(0,200,0)' }" }, 
