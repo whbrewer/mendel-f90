@@ -583,7 +583,7 @@
 
       <div class="form-group">
         <label for="pop_growth_rate" style="left:20px" class="control-label col-xs-12 col-sm-6">
-          <a data-toggle="popover" title="dynamic populations" data-content='The population growth rate parameter determines the percent growth rate per generation. A value of 1.0 represents static population size (no growth). To grow the population 2% per generation, enter the parameter 1.02 (note: one may need to manually convert published annual population growth rates to population growth per generation by using a formula such as 1.0220 = 1.48/generation — assuming a 20 year generation time).'>b. population growth rate:</a></label>      
+          <a data-toggle="popover" title="pop_growth_rate" data-content='The population growth rate parameter determines the percent growth rate per generation. A value of 1.0 represents static population size (no growth). To grow the population 2% per generation, enter the parameter 1.02 (note: one may need to manually convert published annual population growth rates to population growth per generation by using a formula such as 1.0220 = 1.48/generation — assuming a 20 year generation time).'>b. population growth rate:</a></label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="pop_growth_rate" class="form-control"
                  min="1" max="1.26" step="0.02" onchange="validate(this)"
@@ -618,7 +618,7 @@
 
         <div class="form-group">
           <label for="bottleneck_generation" class="control-label col-xs-12 col-sm-6">
-                   &nbsp;&nbsp;&nbsp;
+               &nbsp;&nbsp;&nbsp;
                <a data-toggle="popover" title="bottleneck_generation" data-content='Enter the generation when the bottleneck starts.  To start the simulation with a bottleneck, enter a value of 0. To repeat a bottleneck every X generations, enter a negative value (e.g. -100 will repeat a bottleneck every 100 generations).'>a. generation when bottleneck starts:</a></label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="bottleneck_generation"

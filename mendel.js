@@ -215,6 +215,7 @@ function fxn_bottleneck_able() {
 
 function check_bottleneck() {
    bgen = dmi.bottleneck_generation.value
+
    if(bgen < 0) {
      status("Cyclic bottlenecking turned on")
      if(dmi.num_bottleneck_generations.value > -bgen ) {
@@ -222,6 +223,18 @@ function check_bottleneck() {
      }
    } else {
      status("Cyclic bottlenecking turned off")
+   }
+
+   var pgr = dmi.pop_growth_rate
+
+   e = document.getElementById("pop_growth_model")
+   var selectedIndex = e.options[e.selectedIndex].value;
+
+   if (selectedIndex == 4 && bgen < dmi.num_generations.value) {
+      if (pgr.value - parseInt(pgr.value) == 0) {
+        pgr.value = parseInt(pgr.value) + 0.2
+        status("updated pop growth rate to valid number")
+      }
    }
 }
 
@@ -713,7 +726,7 @@ function fxn_pop_growth_model(i) {
      dmi.carrying_capacity.readOnly = false
      dmi.pop_size.value = "2"; 
      dmi.bottleneck_yes.checked = true
-     dmi.bottleneck_generation.value = dmi.num_generations.value + 1
+     dmi.bottleneck_generation.value = parseInt(dmi.num_generations.value) + 1
      dmi.bottleneck_pop_size.value = 10
      document.getElementById("bydiv").style.display = "block"
      document.getElementById("nbg").style.display = "none"
