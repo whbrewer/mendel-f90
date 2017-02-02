@@ -16,6 +16,12 @@
     padding: 10px;
   }
 
+/*
+  .bootstrap-tagsinput {
+    background-color: #faffbd !important;
+  } 
+*/
+
   body { 
     background: #f5f5f5 !important; 
   }
@@ -134,7 +140,7 @@
       </div>
       <div class="form-group">
         <label id="pgr_label" for="reproductive_rate" class="control-label col-xs-12 col-sm-6">
-          <a data-toggle="popover" title="reproductive_rate" data-content="This is the number of offspring per reproducing individual. Since population size in Mendel is usually constant, this variable defines the maximum amount of selection. There must be an average of at least one offspring per individual (after the selection process) for the population to maintain its size and avoid rapid extinction. Except where random death is considered (see advanced parameters), the entire surplus population is removed based upon phenotypic selection. The default value for humans is two offspring per selected individual (or four offspring per reproducing female).">3. Reproductive rate:</a></label>
+          <a data-toggle="popover" title="reproductive_rate" data-content="This is the number of offspring per reproducing individual. Since population size in Mendel is usually constant, this variable defines the maximum amount of selection. There must be an average of at least one offspring per individual (after the selection process) for the population to maintain its size and avoid rapid extinction. Except where random death is considered, the entire surplus population is removed based upon phenotypic selection. The default value for humans is two offspring per selected individual (or four offspring per reproducing female).">3. Reproductive rate:</a></label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" class="form-control" id="reproductive_rate" 
                  name="reproductive_rate" value="{{reproductive_rate}}"
