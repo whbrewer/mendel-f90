@@ -21,7 +21,7 @@
       { 
          "ptype": "flot-line", 
          "title": "Fitness & Population Size History",
-         "options": "legend: { position: 'sw' }, xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { min: 0, axisLabel: 'Fitness & Population size', axisLabelOffset: -150, axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+         "options": "xaxes: [ { axisLabel: 'Generations', axisLabelFontSizePixels: 12 } ],  yaxes: [ { min: 0, axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, { position: 'right', min: 0, axisLabel: 'Population Size', axisLabelFontSizePixels: 12} ], legend: { position: 'se'}, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
          "datasource": [ 
              { "filename": "<cid>.000.hst", "cols": "1:2", "line_range": "1:10000", "data_def": "{label: 'fitness', data: d1, lines: { show: true }, color: 'rgb(255,50,50)'}" }, 
              { "filename": "<cid>.000.hst", "cols": "1:7", "line_range": "1:10000", "data_def": "{label: 'pop size', data: d2, lines: { show: true }, color: 'rgb(0,0,255)', yaxis: 2}" }
