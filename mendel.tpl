@@ -463,7 +463,7 @@
 
       <div class="form-group">
         <label for="fitness_dependent_fertility" class="control-label col-xs-10 col-sm-6">
-          <a data-toggle="popover" title="fitness_dependent_fertility" data-content='It is widely recognized that when fitness declines, fertility also declines. This in turn affects population surplus, which affects selection efficiency, and can eventually result in “mutational meltdown”. To model this, we have included an option wherein fertility declines proportional to the square of the fitness decline. The resulting fertility decline is initially very subtle, but becomes increasingly severe as fitness approaches zero. The default value is “Yes”, which means that fertility declines with fitness, especially as fitness approaches zero.'>4. Fitness-dependent fecundity decline?</a></label>
+          <a data-toggle="popover" title="fitness_dependent_fertility" data-content='It is widely recognized that when fitness declines, fertility also declines. This in turn affects population surplus, which affects selection efficiency, and can eventually result in “mutational meltdown”. To model this, we have included an option wherein fertility declines proportional to the square of the fitness decline. The resulting fertility decline is initially very subtle, but becomes increasingly severe as fitness approaches zero.'>4. Fitness-dependent fecundity decline?</a></label>
         <div class="col-xs-2 col-sm-3">
           <input type="checkbox" name="fitness_dependent_fertility"
                  accesskey="4" value="on"
