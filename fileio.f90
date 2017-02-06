@@ -246,7 +246,6 @@ open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
 write(27,'("##fileformat=VCFv4.1")')
 write(27,'("##contig=<ID=1,length=249250621,assembly=b37>")')
 write(27,'(a, a)') "####reference=", case_id
-!write(27,'("#CHROM   POS        ID          REF  ALT QUAL FILTER INFO")')
 write(27,'("#CHROM",a1,"POS",a1,"ID",a1,"REF",a1,"ALT",a1,"QUAL",a1,"FILTER",a1,"INFO")') &
            tab, tab, tab, tab, tab, tab, tab
 
@@ -275,13 +274,49 @@ do k = 1, pop_size
          write(27,'(15a)') chrom_str//tab//pos_str//tab//id_str//tab//ref//tab//alt//tab//dot//tab//dot//tab//dot
       end do
    end do 
-enddo
-
-!100 format(a5, i12, f12.7, 6a5, 2i10, f12.7)
+end do
 
 close(27)
 
 end subroutine write_vcf_file
+
+subroutine write_alleles(dmutn)
+
+use inputs
+include 'common.h'
+integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
+integer :: id, i, j, k, npath
+integer, parameter :: intmax = 2147483647
+character*3 :: myid_str
+character*1 :: comma = ","
+
+npath = index(data_file_path,' ') - 1
+
+if (is_parallel) then
+   write(myid_str,'(i3.3)') myid+1
+else
+   write(myid_str,'(i3.3)') 0
+   myid = 0
+end if
+
+!open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+!//'.csv',status='unknown')
+open(27, file='alleles.csv', status='unknown')
+
+do k = 1, pop_size
+   write(27, '(i, a, $)') k, comma
+   do j = 1, 2
+      do i = 2, dmutn(1,j,k) 
+         id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
+         write(27, '(i, a, $)') dmutn(i,j,k), comma
+      end do
+   end do
+   write(27, *)
+end do
+
+close(27)
+
+end subroutine write_alleles
 
 subroutine write_sample(dmutn,fmutn,lb_mutn_count, &
                         linkage_block_fitness,fitness, &
