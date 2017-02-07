@@ -283,14 +283,14 @@
 
       <div class="form-group">
         <label class="control-label col-xs-12">
-          <a data-toggle="popover" title="dominant vs. recessive" data-content="It is widely agreed that in diploid species, most mutations are recessive, while a small fraction are dominant. However, because modeling recessives and dominants can become computationally more intense, and because the output figures can become hard to read when plotting both dominant and recessive mutations, the default setting is co-dominance. This means that all mutations behave additively (a heterozygote will always have half the effect of a homozygote). However, for greatest realism, the majority of mutations should be made recessive, with a minority being dominant by default, as described below.">2. Mutations &mdash; dominant vs. recessive?</a></label>
+          <a data-toggle="popover" title="dominant vs. recessive" data-content="It is widely agreed that in diploid species, most mutations are recessive, while a small fraction are dominant. In the case of co-dominance, all mutations behave additively (a heterozygote will always have half the effect of a homozygote). However, for greatest realism, the majority of mutations should be made recessive, with a minority being dominant by default.">2. Mutations &mdash; dominant vs. recessive?</a></label>
       </div>
 
       <div id="crdiv">
         <div class="form-group">
           <label for="fraction_recessive" class="control-label col-xs-12 col-sm-6">
             &nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="fraction_recessive" data-content="This parameter simply specifies the percentage of mutations that are recessive. The default is 0.0%. If set to 80%, then 80% of mutations are recessive, so the remaining 20% will automatically be made dominant.">a. fraction recessive (rest dominant):</a></label>
+            <a data-toggle="popover" title="fraction_recessive" data-content="This parameter simply specifies the percentage of mutations that are recessive. If set to 0.8, then 80% of mutations are recessive, so the remaining 20% will automatically be made dominant.">a. fraction recessive (rest dominant):</a></label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="fraction_recessive"
                    value="{{fraction_recessive}}" min="0" max="1" step="0.1"
