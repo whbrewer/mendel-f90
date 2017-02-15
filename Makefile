@@ -23,8 +23,8 @@ INCLUDE = /usr/local/lib
 INCLUDE = /usr/local/include
 # Compiler flags
 #DBUGFLAGS = -g -traceback -check # debug version
-FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
-#FCFLAGS = -O3 -I$(INCLUDE) # release version gfortran
+#FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
+FCFLAGS = -O3 -I$(INCLUDE) # release version gfortran
 # note use flag -fpe:0 to handle floating point exceptions
 
 # Linker flags (gfortran on OSX)

@@ -16,12 +16,6 @@
     padding: 10px;
   }
 
-/*
-  .bootstrap-tagsinput {
-    background-color: #faffbd !important;
-  } 
-*/
-
   body { 
     background: #f5f5f5 !important; 
   }
@@ -1222,7 +1216,7 @@
 
 <script>
   $(document).ready(function() {    
-    $('#desc').tagsinput('add', 'v2.6.1');
+    $('#desc').tagsinput('add', 'v2.6.2');
     %if defined('tags'):
       $('#desc').tagsinput('add', '{{tags}}');
     %end

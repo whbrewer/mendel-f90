@@ -1034,7 +1034,7 @@ integer fmutn(max_fav_mutn_per_indiv/2,2,max_size)
 real initial_allele_effects(num_linkage_subunits)
 real w, effect, freq
 real*8  cum_effect(pop_size)
-integer i, lb, m, indx, ica_count(3)
+integer i, j, lb, m, indx, ica_count(3)
 integer zygous(num_linkage_subunits)
 character dom*3
 logical list
@@ -1048,18 +1048,14 @@ do i=1,current_pop_size
 
    zygous = 0
 
-   do m=2,dmutn(1,1,i)+1
-      if(mod(dmutn(m,1,i), lb_modulo) == lb_modulo - 1) then 
-         lb = dmutn(m,1,i)/lb_modulo + 1
-         zygous(lb) = zygous(lb) + 1
-      end if
-   end do
-
-   do m=2,dmutn(1,2,i)+1
-      if(mod(dmutn(m,2,i), lb_modulo) == lb_modulo - 1) then 
-         lb = dmutn(m,2,i)/lb_modulo + 1
-         zygous(lb) = zygous(lb) + 1
-      end if
+   do j = 1, 2 ! haplotype
+     do m=2,dmutn(1,j,i)+1
+        ! The index lb_modulo-1 is reserved exclusively for initial contrasting alleles.
+        if(mod(dmutn(m,j,i), lb_modulo) == lb_modulo - 1) then 
+           lb = dmutn(m,j,i)/lb_modulo + 1
+           zygous(lb) = zygous(lb) + 1
+        end if
+     end do
    end do
 
    do lb=1,num_linkage_subunits
@@ -1202,7 +1198,6 @@ real individual_heterozygosity
 count_homozygous = 0
 count_heterozygous = 0
 do i=1, current_pop_size
-
    j = 2
    do k = 2, dmutn(1,j,i)+1
 
@@ -1304,17 +1299,22 @@ integer dcount, fcount, par_dcount, par_fcount
 integer global_mutn_count(MNP,num_tribes)
 integer global_mutn_list(MNP,num_tribes)
 integer global_list_count(num_tribes)
-integer num_falleles(3), num_dalleles(3), lb_limit, dwarn, fwarn
-integer par_num_falleles(3), par_num_dalleles(3), mutn_limit
-integer ncount, par_ncount, num_nalleles(3), par_num_nalleles(3)
+integer num_falleles(3), num_dalleles(3), num_nalleles(3)
+integer par_num_falleles(3), par_num_dalleles(3), par_num_nalleles(3)
+integer lb_limit, dwarn, fwarn, idwarn, ifwarn
+integer ncount, par_ncount, mutn_limit
 integer nwarn, mutn_thres, mutn, jmax
-real*8 dpbin(NB), dpbin_count(NB), dpbin_max, pbin_width
-real*8 npbin(NB), npbin_count(NB), npbin_max, x
-real*8 fpbin(NB), fpbin_count(NB), fpbin_max, scale_factor
+
+real*8 dpbin(NB), dpbin_count(NB), dpbin_max, pbin_width ! deleterious
+real*8 npbin(NB), npbin_count(NB), npbin_max, x ! neutral
+real*8 fpbin(NB), fpbin_count(NB), fpbin_max, scale_factor ! beneficial
+real*8 idpbin(NB), idpbin_count(NB), idpbin_max, idsum ! initial deleterious alleles
+real*8 ifpbin(NB), ifpbin_count(NB), ifpbin_max, ifsum ! initial favorable alleles
 real*8 par_dpbin(NB), par_fpbin(NB), dsum, fsum
 real*8 par_npbin(NB), par_npbin_count(NB), nsum
 real*8 par_dpbin_count(NB),par_fpbin_count(NB)
 real*8 febin(10,NB), fe_bin_width
+
 real   bin_fitness(11), bin_center(10)
 
 ! For diploid organisms, mutations can be homozygous, and so the
@@ -1368,11 +1368,10 @@ if(frac_fav_mutn /= 1.) then
             mutn_limit =  lb_modulo*lb
          end if
          
-         call count_alleles(dmutn,max_del_mutn_per_indiv,MNP,mutn_limit, &
-                            mutn_list,mutn_count,list_count,mfirst,gen)
+         call count_alleles(dmutn, max_del_mutn_per_indiv, MNP, mutn_limit, &
+                            mutn_list, mutn_count, list_count, mfirst, gen, .false.)
 
-         call bin_alleles(MNP,NB,list_count,mutn_count,pbin_width, &
-                          dpbin,dsum,dwarn)
+         call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, dpbin, dsum, dwarn)
 
          ! The following do statement is for the .pmd file, 
          ! which bins mutations based on their fitness effect
@@ -1401,11 +1400,9 @@ if(track_neutrals) then
    
    if(polygenic_beneficials) then
 
-      call count_string_alleles(nmutn,max_neu_mutn_per_indiv,MNP,  &
-                                mutn_list,mutn_count,list_count)
+      call count_string_alleles(nmutn, max_neu_mutn_per_indiv, MNP, mutn_list, mutn_count, list_count)
 
-      call bin_alleles(MNP,NB,list_count,mutn_count,pbin_width, &
-              npbin,nsum,nwarn)
+      call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, npbin, nsum, nwarn)
 
    else
 
@@ -1415,11 +1412,10 @@ if(track_neutrals) then
       
          mutn_limit = lb_modulo*lb
 
-         call count_alleles(nmutn,max_neu_mutn_per_indiv,MNP,mutn_limit, &
-                 mutn_list,mutn_count,list_count,mfirst,gen)
+         call count_alleles(nmutn, max_neu_mutn_per_indiv, MNP, mutn_limit, &
+                            mutn_list, mutn_count, list_count, mfirst, gen, .false.)
 
-         call bin_alleles(MNP,NB,list_count,mutn_count,pbin_width, &
-                       npbin,nsum,nwarn)
+         call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, npbin, nsum, nwarn)
 
       end do
 
@@ -1452,11 +1448,10 @@ if(frac_fav_mutn > 0. .or. polygenic_beneficials) then
             mutn_limit =  lb_modulo*lb
          end if
          
-         call count_alleles(fmutn,max_fav_mutn_per_indiv,MNP,mutn_limit, &
-                            mutn_list,mutn_count,list_count,mfirst,gen)
+         call count_alleles(fmutn, max_fav_mutn_per_indiv, MNP, mutn_limit, &
+                            mutn_list, mutn_count, list_count, mfirst, gen, .false.)
 
-         call bin_alleles(MNP,NB,list_count,mutn_count,pbin_width, &
-                          fpbin,fsum,fwarn)
+         call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, fpbin, fsum, fwarn)
          
       end do
       
@@ -1479,6 +1474,48 @@ if(frac_fav_mutn > 0. .or. polygenic_beneficials) then
 
 end if
 
+! count and bin initial contrasting alleles
+if (num_contrasting_alleles > 0) then
+  do it=it0,2
+    do lb=1,num_linkage_subunits
+
+      if(it == 1) then
+         mutn_limit = -lb_modulo*(num_linkage_subunits - lb)
+      else
+         mutn_limit =  lb_modulo*lb
+      end if
+ 
+      call count_alleles(dmutn, max_del_mutn_per_indiv, MNP, mutn_limit, &
+                         mutn_list, mutn_count, list_count, mfirst, gen, .true.)
+ 
+      call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, idpbin, idsum, idwarn)
+
+    enddo
+  enddo 
+
+  if(frac_fav_mutn > 0.) then 
+
+    do it=it0,2
+      do lb=1,num_linkage_subunits
+
+        if(it == 1) then
+           mutn_limit = -lb_modulo*(num_linkage_subunits - lb)
+        else
+           mutn_limit =  lb_modulo*lb
+        end if
+
+        call count_alleles(fmutn, max_fav_mutn_per_indiv, MNP, mutn_limit, &
+                           mutn_list, mutn_count, list_count, mfirst, gen, .true.)
+
+        call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, ifpbin, ifsum, ifwarn)
+
+      enddo
+    enddo 
+
+  endif
+
+endif
+
 if(polygenic_beneficials) then
 
 ! Remove favorable allele count from the neutral allele count in the polygenic
@@ -1492,6 +1529,9 @@ end if
 dpbin_max = 1
 npbin_max = 1
 fpbin_max = 1
+idpbin_max = 1
+ifpbin_max = 1
+
 num_dalleles(2) = 0
 num_nalleles(2) = 0
 num_falleles(2) = 0
@@ -1500,6 +1540,8 @@ do j=1,NB
    dpbin_max = max(dpbin_max, dpbin(j))
    npbin_max = max(npbin_max, npbin(j))
    fpbin_max = max(fpbin_max, fpbin(j))
+   idpbin_max = max(idpbin_max, idpbin(j))
+   ifpbin_max = max(ifpbin_max, ifpbin(j))
    if(j > 1 .and. j < NB) then
       num_dalleles(2) = num_dalleles(2) + dpbin(j)
       num_nalleles(2) = num_nalleles(2) + npbin(j)
@@ -1510,6 +1552,7 @@ end do
 num_dalleles(1) = dpbin(1) 
 num_nalleles(1) = npbin(1)
 num_falleles(1) = fpbin(1)
+
 num_dalleles(3) = dpbin(NB)
 num_nalleles(3) = npbin(NB)
 num_falleles(3) = fpbin(NB)
@@ -1526,6 +1569,19 @@ npbin = npbin/npbin_max
 
 fpbin_count = fpbin
 fpbin = fpbin/fpbin_max
+
+idpbin_count = idpbin
+ifpbin_count = ifpbin
+
+! remove bogus values such as NaNs, etc. -- temporary
+do k = 1, NB
+  if (idpbin_count(k) > num_contrasting_alleles .or. idpbin_count(k)*0 .ne. 0) then
+    idpbin_count(k) = -1 ! negative values indicate that there is no valid value for this bin
+  endif  
+  if (ifpbin_count(k) > num_contrasting_alleles .or. ifpbin_count(k)*0 .ne. 0) then
+    ifpbin_count(k) = -1
+  endif  
+enddo 
 
 ! Compute values for fitness effect bin centers.
 
@@ -1593,10 +1649,10 @@ rewind(11)
 if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
     write(11,'("# generation = ",i8)') gen
     write(11,'("# frequency del_normalized fav_normalized ", &
-               "  neu_normalized del_count fav_count neu_count")')
-    write(11,'(i11,3f15.11,3f11.0)')  (k, dpbin(k),  &
+               "  neu_normalized del_count fav_count neu_count initial_del initial_fav")')
+    write(11,'(i11,3f15.11,5f11.0)')  (k, dpbin(k),  &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
-                        npbin_count(k), k=1,NB)
+              npbin_count(k), idpbin_count(k), ifpbin_count(k), k=1,NB)
 end if
 
 ! correct data for total diversity by multiplying by each bin
@@ -1637,6 +1693,8 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
               num_dalleles(2), num_dalleles(3), dcount
    write(11,"('#',4i12,' favorable')")   num_falleles(1), &
               num_falleles(2), num_falleles(3), fcount
+   write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
+              num_nalleles(2), num_nalleles(3), ncount
    write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
               num_nalleles(2), num_nalleles(3), ncount
    if(dwarn == 1) write(11,'("# Warning: Number of deleterious " &
@@ -1814,8 +1872,8 @@ end do
 
 end subroutine diagnostics_selection
 
-subroutine count_alleles(xmutn,max_mutn_per_indiv,MNP,mutn_limit, &
-                         mutn_list,mutn_count,list_count,mfirst,gen)
+subroutine count_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mutn_list, &
+                         mutn_count, list_count, mfirst, gen, count_initial_alleles)
 use inputs
 use polygenic
 include 'common.h'
@@ -1836,7 +1894,7 @@ integer :: i, j, k, m
 integer :: global_mutn_count(MNP,num_tribes)
 integer :: global_mutn_list(MNP,num_tribes)
 integer :: global_list_count(num_tribes)
-logical :: new_mutn
+logical :: new_mutn, count_initial_alleles, initial_allele
 integer :: mutn, jmax
 
 ! mutn_list is the list of mutation indices being analyzed for their frequency.
@@ -1854,9 +1912,14 @@ do i=1,current_pop_size
       m = mfirst(j,i)
       do while(xmutn(m,j,i) < mutn_limit .and. &
            m <=  xmutn(1,j,i)+1 .and. list_count < MNP)
-         mutn = mod(abs(xmutn(m,j,i)), lb_modulo)
-         ! lb_modulo-1 represents an initial contrasting allele
-         !if(mutn /= lb_modulo-1) then
+          mutn = mod(abs(xmutn(m,j,i)), lb_modulo)
+          ! lb_modulo-1 represents an initial contrasting allele
+          if (count_initial_alleles) then
+            initial_allele = (mutn == lb_modulo-1)
+          else
+            initial_allele = (mutn /= lb_modulo-1)
+          endif
+          if(initial_allele) then
             if(upload_mutations) then
                do k=1,num_uploaded_mutn
                   if(xmutn(m,j,i) == uploaded_mutn(k)) then
@@ -1880,8 +1943,8 @@ do i=1,current_pop_size
                   mutn_count(list_count) = 1
                end if
             end if
-         !end if
-         m = m + 1
+          end if
+          m = m + 1
       end do
       mfirst(j,i) = m
    end do

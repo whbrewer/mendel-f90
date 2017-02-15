@@ -304,11 +304,11 @@ end if
 open(27, file='alleles.csv', status='unknown')
 
 do k = 1, pop_size
-   write(27, '(i, a, $)') k, comma
+   write(27, '(i12, a1, $)') k, comma
    do j = 1, 2
       do i = 2, dmutn(1,j,k) 
          id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
-         write(27, '(i, a, $)') dmutn(i,j,k), comma
+         write(27, '(i12, a1, $)') dmutn(i,j,k), comma
       end do
    end do
    write(27, *)

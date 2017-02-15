@@ -572,6 +572,8 @@ end if
 
 initial_allele_effects = 0.
 
+np = int(initial_alleles_pop_frac*pop_size)
+
 do n=1,num_contrasting_alleles
 
    lb = 1 + (n - 1)*nskp
@@ -597,11 +599,10 @@ do n=1,num_contrasting_alleles
    h1_id = min(2, 1 + int(2.*randomnum(1)))
    h2_id = 3 - h1_id
 
-   np = int(initial_alleles_pop_frac*pop_size)
-
    m = dmutn(1,h1_id,1) + 1
    dmutn(m+1,h1_id,1:np) = mutn_indx
    dmutn(  1,h1_id,1:np) = m
+   
    m = fmutn(1,h2_id,1) + 1
    fmutn(m+1,h2_id,1:np) = mutn_indx
    fmutn(  1,h2_id,1:np) = m
