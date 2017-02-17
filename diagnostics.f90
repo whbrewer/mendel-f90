@@ -46,7 +46,7 @@ do i=1,current_pop_size
       total_del_mutn = total_del_mutn          &
                      + lb_mutn_count(lb,1,1,i) &
                      + lb_mutn_count(lb,2,1,i)
-      total_fav_mutn = total_fav_mutn          & 
+      total_fav_mutn = total_fav_mutn          &
                      + lb_mutn_count(lb,1,2,i) &
                      + lb_mutn_count(lb,2,2,i)
       total_neu_mutn = total_neu_mutn          &
@@ -105,8 +105,8 @@ end do
 if(tracked_del_mutn > 0) frac_recessive = &
                          real(num_recessive)/tracked_del_mutn
 
-! Output to a file for plotting the generation number, the mean 
-! fitness, the average number of mutations per individual, and 
+! Output to a file for plotting the generation number, the mean
+! fitness, the average number of mutations per individual, and
 ! the number of fixed favorable mutations.
 
 if(mod(gen,hst_gens)==0 .or. gen <= 10) then
@@ -119,7 +119,7 @@ if(mod(gen,hst_gens)==0 .or. gen <= 10) then
          total_neu_mutn/current_pop_size, &
          current_pop_size/real(global_pop_size)*100., &
          global_genetic_fitness, fertility_factor
-   else 
+   else
       write(7,'(i12,2e16.4,1p3e14.4,i12)') gen,  &
          post_sel_fitness, post_sel_geno_sd, &
          total_del_mutn/current_pop_size, &
@@ -155,7 +155,7 @@ if(mod(gen,output_gens)==0 .or. gen <= 10 .or. percent_pop_poly >= 99.) then
         post_sel_fitness, post_sel_geno_sd, post_sel_pheno_sd, &
         post_sel_corr, num_polys_this_gen, num_polys_cumulative)
 endif
- 
+
 if(allow_back_mutn) write(9,"('mean number of back mutations', &
    '/indiv =',f10.2)") real(num_back_mutn)/real(current_pop_size)
 
@@ -167,7 +167,7 @@ if(is_parallel) then
    call mpi_isum(num_polys_cumulative,global_num_polys_cumulative,1)
    !END_MPI
 
-   if (myid == 0) then 
+   if (myid == 0) then
       call write_status(6, gen, current_global_pop_size, &
            frac_recessive, par_total_del_mutn,           &
            par_tracked_del_mutn, par_total_fav_mutn,     &
@@ -181,7 +181,7 @@ if(is_parallel) then
       if(allow_back_mutn) write(6,"('mean number of back ' &
          'mutations/indiv =',f10.2)") real(global_num_back_mutn) &
          /real(current_global_pop_size)
-      
+
    end if
 
    if((gen < 4 .or. mod(gen,10)==0) .and. altruistic) then
@@ -267,9 +267,9 @@ if(tracking_threshold == 1.0 .and. gen >= 200 .and. &
          write(6, '("deleterious selection threshold  =",1pe10.3)') st
          write(6, '("deleterious fraction accumulated =",f7.4)') frac_accum
       end if
-      write(25, '(i10,1p1e15.3,2a15)') gen, st, 'NaN', 'NaN' 
+      write(25, '(i10,1p1e15.3,2a15)') gen, st, 'NaN', 'NaN'
       if(is_parallel .and. myid==0) then
-         write(35, '(i10,1p1e15.3,2a15)') gen, st, 'NaN', 'NaN' 
+         write(35, '(i10,1p1e15.3,2a15)') gen, st, 'NaN', 'NaN'
       end if
    end if
 end if
@@ -304,7 +304,7 @@ real*8 del_dom_thres, del_rec_thres, fav_dom_thres, fav_rec_thres
 real*8 par_del_dom_thres, par_fav_dom_thres
 
 ! Compute the total number of mutations and the bin widths.
-   
+
 mutn_sum  = current_pop_size*gen*mutn_rate
 del_bin_width = -log(tracking_threshold)/50
 if(max_fav_fitness_gain > 0.) then
@@ -429,11 +429,11 @@ if(mod(gen, 100) == 0) then
    if(gen == 100) accum = 0.
 end if
 
-! Output the number of accumulated deleterious dominant mutations 
+! Output the number of accumulated deleterious dominant mutations
 ! in each of 50 bins during the previous accum_gen generations at
 ! appropriate intervals, along with other relevant information.
 
-if(mod(gen, accum_gen) == 0 .and. verbosity == 2) then 
+if(mod(gen, accum_gen) == 0 .and. verbosity == 2) then
 
    if(gen == 100) then
    write(26,'("#"/"#",11x, "Generation    Accumulation Interval"/ &
@@ -476,7 +476,7 @@ if (x.eq.0) x = 1. ! don't scale data if fraction_neutral = 1
 do k=1,100
 
    if(refr_bins(k) > 0. .and. fraction_recessive > 0.) then
-      fitness_bins(k,1) = fitness_bins(k,1) &                  
+      fitness_bins(k,1) = fitness_bins(k,1) &
                         /(fraction_recessive*refr_bins(k))/x
    else
       fitness_bins(k,1) = 0.
@@ -491,7 +491,7 @@ do k=1,100
 
 end do
 
-! Perform an iteration of smoothing on the fitness_bin values 
+! Perform an iteration of smoothing on the fitness_bin values
 ! using a three-point average.  Iterate three times.
 
 do i=1,3
@@ -534,14 +534,14 @@ end do
 if (.not. is_parallel) then
    write(6, '(14x,"Fraction of mutations retained versus fitness effect")')
    write(6, '(" effect:",10(x,1pe7.0))') (bin_fitness_midpoint(k),k=3,50,5)
-   write(6, '(" domint:",10f7.4)') (fitness_bins(k,2),k=3,50,5) 
+   write(6, '(" domint:",10f7.4)') (fitness_bins(k,2),k=3,50,5)
    if(fraction_recessive > 0.) write(6, '(" recess:",0p10f7.4)') &
              (fitness_bins(k,1),k=3,50,5)
 end if
 
 write(9, '(14x,"Fraction of mutations retained versus fitness effect")')
 write(9, '(" effect:",10(x,1pe7.0))') (bin_fitness_midpoint(k),k=3,50,5)
-write(9, '(" domint:",10f7.4)') (fitness_bins(k,2),k=3,50,5) 
+write(9, '(" domint:",10f7.4)') (fitness_bins(k,2),k=3,50,5)
 if(fraction_recessive > 0.) write(6, '(" recess:",0p10f7.4)') &
           (fitness_bins(k,1),k=3,50,5)
 
@@ -598,8 +598,8 @@ k   = 1
 k0  = 0
 sum = (1. - fraction_recessive)*refr_bins(50)
 del_dom_thres = 0.
- 
-do while(k <= 50 .and. sum > 5000) 
+
+do while(k <= 50 .and. sum > 5000)
    if(fitness_bins(k,2) > 0.25 .and. k0 == 0) k0 = k
    if(fitness_bins(k,2) > 0.75 .and. k > k0 + 1) then
       x0 = 0.
@@ -631,8 +631,8 @@ k   = 1
 k0  = 0
 sum = fraction_recessive*refr_bins(50)
 del_rec_thres = 0.
- 
-do while(k <= 50 .and. sum > 5000) 
+
+do while(k <= 50 .and. sum > 5000)
    if(fitness_bins(k,1) > 0.25 .and. k0 == 0) k0 = k
    if(fitness_bins(k,1) > 0.75 .and. k > k0 + 1) then
       x0 = 0.
@@ -678,7 +678,7 @@ if (frac_fav_mutn > 0 .or. polygenic_beneficials) then
       k = k + 1
    end do
 
-!  Now find the first bin with k < k0 that is backeted by ratios 
+!  Now find the first bin with k < k0 that is backeted by ratios
 !  below and above 2.0.
 
    j = k0 - 1
@@ -763,16 +763,16 @@ do i=1,oneortwo
       del_dom_thres = par_del_dom_thres
       fav_dom_thres = par_fav_dom_thres
    end if
-   
+
 !  Do not write out zero threshold values, instead use NaN's
    if (del_dom_thres==0 .and. del_rec_thres==0 .and. fav_dom_thres==0) then
-      write(fid, '(i10,3a15)') gen, 'NaN', 'NaN', 'NaN' 
+      write(fid, '(i10,3a15)') gen, 'NaN', 'NaN', 'NaN'
    else if (del_dom_thres == 0 .and. del_rec_thres == 0) then
       write(fid, '(i10,2a15,1p1e15.3)') gen, 'NaN', 'NaN', fav_dom_thres
    else if (del_dom_thres == 0 .and. fav_dom_thres == 0) then
-      write(fid, '(i10,a15,1p1e15.3,a15)') gen, 'NaN', del_rec_thres, 'NaN' 
+      write(fid, '(i10,a15,1p1e15.3,a15)') gen, 'NaN', del_rec_thres, 'NaN'
    else if (del_rec_thres == 0 .and. fav_dom_thres == 0) then
-      write(fid, '(i10,1p1e15.3,2a15)') gen, del_dom_thres, 'NaN', 'NaN' 
+      write(fid, '(i10,1p1e15.3,2a15)') gen, del_dom_thres, 'NaN', 'NaN'
    else if(del_dom_thres == 0) then
       write(fid, '(i10,a15,1p2e15.3)') gen, 'NaN', del_rec_thres, fav_dom_thres
    else if(del_rec_thres == 0) then
@@ -811,7 +811,7 @@ real*8 par_lb_fitness_frac_pos, y0
 real*8 d, x, x0, x0r, x1, z0, z1, del_bin_width, fav_bin_width
 
 ! Generate the theoretical distribution curves for plotting.
-   
+
 haplotype_bin_width = 1.e-04
 del_bin_width = haplotype_bin_width
 fav_bin_width = 0.01d0*max(0.01, max_fav_fitness_gain)
@@ -977,11 +977,11 @@ end do
 do k = 101,200
    num_fav_lb = num_fav_lb + haplotype_bins(k)
 end do
-  
+
 lb_fitness_frac_positive = num_fav_lb/(num_del_lb + num_fav_lb)
 
 write(4,'("# favorable x-axis scaling = ",1pe12.4)')  &
-             fav_bin_width/del_bin_width 
+             fav_bin_width/del_bin_width
 write(4,'("# avg_linkage_block_effect = ",1pe12.4)')  &
              avg_lb_effect
 write(4,'("# lb_fitness_percent_positive = ",f12.4)') &
@@ -1010,7 +1010,7 @@ if (is_parallel) then
    end if
 end if
 !END_MPI
- 
+
 end subroutine diagnostics_near_neutrals_plot
 
 subroutine diagnostics_contrasting_alleles(dmutn, nmutn, fmutn, &
@@ -1018,7 +1018,7 @@ subroutine diagnostics_contrasting_alleles(dmutn, nmutn, fmutn, &
 
 ! This routine analyzes the distribution of the initial contrasting
 ! alleles and their effects on overall fitness.  When logical
-! variable list is .true., routine outputs a list of allele 
+! variable list is .true., routine outputs a list of allele
 ! frequencies.
 use inputs
 include 'common.h'
@@ -1051,7 +1051,7 @@ do i=1,current_pop_size
    do j = 1, 2 ! haplotype
      do m=2,dmutn(1,j,i)+1
         ! The index lb_modulo-1 is reserved exclusively for initial contrasting alleles.
-        if(mod(dmutn(m,j,i), lb_modulo) == lb_modulo - 1) then 
+        if(mod(dmutn(m,j,i), lb_modulo) == lb_modulo - 1) then
            lb = dmutn(m,j,i)/lb_modulo + 1
            zygous(lb) = zygous(lb) + 1
         end if
@@ -1075,14 +1075,14 @@ do i=1,current_pop_size
    zygous = 0
 
    do m=2,fmutn(1,1,i)+1
-      if(mod(fmutn(m,1,i), lb_modulo) == lb_modulo - 1) then 
+      if(mod(fmutn(m,1,i), lb_modulo) == lb_modulo - 1) then
          lb = fmutn(m,1,i)/lb_modulo + 1
          zygous(lb) = zygous(lb) + 1
       end if
    end do
 
    do m=2,fmutn(1,2,i)+1
-      if(mod(fmutn(m,2,i), lb_modulo) == lb_modulo - 1) then 
+      if(mod(fmutn(m,2,i), lb_modulo) == lb_modulo - 1) then
          lb = fmutn(m,2,i)/lb_modulo + 1
          zygous(lb) = zygous(lb) + 1
       end if
@@ -1122,7 +1122,7 @@ if(.not.list) then
       ica_mean_effect = ica_mean_effect + (cum_effect(i) - 1.d0)
    end do
 
-   ica_mean_effect = ica_mean_effect/current_pop_size 
+   ica_mean_effect = ica_mean_effect/current_pop_size
 
 !  Compute mean frequency of positive initial contrasting alleles
 !  and the number of positive initial contrasting alleles fixed and lost.
@@ -1191,7 +1191,7 @@ integer fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer i,j,k
 integer count_homozygous, count_heterozygous, total_analyzed
 real mutn_per_individual, fraction_heterozygous
-real individual_heterozygosity 
+real individual_heterozygosity
 
 ! Analyze percent homozygosity and heterozygosity of deleterious mutations
 
@@ -1211,7 +1211,7 @@ do i=1, current_pop_size
          count_heterozygous = count_heterozygous + 1
       end if
 
-   end do 
+   end do
 end do
 
 total_analyzed = count_heterozygous+count_homozygous
@@ -1234,7 +1234,7 @@ write(*,*)
 10   continue
 
 ! Analyze percent homozygosity and heterozygosity of favorable mutations
-    
+
 if(frac_fav_mutn > 0. .or. polygenic_beneficials) then
 
 count_homozygous = 0
@@ -1253,8 +1253,8 @@ do i=1, current_pop_size
       else
          count_heterozygous = count_heterozygous + 1
       end if
-      
-   end do 
+
+   end do
 end do
 
 total_analyzed = count_heterozygous+count_homozygous
@@ -1268,10 +1268,10 @@ write(*,'("there are ",i10," homozygous mutations")')      count_homozygous
 write(*,'("and       ",i10," heterozygous mutations")')    count_heterozygous
 write(*,'("resulting in a percent heterozygosity of: ",f5.2,"%")') &
   fraction_heterozygous*100
-write(*,'("There are: ",f7.1, " tracked favorable mutation per individual")') & 
+write(*,'("There are: ",f7.1, " tracked favorable mutation per individual")') &
   mutn_per_individual
 write(*,*)
-   
+
 end if
 
 20   continue
@@ -1288,7 +1288,7 @@ include 'common.h'
 include 'mpif.h'
 ! END_MPI
 ! MNP = max number of polymorphisms, NP = number of bins
-integer, parameter :: MNP=100000, NB=100 
+integer, parameter :: MNP=100000, NB=100
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer nmutn(max_neu_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
@@ -1337,11 +1337,11 @@ if(int(pbin_width) == 0) then
    return
 end if
 
-! Compute statistics on deleterious polymorphisms.  
+! Compute statistics on deleterious polymorphisms.
 
-! To keep the required computer time reasonable, limit the maximum 
-! number of polymorphisms to be considered to be MNP.  This may 
-! result in the analysis being performed only over a portion of 
+! To keep the required computer time reasonable, limit the maximum
+! number of polymorphisms to be considered to be MNP.  This may
+! result in the analysis being performed only over a portion of
 ! the total total population.
 
 dsum   = 0.
@@ -1352,14 +1352,14 @@ dwarn  = 0
 if(frac_fav_mutn /= 1.) then
 
    mfirst = 2
-   
+
    ! Loop over recessives first and dominants second.
-   
+
    it0 = 1
    if(fraction_recessive == 0.) it0 = 2
-   
+
    do it=it0,2
-      
+
       do lb=1,num_linkage_subunits
 
          if(it == 1) then
@@ -1367,13 +1367,13 @@ if(frac_fav_mutn /= 1.) then
          else
             mutn_limit =  lb_modulo*lb
          end if
-         
+
          call count_alleles(dmutn, max_del_mutn_per_indiv, MNP, mutn_limit, &
                             mutn_list, mutn_count, list_count, mfirst, gen, .false.)
 
          call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, dpbin, dsum, dwarn)
 
-         ! The following do statement is for the .pmd file, 
+         ! The following do statement is for the .pmd file,
          ! which bins mutations based on their fitness effect
          do k=1,list_count
             j = min(NB, 1 + int(mutn_count(k)/pbin_width))
@@ -1383,21 +1383,21 @@ if(frac_fav_mutn /= 1.) then
                febin(ie,j) = febin(ie,j) + 1
             end if
          end do
-         
+
       end do
 
    end do
 
 end if
 
-! Compute statistics on neutral polymorphisms.  
+! Compute statistics on neutral polymorphisms.
 
 nsum   = 0.
 npbin  = 0.
 nwarn  = 0
 
 if(track_neutrals) then
-   
+
    if(polygenic_beneficials) then
 
       call count_string_alleles(nmutn, max_neu_mutn_per_indiv, MNP, mutn_list, mutn_count, list_count)
@@ -1407,9 +1407,9 @@ if(track_neutrals) then
    else
 
       mfirst = 2
-   
+
       do lb=1,num_linkage_subunits
-      
+
          mutn_limit = lb_modulo*lb
 
          call count_alleles(nmutn, max_neu_mutn_per_indiv, MNP, mutn_limit, &
@@ -1423,7 +1423,7 @@ if(track_neutrals) then
 
 end if
 
-! Compute statistics on favorable polymorphisms.  
+! Compute statistics on favorable polymorphisms.
 
 fsum   = 0.
 fpbin  = 0.
@@ -1437,9 +1437,9 @@ if(frac_fav_mutn > 0. .or. polygenic_beneficials) then
 
    it0 = 1
    if(fraction_recessive == 0.) it0 = 2
-   
+
    do it=it0,2
-      
+
       do lb=1,num_linkage_subunits
 
          if(it == 1) then
@@ -1447,16 +1447,16 @@ if(frac_fav_mutn > 0. .or. polygenic_beneficials) then
          else
             mutn_limit =  lb_modulo*lb
          end if
-         
+
          call count_alleles(fmutn, max_fav_mutn_per_indiv, MNP, mutn_limit, &
                             mutn_list, mutn_count, list_count, mfirst, gen, .false.)
 
          call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, fpbin, fsum, fwarn)
-         
+
       end do
-      
+
    end do
-   
+
    if(polygenic_beneficials) then
       do i=1,current_pop_size
          jmax = 2
@@ -1484,16 +1484,16 @@ if (num_contrasting_alleles > 0) then
       else
          mutn_limit =  lb_modulo*lb
       end if
- 
+
       call count_alleles(dmutn, max_del_mutn_per_indiv, MNP, mutn_limit, &
                          mutn_list, mutn_count, list_count, mfirst, gen, .true.)
- 
+
       call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, idpbin, idsum, idwarn)
 
     enddo
-  enddo 
+  enddo
 
-  if(frac_fav_mutn > 0.) then 
+  if(frac_fav_mutn > 0.) then
 
     do it=it0,2
       do lb=1,num_linkage_subunits
@@ -1510,7 +1510,7 @@ if (num_contrasting_alleles > 0) then
         call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, ifpbin, ifsum, ifwarn)
 
       enddo
-    enddo 
+    enddo
 
   endif
 
@@ -1549,7 +1549,7 @@ do j=1,NB
    end if
 end do
 
-num_dalleles(1) = dpbin(1) 
+num_dalleles(1) = dpbin(1)
 num_nalleles(1) = npbin(1)
 num_falleles(1) = fpbin(1)
 
@@ -1577,11 +1577,11 @@ ifpbin_count = ifpbin
 do k = 1, NB
   if (idpbin_count(k) > num_contrasting_alleles .or. idpbin_count(k)*0 .ne. 0) then
     idpbin_count(k) = -1 ! negative values indicate that there is no valid value for this bin
-  endif  
+  endif
   if (ifpbin_count(k) > num_contrasting_alleles .or. ifpbin_count(k)*0 .ne. 0) then
     ifpbin_count(k) = -1
-  endif  
-enddo 
+  endif
+enddo
 
 ! Compute values for fitness effect bin centers.
 
@@ -1596,7 +1596,7 @@ if (verbosity==2) then
    write(19,'("# generation = ",i8)') gen
    write(19,"('#',9x,'Table of polymorphism frequency vs. fitness' &
       ' effect category'/'#'/ &
-      '#freq',17x,'fitness effect category center value')") 
+      '#freq',17x,'fitness effect category center value')")
    write(19,'(3x,1p4e7.0,6e8.1)') bin_center(1:10)
    write(19,'(i3,4i7,6i8)') (k,int(febin(1:10,k)),k=1,NB)
    call flush(19)
@@ -1605,17 +1605,17 @@ endif
 ! Output global statistics to file caseid.000.plm
 if(is_parallel) then
 
-   call mpi_davg(dpbin, par_dpbin, NB) 
-   call mpi_davg(fpbin, par_fpbin, NB) 
-   call mpi_davg(npbin, par_npbin, NB) 
+   call mpi_davg(dpbin, par_dpbin, NB)
+   call mpi_davg(fpbin, par_fpbin, NB)
+   call mpi_davg(npbin, par_npbin, NB)
 
-   call mpi_davg(dpbin_count, par_dpbin_count, NB) 
-   call mpi_davg(fpbin_count, par_fpbin_count, NB) 
-   call mpi_davg(npbin_count, par_npbin_count, NB) 
+   call mpi_davg(dpbin_count, par_dpbin_count, NB)
+   call mpi_davg(fpbin_count, par_fpbin_count, NB)
+   call mpi_davg(npbin_count, par_npbin_count, NB)
 
-   call mpi_davg(num_dalleles, par_num_dalleles, 3) 
-   call mpi_davg(num_falleles, par_num_falleles, 3) 
-   call mpi_davg(num_nalleles, par_num_nalleles, 3) 
+   call mpi_davg(num_dalleles, par_num_dalleles, 3)
+   call mpi_davg(num_falleles, par_num_falleles, 3)
+   call mpi_davg(num_nalleles, par_num_nalleles, 3)
 
    dcount = par_num_dalleles(1) + par_num_dalleles(2) + par_dpbin(NB)
    ncount = par_num_nalleles(1) + par_num_nalleles(2) + par_npbin(NB)
@@ -1641,7 +1641,7 @@ if(is_parallel) then
       write(21,'("#",4i10," neutral")')     &
           num_nalleles(1), num_nalleles(2), num_nalleles(3), ncount
       call flush(21)
-   end if 
+   end if
 
 end if
 
@@ -1652,7 +1652,8 @@ if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
                "  neu_normalized del_count fav_count neu_count initial_del initial_fav")')
     write(11,'(i11,3f15.11,5f11.0)')  (k, dpbin(k),  &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
-              npbin_count(k), idpbin_count(k), ifpbin_count(k), k=1,NB)
+              npbin_count(k), idpbin_count(k)*initial_alleles_amp_factor, &
+              ifpbin_count(k)*initial_alleles_amp_factor, k=1,NB)
 end if
 
 ! correct data for total diversity by multiplying by each bin
@@ -1779,7 +1780,7 @@ do i=1,current_pop_size
    j = min(NB, int(100.*fitness_post_sel(i)))
    sel_bins(j,2) = sel_bins(j,2) + 1
 end do
- 
+
 jmax    = 1
 max_bin = 0
 
@@ -1821,7 +1822,7 @@ if (is_parallel .and. myid==0) then
 else ! non-parallel
     oneortwo = 1
     fid = 24
-end if 
+end if
 
 do i = 1, oneortwo
 
@@ -1831,14 +1832,14 @@ do i = 1, oneortwo
       pre_sel_fitness  = par_pre_sel_fitness
       post_sel_fitness = par_post_sel_fitness
       pre_sel_geno_sd  = par_pre_sel_geno_sd
-      post_sel_geno_sd = par_post_sel_geno_sd 
+      post_sel_geno_sd = par_post_sel_geno_sd
       pre_sel_pheno_sd = par_pre_sel_pheno_sd
    end if
 
    rewind (fid)
 
    write(fid,'("# generation = ",i8)') gen
-   write(fid,'("# heritability            =",f9.5)') heritability 
+   write(fid,'("# heritability            =",f9.5)') heritability
    write(fid,'("# non scaling noise       =",f9.5)') non_scaling_noise
    write(fid,'("# pre  selection fitness  =",f9.5)') pre_sel_fitness
    write(fid,'("# post selection fitness  =",f9.5)') post_sel_fitness
@@ -1862,9 +1863,9 @@ do i = 1, oneortwo
       if(select_ratio > 0.) then
          write(fid,'(f10.3,2i20,f18.3)') j*0.01, sel_bins(j,:), select_ratio
       else
-         write(fid,'(f10.3,2i20,15x,"?")') j*0.01, sel_bins(j,:) 
+         write(fid,'(f10.3,2i20,15x,"?")') j*0.01, sel_bins(j,:)
       end if
-   end do    
+   end do
 
    call flush(fid)
 
@@ -2013,14 +2014,13 @@ subroutine bin_alleles(MNP,NB,list_count,mutn_count,pbin_width,pbin,xsum,warn)
 
   ! Load the allele hit counts into the proper bins and count
   ! the total number of hits accumulated.
-  
+
   do k=1,list_count
      j = min(NB, 1 + int(mutn_count(k)/pbin_width))
      pbin(j) = pbin(j) + 1
      xsum = xsum + mutn_count(k)
   end do
-  
-  if(list_count == MNP) warn = 1
-  
-end subroutine bin_alleles
 
+  if(list_count == MNP) warn = 1
+
+end subroutine bin_alleles

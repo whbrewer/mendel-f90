@@ -30,7 +30,8 @@ real    reproductive_rate, mutn_rate,                             &
         se_linked_scaling, pop_growth_rate,                       &
         tc_scaling_factor, group_heritability, fraction_neutral,  &
         social_bonus_factor, max_total_fitness_increase,          &
-        polygenic_effect, initial_alleles_pop_frac 
+        polygenic_effect, initial_alleles_pop_frac,               &
+        initial_alleles_amp_factor
 
 real*8 :: tracking_threshold, extinction_threshold
 
@@ -42,7 +43,7 @@ logical :: fitness_dependent_fertility, dynamic_linkage,             &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
            polygenic_beneficials, tribal_fission, reseed_rng
 
-! note: if changing the string length of polygenic_target below, 
+! note: if changing the string length of polygenic_target below,
 ! need to make corresponding change in polygenic.f90 function poly_match
 character case_id*6, data_file_path*80, polygenic_target*40, polygenic_init*40
 
@@ -75,7 +76,7 @@ namelist /population/ recombination_model, clonal_haploid, &
      pop_growth_model, pop_growth_rate, bottleneck_yes, &
      bottleneck_generation, bottleneck_pop_size, &
      num_bottleneck_generations, initial_alleles_mean_effect, &
-     carrying_capacity, initial_alleles_pop_frac
+     carrying_capacity, initial_alleles_pop_frac, initial_alleles_amp_factor
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
@@ -117,22 +118,22 @@ write(nf,'(a32,i12)')   ' fitness_distrib_type = ' , fitness_distrib_type
 write(nf,'(a32,f12.7)') ' fraction_neutral = '     , fraction_neutral
 write(nf,'(a32,e12.3)') ' genome_size = '          , genome_size
 write(nf,'(a32,f12.7)') ' high_impact_mutn_fraction = ',   &
-                          high_impact_mutn_fraction   
+                          high_impact_mutn_fraction
 write(nf,'(a32,f12.7)') ' high_impact_mutn_threshold = ',  &
-                          high_impact_mutn_threshold 
+                          high_impact_mutn_threshold
 write(nf,'(a32,i12)')   ' num_initial_fav_mutn = ' , num_initial_fav_mutn
-write(nf,'(a32,f12.7)') ' max_fav_fitness_gain = ' , max_fav_fitness_gain 
+write(nf,'(a32,f12.7)') ' max_fav_fitness_gain = ' , max_fav_fitness_gain
 write(nf,'(a32,f12.7)') ' uniform_fitness_effect_del = ',  &
                           uniform_fitness_effect_del
 write(nf,'(a32,f12.7)') ' uniform_fitness_effect_fav = ',  &
                           uniform_fitness_effect_fav
 write(nf,'(a32,f12.7)') ' fraction_recessive = '   , fraction_recessive
 write(nf,'(a32,f12.7)') ' recessive_hetero_expression = ', &
-                          recessive_hetero_expression    
+                          recessive_hetero_expression
 write(nf,'(a32,f12.7)') ' dominant_hetero_expression = ',  &
-                          dominant_hetero_expression     
-write(nf,'(a32,f12.7)') ' multiplicative_weighting = ',    & 
-                          multiplicative_weighting       
+                          dominant_hetero_expression
+write(nf,'(a32,f12.7)') ' multiplicative_weighting = ',    &
+                          multiplicative_weighting
 write(nf,'(a32,l)')     ' synergistic_epistasis = ',       &
                           synergistic_epistasis
 write(nf,'(a32,e12.5)') ' se_nonlinked_scaling = ' , se_nonlinked_scaling
@@ -144,32 +145,34 @@ write(nf,'(a32,a)')     ' polygenic_init = '       , polygenic_init
 write(nf,'(a32,a)')     ' polygenic_target = '     , polygenic_target
 write(nf,'(a32,f12.7)') ' polygenic_effect = '     , polygenic_effect
 write(nf,'("/")')
- 
+
 write(nf,'(/"&selection")')
 write(nf,'(a32,f12.7)') ' fraction_random_death = ', fraction_random_death
 write(nf,'(a32,f12.7)') ' heritability = '         , heritability
 write(nf,'(a32,f12.7)') ' non_scaling_noise = '    , non_scaling_noise
 write(nf,'(a32,l)')     ' fitness_dependent_fertility = ', &
-                          fitness_dependent_fertility    
+                          fitness_dependent_fertility
 write(nf,'(a32,i12)')   ' selection_scheme = '     , selection_scheme
 write(nf,'(a32,f12.7)') ' partial_truncation_value = ',    &
-                          partial_truncation_value       
+                          partial_truncation_value
 write(nf,'("/")')
 
 write(nf,'(/"&population")')
 write(nf,'(a32,i12)')   ' recombination_model = '  , recombination_model
 write(nf,'(a32,l)')     ' clonal_haploid = '       , clonal_haploid
 write(nf,'(a32,f12.7)') ' fraction_self_fertilization = ', &
-                          fraction_self_fertilization    
+                          fraction_self_fertilization
 write(nf,'(a32,i12)')   ' num_contrasting_alleles = ',     &
-                          num_contrasting_alleles        
+                          num_contrasting_alleles
 write(nf,'(a32,f12.7)') ' initial_alleles_mean_effect = ', &
-                          initial_alleles_mean_effect    
+                          initial_alleles_mean_effect
 write(nf,'(a32,f12.7)') ' initial_alleles_pop_frac = ', &
-                          initial_alleles_pop_frac    
+                          initial_alleles_pop_frac
+write(nf,'(a32,f12.7)') ' initial_alleles_amp_factor = ', &
+                          initial_alleles_amp_factor
 write(nf,'(a32,l)')     ' dynamic_linkage = '      , dynamic_linkage
 write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
-                          haploid_chromosome_number      
+                          haploid_chromosome_number
 write(nf,'(a32,i12)')   ' num_linkage_subunits = ' , num_linkage_subunits
 write(nf,'(a32,i12)')   ' pop_growth_model = '     , pop_growth_model
 write(nf,'(a32,f12.7)') ' pop_growth_rate = '      , pop_growth_rate
@@ -186,10 +189,10 @@ write(nf,'(a32,l)')     ' is_parallel = '           , is_parallel
 write(nf,'(a32,l)')     ' homogenous_tribes = '     , homogenous_tribes
 write(nf,'(a32,i12)')   ' num_indiv_exchanged = '   , num_indiv_exchanged
 write(nf,'(a32,i12)')   ' migration_generations = ' , migration_generations
-write(nf,'(a32,i12)')   ' migration_model = '       , migration_model    
+write(nf,'(a32,i12)')   ' migration_model = '       , migration_model
 write(nf,'(a32,l)')     ' tribal_competition = '    , tribal_competition
-write(nf,'(a32,f12.7)') ' tc_scaling_factor = '     , tc_scaling_factor 
-write(nf,'(a32,f12.7)') ' group_heritability = '    , group_heritability 
+write(nf,'(a32,f12.7)') ' tc_scaling_factor = '     , tc_scaling_factor
+write(nf,'(a32,f12.7)') ' group_heritability = '    , group_heritability
 write(nf,'(a32,l)')     ' altruistic = '            , altruistic
 write(nf,'(a32,f12.7)') ' social_bonus_factor = '   , social_bonus_factor
 write(nf,'("/")')
@@ -262,6 +265,7 @@ clonal_haploid = .false.
 fraction_self_fertilization = 0.0
 num_contrasting_alleles = 0
 initial_alleles_mean_effect = 0.0
+initial_alleles_amp_factor = 1
 dynamic_linkage = .true.
 haploid_chromosome_number = 23
 num_linkage_subunits = 989

@@ -25,7 +25,7 @@
          se_nonlinked_scaling = 0.0
             se_linked_scaling = 0.0
              upload_mutations = F
-              allow_back_mutn = F 
+              allow_back_mutn = F
         polygenic_beneficials = F
                polygenic_init = 'AAAAAA'
              polygenic_target = 'TCGTCG'
@@ -42,11 +42,12 @@
 /
 
 &population
-          recombination_model = 3 
+          recombination_model = 3
   fraction_self_fertilization = 0.0
       num_contrasting_alleles = 0
    max_total_fitness_increase = 0
      initial_alleles_pop_frac = 1.0
+   initial_alleles_amp_factor = 1000.
               dynamic_linkage = T
     haploid_chromosome_number = 23
          num_linkage_subunits = 989

@@ -84,7 +84,7 @@ do i = 1, iargc()
       call set_default_parameters
       call write_parameters(5)
       close(5)
-      print *, "Parameter file written: mendel.in.new" 
+      print *, "Parameter file written: mendel.in.new"
       stop
    else ! web interface
       filename = './mendel.in'
@@ -119,7 +119,7 @@ end if
 call initialize(myid_str)
 run_status = 0
 
-if(is_parallel) then 
+if(is_parallel) then
 ! Since we may turn off is_parallel in case a tribe dies,
 ! remember the original state.
   am_parallel = .true.
@@ -134,7 +134,7 @@ if(is_parallel) then
 else
   am_parallel = .false.
 endif
- 
+
 if(is_parallel .and. tribal_competition) then
    global_run_status = 0
    run_status = 0
@@ -230,7 +230,7 @@ if(.not.bottleneck_yes .and. pop_growth_model /= 4) &
 
 ! Initialize the population size to be equal to the parameter
 ! pop_size unless the parameter bottleneck_generation has the
-! value zero.  In the latter case, initialize the population size 
+! value zero.  In the latter case, initialize the population size
 ! to bottleneck_pop_size.
 
 if(abs(bottleneck_generation) > 0) then
@@ -247,18 +247,18 @@ if(bottleneck_yes.and.bottleneck_generation < 0) then
       write(*,*) 'ERROR: num_bottleneck_generations ',            &
                  '>= cyclic bottleneck_generations'
       stop
-   end if  
+   end if
    bottleneck_modulo = abs(bottleneck_generation)
    bottleneck_generation = abs(bottleneck_generation)
    cyclic_bottlenecking = .true.
 end if
 
-! If not a restart case, initialize entire population to have no 
-! initial mutations.   
+! If not a restart case, initialize entire population to have no
+! initial mutations.
 
 ! Initialize the linkage block fitness such that all individuals
-! in the population have identical haplotypes.  If initial 
-! contrasting alleles are to be included, generate them here. 
+! in the population have identical haplotypes.  If initial
+! contrasting alleles are to be included, generate them here.
 
 if(.not.restart_case) then
    dmutn = num_linkage_subunits*lb_modulo + 1
@@ -268,7 +268,7 @@ if(.not.restart_case) then
    fmutn(1,:,:)  = 0
 
    ! With polygenic beneficials each linkage block represents a single
-   ! nucleotide.  Correspondingly, we do not accumulate mutations as 
+   ! nucleotide.  Correspondingly, we do not accumulate mutations as
    ! in the traditional sense, but rather we maintain a single mutation
    ! for each linkage block.  Therefore, number of mutations in each
    ! haplotype is constant, equal to the number of linkage subunits.
@@ -289,7 +289,7 @@ if(.not.restart_case) then
 !     if(recombination_model==full_sexual) recombination_model = suppressed
    else
       nmutn(1,:,:) = 0
-      lb_mutn_count = 0 
+      lb_mutn_count = 0
    endif
    linkage_block_fitness = 1.d0
    if(num_contrasting_alleles > 0)                                &
@@ -310,7 +310,7 @@ do k=1,num_initial_fav_mutn
    call favorable_mutn(fmutn,lb_mutn_count,linkage_block_fitness)
 end do
 
-post_sel_fitness  = 1.d0 
+post_sel_fitness  = 1.d0
 ica_count         = 0
 
 call second(tout)
@@ -332,7 +332,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    if(cyclic_bottlenecking.and.                                   &
       (mod(gen,bottleneck_modulo)==0                              &
-      .and.gen>gen_0+1+bottleneck_modulo)) then                   
+      .and.gen>gen_0+1+bottleneck_modulo)) then
       bottleneck_generation = bottleneck_generation + bottleneck_modulo
    end if
 
@@ -386,7 +386,7 @@ do gen=gen_0+1,gen_0+num_generations
          if(tribal_competition) then
             write(*,*) 'competing pop sizes:', pop_size_array
          endif
-             
+
       end if
       call migration(dmutn,nmutn,fmutn,linkage_block_fitness, &
            lb_mutn_count,gen,ierr,msg_num)
@@ -405,7 +405,7 @@ do gen=gen_0+1,gen_0+num_generations
    end if
 
 !  Re-initialize random number generator using PID xor Time.
-   if(reseed_rng) call init_random_seed() 
+   if(reseed_rng) call init_random_seed()
 
 !  Randomly mate one half of the population with members
 !  from the other half.
@@ -416,7 +416,7 @@ do gen=gen_0+1,gen_0+num_generations
         num_offspring,available,pop_size_allocation,nmax,offspring_count, &
         total_offspring,tsub,gen)
 
-   ! create a beneficial mutation for each individual which received 
+   ! create a beneficial mutation for each individual which received
    ! the polygenic target during this generation
 
    if(polygenic_beneficials) then
@@ -426,14 +426,14 @@ do gen=gen_0+1,gen_0+num_generations
       ! in the neutral mutation array.
 
       ! Loop through all individuals in the population and count the number
-      ! of matches with the target nucleotide string. 
+      ! of matches with the target nucleotide string.
 
       num_polys_this_gen = 0
       do id=1,current_pop_size
          do j=1,2 ! haplotype
             if(fmutn(2,j,id) > 0) then
-               num_polys_this_gen = num_polys_this_gen + 1 
-            endif 
+               num_polys_this_gen = num_polys_this_gen + 1
+            endif
          enddo
       enddo
 
@@ -465,18 +465,18 @@ do gen=gen_0+1,gen_0+num_generations
    cumulative_offspring = cumulative_offspring + offspring_count
 
    if((mod(gen - gen_0, 10) == 0 .or. gen - gen_0 < 10) .and. &
-      mutn_rate >= 1.) then 
+      mutn_rate >= 1.) then
       d = real(new_mutn_count)/real(cumulative_offspring)
       poisson_mean = poisson_mean + 0.3*(mutn_rate - d)
    end if
 
    if(is_parallel .and. tribal_competition) then
 
-!     Modify the tribal population size such that selection 
+!     Modify the tribal population size such that selection
 !     intensity depends only on the default fertility.
 
       real_pop_size = offspring_count/(reproductive_rate &
-                      *(1. - fraction_random_death)) 
+                      *(1. - fraction_random_death))
       if(fitness_dependent_fertility) real_pop_size =  &
          real_pop_size/sqrt(min(1.d0, post_sel_fitness))
       current_pop_size = int(real_pop_size)
@@ -484,11 +484,11 @@ do gen=gen_0+1,gen_0+num_generations
          current_pop_size = current_pop_size + 1
       migration_rate = num_indiv_exchanged/real(current_pop_size)
 !     Following is the k value, what Aoki calls "group selection intensity"
-!     ref: Aoki, Kenichi, "A condition for group selection to prevail over 
-!     counteracting selection" by Kenichi Aoki, Evolution 36(4), 1982, 
+!     ref: Aoki, Kenichi, "A condition for group selection to prevail over
+!     counteracting selection" by Kenichi Aoki, Evolution 36(4), 1982,
 !     pp. 832-842.
       aoki = 2*selection_coefficient*current_pop_size*migration_rate
-      if(myid.eq.0) write(*,'(a,i5,x,a,f7.4,x,a,f7.4,x,a,i7)') & 
+      if(myid.eq.0) write(*,'(a,i5,x,a,f7.4,x,a,f7.4,x,a,i7)') &
          'gen:', gen, 'group_selection_intensity: ', aoki,     &
          'migration_rate:', migration_rate,  &
          'deme_size:', current_pop_size
@@ -536,9 +536,9 @@ do gen=gen_0+1,gen_0+num_generations
    call second(tout_offspring)
    sec(5) = sec(5) + tout_offspring - tin_offspring
 
-!  Impose selection based on fitness to reduce the population 
+!  Impose selection based on fitness to reduce the population
 !  size to a value not to exceed the parameter pop_size.
-    
+
    call second(tin_selection)
    call selection(dmutn, nmutn, fmutn, lb_mutn_count,  &
         linkage_block_fitness, fitness, pheno_fitness, &
@@ -569,7 +569,7 @@ do gen=gen_0+1,gen_0+num_generations
          ! otherwise will hang waiting for communications
          if(num_tribes == 2) is_parallel = .false.
          run_status = -1
-      else 
+      else
          do i=6,9,3
             write(i,'(/"** SHUTDOWN DUE TO EXTINCTION **"/)')
          end do
@@ -592,8 +592,8 @@ do gen=gen_0+1,gen_0+num_generations
 !  we need to provide some means to allow a population size of one
 !  to recover from a bottleneck. This is done by increasing it to
 !  a value of 2 just before the mutational check, which will cause
-!  it to rebound correctly. If it is left as 1, it will never rebound 
-!  correctly, but stay at a fixed value of 1 for the remainder of the 
+!  it to rebound correctly. If it is left as 1, it will never rebound
+!  correctly, but stay at a fixed value of 1 for the remainder of the
 !  simulation.
 
    if(bottleneck_yes .and. bottleneck_pop_size == 1 .and. &
@@ -605,7 +605,7 @@ do gen=gen_0+1,gen_0+num_generations
    if((is_parallel .and. current_pop_size <  &
       extinction_threshold*pop_size) .or. &
       current_pop_size <= 1) then
-      
+
       ! If one tribe melts down, set trigger for shutdown
       if(is_parallel) then
          do i=6,9,3
@@ -628,7 +628,7 @@ do gen=gen_0+1,gen_0+num_generations
    ! In case one tribe is set to run less generations than the other
    if(is_parallel .and. .not.homogenous_tribes .and. &
       gen==gen_0+num_generations) then
-      do i=6,9,3 
+      do i=6,9,3
          write(i,*) 'TRIBE',myid+1,'IS SHUTTING DOWN. GEN:',gen
       end do
       run_status = -(myid + 1)
@@ -636,7 +636,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    ! START_MPI
    ! For the limiting case of two tribes, we must turn off the parallel
-   ! switch if one of the tribes goes extinct.  So, every generation 
+   ! switch if one of the tribes goes extinct.  So, every generation
    ! communicate the status of each tribe to the other.
 
    if(tribal_competition) then
@@ -647,26 +647,26 @@ do gen=gen_0+1,gen_0+num_generations
             call mpi_send_int(run_status,0,msg_num,ierr)
             msg_num = msg_num + 1
             call mpi_recv_int(other_run_status,0,msg_num,ierr)
-         else 
+         else
             call mpi_recv_int(other_run_status,1,msg_num,ierr)
             msg_num = msg_num + 1
             call mpi_send_int(run_status,1,msg_num,ierr)
          end if
          msg_num = msg_num + 1
-            
+
          if(tribal_fission) then
 
             ! Simple tribal fission - if one tribe goes extinct, split the
             ! surviving tribe into two and send half of its population
-            ! to the tribe that went extinct  
-            
+            ! to the tribe that went extinct
+
             if (run_status < 0 .or. other_run_status < 0 ) then
-               
+
                if(myid==0) then
                   write(6,*) myid,'competing pop sizes:', pop_size_array
                   pop_size_winner = maxval(pop_size_array)
                   pop_size_loser = minval(pop_size_array)
-                  id_winner = maxloc(pop_size_array,1) - 1 
+                  id_winner = maxloc(pop_size_array,1) - 1
                   call mpi_send_int(pop_size_winner,1-myid,msg_num,ierr)
                   call mpi_send_int(pop_size_loser,1-myid,msg_num,ierr)
                   call mpi_send_int(id_winner,1-myid,msg_num,ierr)
@@ -676,7 +676,7 @@ do gen=gen_0+1,gen_0+num_generations
                   call mpi_recv_int(id_winner,1-myid,msg_num,ierr)
                end if
                winner = .false.
-               
+
                if(run_status < 0) then ! dying tribe
                   run_status = 0 ! resurrect tribe - reset the status as ok
                   is_parallel = .true.
@@ -690,47 +690,47 @@ do gen=gen_0+1,gen_0+num_generations
                   current_pop_size = (pop_size_winner + pop_size_loser)/2
                   ! if odd, round down half the time and round up half the time
                   if(mod(current_pop_size,2)==1 .and. randomnum(1).gt.0.5) then
-                     num_migrate = num_migrate+1 
+                     num_migrate = num_migrate+1
                      current_pop_size = current_pop_size + 1
                   end if
                   call mpi_send_int(current_pop_size,1-myid,msg_num,ierr)
                   call mpi_send_int(num_migrate,1-myid,msg_num,ierr)
                   write(6,*) 'migrating half the tribe from',myid+1,' to ',2-myid
                end if
-               
+
                ! now migrate half the population
                do k = 1, num_migrate
-                  i = pop_size_winner-num_migrate + k 
+                  i = pop_size_winner-num_migrate + k
                   j = pop_size_loser + k
                   !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
                   id_loser = 1 - id_winner
-                  call migrate_individual(id_winner,id_loser,i,j,dmutn,fmutn,nmutn, & 
+                  call migrate_individual(id_winner,id_loser,i,j,dmutn,fmutn,nmutn, &
                        lb_mutn_count,linkage_block_fitness,winner)
                end do
-               
+
             end if
-            
+
          else ! .not.tribal_fission
-            
+
             ! This is the alternative treatment to fission
             ! turn off parallel and let the one run to completion
             if(other_run_status < 0)  then
                num_tribes = num_tribes - 1
                is_parallel = .false.
             end if
-            
+
             if(run_status < 0) goto 30
-            
+
          end if ! tribal_fission
 
       else if (num_tribes > 2) then
 
-         ! receive status from every process in group 
+         ! receive status from every process in group
          ! to check if one process has died
 
          call mpi_allreduce(run_status,global_run_status,1, &
               mpi_integer,mpi_sum,mycomm,ierr)
-  
+
          if(sum(global_run_status) < 0) then
 
             ranks(1) = -sum(global_run_status)
@@ -754,7 +754,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    call second(tin_diagnostics)
 
-   if(mod(gen, 10) == 0 .or. (.not.bottleneck_yes .and. & 
+   if(mod(gen, 10) == 0 .or. (.not.bottleneck_yes .and. &
       current_pop_size <= pop_size/20) .or. gen <= 10) then
       print_flag = .true.
    else
@@ -807,7 +807,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    if (polygenic_beneficials) then
       if (percent_pop_poly >= 99) then
-         print*,'POLYGENICS: SHUTTING DOWN BECAUSE 99% OF POPULATION HAS ALLELE'        
+         print*,'POLYGENICS: SHUTTING DOWN BECAUSE 99% OF POPULATION HAS ALLELE'
          goto 20 ! shutdown
       endif
    endif
@@ -829,7 +829,7 @@ do gen=gen_0+1,gen_0+num_generations
                                      time_selection
       call flush(22)
    endif
-  
+
    !START_MPI
    if(is_parallel) then
       call mpi_ravg(tgen,par_tgen,1)
@@ -872,13 +872,13 @@ do gen=gen_0+1,gen_0+num_generations
    !      Write PPM data.
 
    ! do i=1,pop_size
-   !    if (fitness(i) > 1) then 
+   !    if (fitness(i) > 1) then
    !       red = 255
    !       green = 0
    !       blue = 0
    !    else
    !       red = int(fitness(i)*255)
-   !       if (red < 0) red = 0 
+   !       if (red < 0) red = 0
    !          green = red
    !          blue = red
    !       end if
@@ -896,18 +896,18 @@ do gen=gen_0+1,gen_0+num_generations
          pop_size = ceiling(pop_size*(1. + pop_growth_rate* &
                     (1. - pop_size/carrying_capacity)))
          current_pop_size = pop_size
-      else if (pop_growth_model == 3) then 
+      else if (pop_growth_model == 3) then
          old_pop_size = pop_size
          if (gen > 20) then
             pop_size = prescribed_pop_growth(size(prescribed_pop_growth))
          else
             pop_size = prescribed_pop_growth(gen)
-         end if 
+         end if
          growth_rate = pop_size/real(old_pop_size)
          if (growth_rate > reproductive_rate) then
             print *, 'ERROR: INCREASE REPRODUCTION RATE'
             stop
-         end if 
+         end if
          current_pop_size = pop_size
       else if (pop_growth_model == 4) then ! Founder effects
          if (gen < bottleneck_generation .and. pop_size < carrying_capacity) then
@@ -917,16 +917,16 @@ do gen=gen_0+1,gen_0+num_generations
             pop_size = bottleneck_pop_size
          else if (gen > bottleneck_generation .and. pop_size < carrying_capacity) then
             pop_size = min(ceiling(gr2*pop_size),carrying_capacity)
-            reproductive_rate = gr2 
-         else 
+            reproductive_rate = gr2
+         else
             pop_size = carrying_capacity
             reproductive_rate = reproductive_rate_saved
          end if
-      else 
+      else
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
                     'not supported'
-         stop   
-      end if   
+         stop
+      end if
 
       this_size = int((1.1*reproductive_rate*pop_size &
                   *(1. - fraction_random_death)))
@@ -934,7 +934,7 @@ do gen=gen_0+1,gen_0+num_generations
       if(this_size > max_size) then
          write(0,*) "OUT OF MEMORY! SHUTTING DOWN!", this_size, max_size
          goto 20
-      end if 
+      end if
 
    end if
 
@@ -981,7 +981,7 @@ if(polygenic_beneficials) then
          if(plot_allele_gens > 1) then
             print *, "NOTE: gen_exit and duration parameters can ONLY be"
             print *, "      computed correctly when plot_allele_gens = 1"
-         endif 
+         endif
       end do
       write(i,*)
       write(i,'(a,a,f7.2)') 'Percentage of instances lost to drift within ',  &
@@ -994,8 +994,8 @@ if(polygenic_beneficials) then
       write(i,*)
       write(i,*) 'First_inst_gen, Last_inst_gen, Fix_gen, Total_inst'
       write(i,'(2i15,i9,i12)') poly_gen_first_instance, &
-                               poly_gen_last_instance,  & 
-                               poly_stop_gen-plot_allele_gens, & 
+                               poly_gen_last_instance,  &
+                               poly_stop_gen-plot_allele_gens, &
                                num_polys_cumulative
       write(i,*) '-----------------------------------------------------'
    end do
@@ -1054,7 +1054,7 @@ close(12)
 close(13)
 close(14)
 ! close(15)
-if (verbosity == 2) then 
+if (verbosity == 2) then
    close(16)
    close(19)
    close(22)
@@ -1091,7 +1091,7 @@ endif
 ! END_MPI
 
 ! Write an empty file called success which is used by the unit testing
-! framework to know if the run has successfully completed or not 
+! framework to know if the run has successfully completed or not
 filename = 'success'
 j = index(data_file_path,' ') - 1
 open (99, file=data_file_path(1:npath)//filename,status='unknown')
@@ -1131,7 +1131,7 @@ real*8 par_pre_sel_fitness, par_post_sel_fitness, &
 real*8 tribal_fitness_variance, par_tribal_fitness
 
 ! Compute total social bonus.
- 
+
 if(upload_mutations .and. altruistic) then
    social_bonus = 0.d0
    do i=1, current_pop_size
@@ -1161,7 +1161,7 @@ if (is_parallel) then
 
    if(tribal_competition) then
 
-!     Gather the fitnesses from each tribe into a single 
+!     Gather the fitnesses from each tribe into a single
 !     array called post_sel_fitness_array in order to compute
 !     tribal fitness variance below.
 
@@ -1180,7 +1180,7 @@ if (is_parallel) then
             global_genetic_fitness = &
                     pop_size_array(i)*post_sel_fitness_array(i) + &
                                      global_genetic_fitness
-         end do 
+         end do
          global_genetic_fitness = global_genetic_fitness/ &
                                   dble(current_global_pop_size)
 
@@ -1196,8 +1196,8 @@ if (is_parallel) then
                             post_sel_fitness_array(i))**2
          end do
 
-!        Compute the tribal noise variance required to yield the 
-!        specified group heritability.  Take the square root to 
+!        Compute the tribal noise variance required to yield the
+!        specified group heritability.  Take the square root to
 !        obtain the standard deviation.
 
          tribal_noise = sqrt(tribal_fitness_variance* &
@@ -1218,14 +1218,14 @@ if (is_parallel) then
 
 !     Compute the total tribal fitness.
 
-      tribal_fitness = post_sel_fitness + tribal_noise 
+      tribal_fitness = post_sel_fitness + tribal_noise
 
 !     The tribal_fitness_factor relates the fitness of the
-!     current tribe to the average tribal fitness from all tribes.  
+!     current tribe to the average tribal fitness from all tribes.
 
       call mpi_davg(tribal_fitness,par_tribal_fitness,1)
       call mpi_mybcastd(par_tribal_fitness,1)
-      
+
       tribal_fitness_factor=tribal_fitness/ &
                             global_genetic_fitness
 
@@ -1234,7 +1234,7 @@ if (is_parallel) then
       tribal_fitness = tribal_fitness + &
                        social_bonus_factor*social_bonus
 
-!     Recompute tribal_fitness_factor which now includes 
+!     Recompute tribal_fitness_factor which now includes
 !     social_bonus.
 
       call mpi_davg(tribal_fitness,par_tribal_fitness,1)
@@ -1251,7 +1251,7 @@ if (is_parallel) then
 
    endif
 
-else 
+else
 
 !  Add social bonus to fitness for non-parallel/single-tribe case.
    tribal_fitness = tribal_fitness +  &
