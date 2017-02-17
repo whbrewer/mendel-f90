@@ -6,7 +6,7 @@
     "command": "../../../../apps/mendel/mendel",
     "postprocess": "None",
     "preprocess": "None",
-    "assets": [ "mendel.js", "help.html", "about.html" ], 
+    "assets": [ "mendel.js", "help.html", "about.html" ],
     "plots": [ {
         "datasource": [ {
             "data_def": "{label: 'deleterious', data: d1, lines: { show: true }, color: 'rgb(200,0,0)'}",
@@ -165,6 +165,11 @@
             "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}",
             "cols": "1:7", "line_range": "-109:100000", "filename": "<cid>.000.plm"
         }
+        ,
+        {
+            "data_def": "{label: \"Initial alleles\", data: d4, bars: { show: true, autoWidth: true }, color: \"rgb(0,0,0)\"}",
+            "cols": "1:8", "line_range": "-109:100000", "filename": "<cid>.000.plm"
+        }
         ],
         "options": "xaxis: { axisLabel: 'Allele Frequency', axisLabelFontSizePixels: 12 }, yaxis: { min: 0, axisLabel: 'Number of Alleles', axisLabelOffset: -100, axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
@@ -198,7 +203,7 @@
             "cols": "1:8", "line_range": "-109:10000", "filename": "<cid>.000.plm"
         }
         ],
-        "options": "legend: { position: \"nw\"}, xaxis: { axisLabel: \"Allele frequency\"}, yaxis: { min: 0, max: 100, axisLabel: \"Number of alleles\" }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "legend: { position: \"nw\"}, xaxis: { axisLabel: \"Allele frequency\"}, yaxis: { min: 0, axisLabel: \"Number of alleles\" }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Initial Allele Frequencies"
     }
