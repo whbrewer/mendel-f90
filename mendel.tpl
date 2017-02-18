@@ -115,23 +115,14 @@
                  value="{{frac_fav_mutn}}" class="form-control"
                  min="0.0" max="1.0" step="0.01"
                  onchange="compute_u(); fxn_auto_malloc(); validate(this)"
-                 title="0.0 - 1.0 (e.g. if 1:1000, enter 0.001)">
+                 title="0.0 - 1.0 (e.g. if 1:1000, enter 0.001)"><br>
+          <table class="table">
+            <tr><td>beneficial mutation rate: </td> <td><code><span id="uben"></span></code></td></tr>
+            <tr><td>deleterious mutation rate:</td> <td><code><span id="udel"></span></font></code></td></tr>
+          </table>
         </div>
       </div>
-      <div class="form-group">
-        <label for="uben" class="control-label col-xs-6 col-sm-6" style="text-align:right">
-            beneficial mutation rate:</label>
-        <div class="col-xs-6 col-sm-3">
-          <input type="number" name="uben" id="uben" class="form-control" readOnly=true>
-        </div>
-      </div>
-      <div class="form-group">
-        <LABEL for="udel" class="control-label col-xs-6 col-sm-6" style="text-align:right">
-            deleterious mutation rate:</label>
-        <div class="col-xs-6 col-sm-3">
-          <input type="number" name="udel" id="udel" class="form-control" readOnly=true>
-        </div>
-      </div>
+
       <div class="form-group">
         <label id="pgr_label" for="reproductive_rate" class="control-label col-xs-12 col-sm-6">
           <a data-toggle="popover" title="reproductive_rate" data-content="This is the number of offspring per reproducing individual. Since population size in Mendel is usually constant, this variable defines the maximum amount of selection. There must be an average of at least one offspring per individual (after the selection process) for the population to maintain its size and avoid rapid extinction. Except where random death is considered, the entire surplus population is removed based upon phenotypic selection. The default value for humans is two offspring per selected individual (or four offspring per reproducing female).">3. Reproductive rate:</a></label>
@@ -1123,15 +1114,10 @@
                  value="{{fraction_neutral}}" class="form-control"
                  min="0" max="1" step="0.1"
                  onchange="fxn_fraction_neutral(); fxn_auto_malloc(); validate(this)"
-                 title="0 - 1">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="uneu" class="control-label col-xs-6 col-sm-6">
-          &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="neutral mutation rate" data-content='This value is automatically computed, so it does not need to be specified here.  It based on the specified total non-neutral mutation rate multiplied times the fraction_neutral parameter.'>b. neutral mutation rate:</a></label>
-        <div class="col-xs-12 col-sm-3">
-          <input name="uneu" type="number" class="form-control" readOnly=true>
+                 title="0 - 1"><br>
+          <table class="table">
+             <tr><td>neutral mutation rate:</td> <td><code><span id="uneu"></span></font></code></td> </tr>
+          </table>
         </div>
       </div>
 

@@ -51,7 +51,7 @@ function fxn_initial_alleles() {
 }
 
 function fxn_initial_alleles_init() {
-  if (dmi.num_contrasting_alleles.value == 0) { 
+  if (dmi.num_contrasting_alleles.value == 0) {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
@@ -135,22 +135,22 @@ function fxn_dynamic_linkage() {
 function fxn_dynamic_linkage_able() {
     if (dmi.dynamic_linkage.checked) {
        dmi.haploid_chromosome_number.readOnly = false
-           document.getElementById("num_linkage_subunits").innerText = 
+           document.getElementById("num_linkage_subunits").innerText =
             "b. number of linkage subunits:"
     } else {
        dmi.haploid_chromosome_number.readOnly = true
-       document.getElementById("num_linkage_subunits").innerText = 
+       document.getElementById("num_linkage_subunits").innerText =
             "b. fixed block linkage number:"
     }
 }
 
 function fxn_haploid() {
    if (dmi.clonal_haploid.checked) {
-      dmi.fraction_recessive.value = 0.0 
-      dmi.dominant_hetero_expression.value = 1.0 
+      dmi.fraction_recessive.value = 0.0
+      dmi.dominant_hetero_expression.value = 1.0
       status("Setting fraction_recessive to 0 and dominant_hetero_expression to 1")
    } else {
-      dmi.dominant_hetero_expression.value = 0.5 
+      dmi.dominant_hetero_expression.value = 0.5
       status("Setting dominant_hetero_expression back to 0.5")
    }
 }
@@ -178,7 +178,7 @@ function fxn_restart_case() {
   if (dmi.restart_case.checked) {
     if (dmi.restart_dump_number.value = "0") {
         dmi.restart_dump_number.value = "1"
-    } 
+    }
   }
 }
 
@@ -219,7 +219,7 @@ function check_bottleneck() {
    if(bgen < 0) {
      status("Cyclic bottlenecking turned on")
      if(dmi.num_bottleneck_generations.value > -bgen ) {
-         dmi.num_bottleneck_generations.value = -bgen - 1; 
+         dmi.num_bottleneck_generations.value = -bgen - 1;
      }
    } else {
      status("Cyclic bottlenecking turned off")
@@ -243,9 +243,10 @@ function fxn_auto_malloc() {
   // max number of mutations per individual
   compute_memory()
 
-  var uben = dmi.uben.value
-  var udel = dmi.udel.value
-  var uneu = dmi.uneu.value
+  var u = dmi.mutn_rate.value
+  var uneu = u*dmi.fraction_neutral.value
+  var uben = (u-uneu)*dmi.frac_fav_mutn.value
+  var udel = (u-uneu)*(1-dmi.frac_fav_mutn.value)
 
   var ng = dmi.num_generations.value
   var min = 100
@@ -271,7 +272,7 @@ function fxn_auto_malloc() {
 
 function compute_memory() {
   // given in bytes
-  var sizeof_float = 4; 
+  var sizeof_float = 4;
   var sizeof_double = 8
   var sizeof_int = 4
   var sizeof_logical = 4
@@ -295,11 +296,12 @@ function compute_memory() {
   var max_fav = dmi.max_fav_mutn_per_indiv.value
 
   // estimate memory requirements
-  
-  var uben = dmi.uben.value
-  var udel = dmi.udel.value
-  var uneu = dmi.uneu.value
 
+  var u = dmi.mutn_rate.value
+  var uneu = u*dmi.fraction_neutral.value
+  var uben = (u-uneu)*dmi.frac_fav_mutn.value
+  var udel = (u-uneu)*(1-dmi.frac_fav_mutn.value)
+  
   var est_max_del = ng*udel
   var est_max_neu = ng*uneu
   var est_max_fav = ng*uben
@@ -363,10 +365,10 @@ function compute_memory() {
 
 function compute_u() {
    u = dmi.mutn_rate.value
-   uneu = dmi.uneu.value = u*dmi.fraction_neutral.value
-   dmi.uben.value = (u-uneu)*dmi.frac_fav_mutn.value
-   dmi.udel.value = (u-uneu)*(1-dmi.frac_fav_mutn.value)
-   dmi.uneu.value = uneu
+   uneu = u*dmi.fraction_neutral.value
+   document.getElementById("uben").innerHTML = String(Math.round((u-uneu)*dmi.frac_fav_mutn.value*10)/10)
+   document.getElementById("udel").innerHTML = String(Math.round((u-uneu)*(1-dmi.frac_fav_mutn.value)*10)/10)
+   document.getElementById("uneu").innerHTML = String(Math.round(uneu*10)/10)
 }
 
 function fxn_fraction_neutral() {
@@ -376,7 +378,7 @@ function fxn_fraction_neutral() {
    } else {
       dmi.track_neutrals.checked = false
       //status("not tracking all mutations")
-   }      
+   }
    compute_u()
 }
 
@@ -486,9 +488,9 @@ function fxn_init_tracking_threshold() {
       dmi.track_all_mutn.checked = true
    } else {
       dmi.track_all_mutn.checked = false
-   } 
+   }
    // set a default tracking_threshold value, in case user
-   // is not restarting from a file that has a specified tracking 
+   // is not restarting from a file that has a specified tracking
    // threshold value.
    if(tracking_threshold == 0) { tracking_threshold = 1.e-5; }
 }
@@ -572,7 +574,7 @@ function show_hide_mutation_upload_form(i) {
         }
 
         // if user checks upload mutations on the mutation pane
-        // then automatically also check the upload mutations box 
+        // then automatically also check the upload mutations box
         // under population substructure, and vice-versa
     if (dmi.upload_mutations.checked) {
            document.getElementById("upload_mutations_div").style.display = "block"
@@ -603,13 +605,13 @@ function fxn_tribes(max_tribes) {
    num_procs = myobject.value
 
    // set max number of tribes for server from setting in config.inc
-   if(num_procs > max_tribes) { 
+   if(num_procs > max_tribes) {
       myobject.value = max_tribes
       num_procs = max_tribes
    }
-   // set min number of tribes 
+   // set min number of tribes
    if(num_procs < 2) {
-      myobject.value = 2; 
+      myobject.value = 2;
       num_procs = 2
    }
 
@@ -670,7 +672,7 @@ function fxn_selection_init() {
   } else {
      dmi.non_scaling_noise.value = 0.0
      //status("Setting non_scaling_noise to 0.0")
-  } 
+  }
 }
 
 function fxn_selection(i) {
@@ -680,7 +682,7 @@ function fxn_selection(i) {
      dmi.partial_truncation_value.select()
   } else {
      document.getElementById("ptv").style.display = "none"
-  } 
+  }
 }
 
 function check_back_mutn() {
@@ -689,7 +691,7 @@ function check_back_mutn() {
       dmi.tracking_threshold.value = "0.0"
       status("NOTE: Changed tracking threshold to 0.0 so that all mutations will be tracked")
    } else {
-      if(tt<=0) tt = 1.e-5; 
+      if(tt<=0) tt = 1.e-5;
       dmi.tracking_threshold.value = tt
       status("NOTE: Changed tracking threshold back to " + tt )
    }
@@ -703,18 +705,18 @@ function fxn_pop_growth_model(i) {
   } else if (i == 1) { // Exponential growth
      dmi.pop_growth_rate.readOnly = false
      dmi.carrying_capacity.readOnly = true
-     dmi.pop_size.value = "2"; 
-     dmi.num_generations.value = "2000"; 
-     dmi.pop_growth_rate.value = "1.01"; 
-     dmi.pop_growth_rate.title = "1.00 - 1.26"; 
+     dmi.pop_size.value = "2";
+     dmi.num_generations.value = "2000";
+     dmi.pop_growth_rate.value = "1.01";
+     dmi.pop_growth_rate.title = "1.00 - 1.26";
      status("WARNING: dynamic populations are experimental and largely untested")
   } else if (i == 2) { // Carrying capacity
      dmi.pop_growth_rate.readOnly = false
      dmi.carrying_capacity.readOnly = false
-     dmi.pop_size.value = "2"; 
-     dmi.num_generations.value = "1000"; 
-     dmi.pop_growth_rate.value = "0.1"; 
-     dmi.pop_growth_rate.title = "0.0 - 1.0"; 
+     dmi.pop_size.value = "2";
+     dmi.num_generations.value = "1000";
+     dmi.pop_growth_rate.value = "0.1";
+     dmi.pop_growth_rate.title = "0.0 - 1.0";
      status("WARNING: dynamic populations are experimental and largely untested")
   } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true
@@ -724,7 +726,7 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = false
      dmi.pop_growth_rate.value = "8"
      dmi.carrying_capacity.readOnly = false
-     dmi.pop_size.value = "2"; 
+     dmi.pop_size.value = "2";
      dmi.bottleneck_yes.checked = true
      dmi.bottleneck_generation.value = parseInt(dmi.num_generations.value) + 1
      dmi.bottleneck_pop_size.value = 10
