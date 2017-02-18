@@ -115,7 +115,7 @@
                  value="{{frac_fav_mutn}}" class="form-control"
                  min="0.0" max="1.0" step="0.01"
                  onchange="compute_u(); fxn_auto_malloc(); validate(this)"
-                 title="0.0 - 1.0 (e.g. if 1:1000, enter 0.001)"><br>
+                 title="0.0 - 1.0 (e.g. if 1:1000, enter 0.001)">
           <table class="table">
             <tr><td>beneficial mutation rate: </td> <td><code><span id="uben"></span></code></td></tr>
             <tr><td>deleterious mutation rate:</td> <td><code><span id="udel"></span></font></code></td></tr>
@@ -1114,7 +1114,7 @@
                  value="{{fraction_neutral}}" class="form-control"
                  min="0" max="1" step="0.1"
                  onchange="fxn_fraction_neutral(); fxn_auto_malloc(); validate(this)"
-                 title="0 - 1"><br>
+                 title="0 - 1">
           <table class="table">
              <tr><td>neutral mutation rate:</td> <td><code><span id="uneu"></span></font></code></td> </tr>
           </table>
