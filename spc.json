@@ -23,7 +23,7 @@
             "cols": "1:6", "line_range": "1:10000", "filename": "<cid>.000.hst"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Generations', axisLabelOffset: 0, axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Mutations', axisLabelOffset: 0, axisLabelFontSizePixels: 12 }",
+        "options": "legend: { position: 'nw' }, xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Mutations', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Average mutation/individual"
     }
@@ -35,7 +35,7 @@
         }
         ,
         {
-            "data_def": "{label: 'pop size', data: d2, lines: { show: true }, color: 'rgb(0,0,255)', yaxis: 2, position: 'right'}",
+            "data_def": "{label: 'pop size', data: d2, lines: { show: true }, color: 'rgb(0,0,255)', yaxis: 2}",
             "cols": "1:7", "line_range": "1:10000", "filename": "<cid>.000.hst"
         }
         ],
@@ -55,7 +55,7 @@
             "cols": "1:2", "line_range": "4:53", "filename": "<cid>.000.dst"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return -Math.exp(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabelOffset: -220, axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }",
+        "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return -Math.exp(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }",
         "ptype": "flot-line",
         "title": "Distribution of accumulated mutations (deleterious)"
     }
@@ -71,7 +71,7 @@
             "cols": "1:2", "line_range": "55:105", "filename": "<cid>.000.dst"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: <max_fav_fitness_gain> },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelOffset: -220, axisLabelFontSizePixels: 12, max: 10}, legend: { position: 'nw' }",
+        "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: <max_fav_fitness_gain> },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12}, legend: { position: 'nw' }",
         "ptype": "flot-line",
         "title": "Distribution of accumulated mutations (beneficial)"
     }
@@ -87,7 +87,7 @@
             "cols": "1:4", "line_range": "1:100000", "filename": "<cid>.000.thr"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Selection Threshold', axisLabelOffset: -120, axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Selection Threshold', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Selection threshold history"
     }
@@ -108,7 +108,7 @@
             "cols": "1:5", "line_range": "3:103", "filename": "<cid>.000.hap"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: -0.01, max: 0.0}, yaxis: { axisLabel: 'Frequency', axisLabelOffset: -50, axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'nw' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: -0.01, max: 0.0}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'nw' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Near neutral deleterious effects"
     }
@@ -129,7 +129,7 @@
             "cols": "1:5", "line_range": "103:204", "filename": "<cid>.000.hap"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, yaxis: { axisLabel: 'Frequency', axisLabelOffset: -50, axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: <max_fav_fitness_gain>}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01 }, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Near neutral beneficial effects"
     }
@@ -145,7 +145,7 @@
             "cols": "1:3", "line_range": "1:100000", "filename": "<cid>.000.sel"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Individuals', axisLabelOffset: -120, axisLabelFontSizePixels: 12, ticks: 10, min: 0.0 }, y2axis: { ticks: 5, min: 0.0, max: 1.0 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Individuals', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0 }, y2axis: { ticks: 5, min: 0.0, max: 1.0 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Selection effects"
     }
@@ -167,11 +167,11 @@
         }
         ,
         {
-            "data_def": "{label: \"Initial alleles\", data: d4, bars: { show: true, autoWidth: true }, color: \"rgb(0,0,0)\"}",
-            "cols": "1:8", "line_range": "-109:100000", "filename": "<cid>.000.plm"
+            "data_def": "{label: \"Initial\", data: d4, bars: { show: true, autoWidth: true }, color: \"rgb(0,0,0)\"}",
+            "cols": "1:8", "line_range": "-109:10000", "filename": "<cid>.000.plm"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Allele Frequency', axisLabelFontSizePixels: 12 }, yaxis: { min: 0, axisLabel: 'Number of Alleles', axisLabelOffset: -100, axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Allele Frequency', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Alleles', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Allele Frequencies"
     }
@@ -192,18 +192,23 @@
             "cols": "1:7", "line_range": "-109:100000", "filename": "<cid>.000.plmcor"
         }
         ],
-        "options": "xaxis: { axisLabel: 'Allele Frequency Frequency (1-99)', axisLabelFontSizePixels: 12, min:1, max:99 }, yaxis: { axisLabel: 'Total Number of Variants', axisLabelOffset: -100, axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "xaxis: { axisLabel: 'Allele Frequency Class', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Total Number of Variants', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Total number of variants vs. allele frequencies"
     }
     ,
     {
         "datasource": [ {
-            "data_def": "{label: \"Initial alleles\", data: d1, bars: { show: true }, color: \"rgb(200,0,0)\"}",
+            "data_def": "{label: \"Initial deleterious alleles\", data: d1, bars: { show: true }, color: \"rgb(200,0,0)\"}",
             "cols": "1:8", "line_range": "-109:10000", "filename": "<cid>.000.plm"
         }
+        ,
+        {
+            "data_def": "{label: \"Initial favorable alleles\", data: d2, lines: { show: true }, color: \"rgb(0,200,0)\"}",
+            "cols": "1:9", "line_range": "-109:10000", "filename": "<cid>.000.plm"
+        }
         ],
-        "options": "legend: { position: \"nw\"}, xaxis: { axisLabel: \"Allele frequency\"}, yaxis: { min: 0, axisLabel: \"Number of alleles\" }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
+        "options": "legend: { position: 'nw'}, xaxis: { axisLabel: 'Allele frequency'}, yaxis: { min: 0, axisLabel: 'Number of alleles' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
         "ptype": "flot-line",
         "title": "Initial Allele Frequencies"
     }
