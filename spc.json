@@ -1,217 +1,290 @@
 {
-    "category": "genetics",
-    "name": "mendel",
-    "input_format": "namelist",
-    "language": "python",
-    "command": "../../../../apps/mendel/mendel",
-    "postprocess": "None",
-    "preprocess": "None",
-    "assets": [ "mendel.js", "help.html", "about.html" ],
-    "plots": [ {
-        "datasource": [ {
-            "data_def": "{label: 'deleterious', data: d1, lines: { show: true }, color: 'rgb(200,0,0)'}",
-            "cols": "1:4", "line_range": "1:10000", "filename": "<cid>.000.hst"
-        }
-        ,
-        {
-            "data_def": "{label: 'favorable', data: d2, lines: { show: true }, color: 'rgb(0,200,0)'}",
-            "cols": "1:5", "line_range": "1:10000", "filename": "<cid>.000.hst"
-        }
-        ,
-        {
-            "data_def": "{label: 'neutrals', data: d3, lines: { show: true }, color: 'rgb(0,0,200)'}",
-            "cols": "1:6", "line_range": "1:10000", "filename": "<cid>.000.hst"
-        }
-        ],
-        "options": "legend: { position: 'nw' }, xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Mutations', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Average mutation/individual"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{label: 'fitness', data: d1, lines: { show: true }, color: 'rgb(255,50,50)'}",
-            "cols": "1:2", "line_range": "1:10000", "filename": "<cid>.000.hst"
-        }
-        ,
-        {
-            "data_def": "{label: 'pop size', data: d2, lines: { show: true }, color: 'rgb(0,0,255)', yaxis: 2}",
-            "cols": "1:7", "line_range": "1:10000", "filename": "<cid>.000.hst"
-        }
-        ],
-        "options": "xaxes: [ { axisLabel: 'Generations', axisLabelFontSizePixels: 12 } ],  yaxes: [ { min: 0, axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, { position: 'right', min: 0, axisLabel: 'Population Size', axisLabelFontSizePixels: 12} ], legend: { position: 'se'}, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Fitness & Population Size History"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Dominant', data: d1, bars: { show: true, autoWidth: true }, color: 'rgb(0,200,0)' }",
-            "cols": "1:3", "line_range": "4:53", "filename": "<cid>.000.dst"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Recessive', data: d2, bars: { show: true, autoWidth: true }, color: 'rgb(200,0,0)'}",
-            "cols": "1:2", "line_range": "4:53", "filename": "<cid>.000.dst"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return -Math.exp(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }",
-        "ptype": "flot-line",
-        "title": "Distribution of accumulated mutations (deleterious)"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Dominant', data: d1, bars: { show: true, autoWidth: true }, color: 'rgb(0,200,0)' }",
-            "cols": "1:3", "line_range": "55:105", "filename": "<cid>.000.dst"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Recessive', data: d2, bars: { show: true, autoWidth: true }, color: 'rgb(200,0,0)'}",
-            "cols": "1:2", "line_range": "55:105", "filename": "<cid>.000.dst"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: <max_fav_fitness_gain> },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12}, legend: { position: 'nw' }",
-        "ptype": "flot-line",
-        "title": "Distribution of accumulated mutations (beneficial)"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Deleterious threshold', data: d1, color: 'rgb(200,0,0)'}",
-            "cols": "1:2", "line_range": "1:100000", "filename": "<cid>.000.thr"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Favorable threshold', data: d2, color: 'rgb(0,200,0)'}",
-            "cols": "1:4", "line_range": "1:100000", "filename": "<cid>.000.thr"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Selection Threshold', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Selection threshold history"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Theoretical', data: d1, color: 'rgb(200,0,0)' }",
-            "cols": "1:2", "line_range": "3:103", "filename": "<cid>.000.hap"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Dominant', bars: { show: true, barWidth: 0.0001 }, data: d2, color: 'rgb(0,200,0)' }",
-            "cols": "1:4", "line_range": "3:103", "filename": "<cid>.000.hap"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Recessive', bars: { show: true, barWidth: 0.0001 }, data: d3, color: 'rgb(0,0,200)' }",
-            "cols": "1:5", "line_range": "3:103", "filename": "<cid>.000.hap"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: -0.01, max: 0.0}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'nw' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Near neutral deleterious effects"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Theoretical', data: d1, color: 'rgb(200,0,0)' }",
-            "cols": "1:2", "line_range": "103:204", "filename": "<cid>.000.hap"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Dominant', bars: { show: true, barWidth: 0.0001 }, data: d2, color: 'rgb(0,200,0)' }",
-            "cols": "1:4", "line_range": "103:204", "filename": "<cid>.000.hap"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Recessive', bars: { show: true, barWidth: 0.0001 }, data: d3, color: 'rgb(0,0,200)' }",
-            "cols": "1:5", "line_range": "103:204", "filename": "<cid>.000.hap"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: <max_fav_fitness_gain>}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01 }, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Near neutral beneficial effects"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: '<< Before selection', bars: { show: true, barWidth: 0.01 }, data: d1, color: 'rgb(200,0,0)' }",
-            "cols": "1:2", "line_range": "1:100000", "filename": "<cid>.000.sel"
-        }
-        ,
-        {
-            "data_def": "{ label: '<< After selection', bars: { show: true, barWidth: 0.01 }, data: d2, color: 'rgb(0,200,0)' }",
-            "cols": "1:3", "line_range": "1:100000", "filename": "<cid>.000.sel"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Individuals', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0 }, y2axis: { ticks: 5, min: 0.0, max: 1.0 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Selection effects"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Deleterious', data: d1, bars: { show: true }, color: 'rgb(200,0,0)'}",
-            "cols": "1:5", "line_range": "-109:100000", "filename": "<cid>.000.plm"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Favorable', data: d2, bars: { show: true }, color: 'rgb(0,200,0)'}",
-            "cols": "1:6", "line_range": "-109:100000", "filename": "<cid>.000.plm"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}",
-            "cols": "1:7", "line_range": "-109:100000", "filename": "<cid>.000.plm"
-        }
-        ,
-        {
-            "data_def": "{label: \"Initial\", data: d4, bars: { show: true, autoWidth: true }, color: \"rgb(0,0,0)\"}",
-            "cols": "1:8", "line_range": "-109:10000", "filename": "<cid>.000.plm"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Allele Frequency', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Alleles', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Allele Frequencies"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{ label: 'Deleterious', data: d1, bars: { show: true }, color: 'rgb(200,0,0)'}",
-            "cols": "1:5", "line_range": "-109:100000", "filename": "<cid>.000.plmcor"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Favorable', data: d2, bars: { show: true }, color: 'rgb(0,200,0)'}",
-            "cols": "1:6", "line_range": "-109:100000", "filename": "<cid>.000.plmcor"
-        }
-        ,
-        {
-            "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}",
-            "cols": "1:7", "line_range": "-109:100000", "filename": "<cid>.000.plmcor"
-        }
-        ],
-        "options": "xaxis: { axisLabel: 'Allele Frequency Class', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Total Number of Variants', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Total number of variants vs. allele frequencies"
-    }
-    ,
-    {
-        "datasource": [ {
-            "data_def": "{label: \"Initial deleterious alleles\", data: d1, bars: { show: true }, color: \"rgb(200,0,0)\"}",
-            "cols": "1:8", "line_range": "-109:10000", "filename": "<cid>.000.plm"
-        }
-        ,
-        {
-            "data_def": "{label: \"Initial favorable alleles\", data: d2, lines: { show: true }, color: \"rgb(0,200,0)\"}",
-            "cols": "1:9", "line_range": "-109:10000", "filename": "<cid>.000.plm"
-        }
-        ],
-        "options": "legend: { position: 'nw'}, xaxis: { axisLabel: 'Allele frequency'}, yaxis: { min: 0, axisLabel: 'Number of alleles' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }",
-        "ptype": "flot-line",
-        "title": "Initial Allele Frequencies"
-    }
-    ],
-    "description": "Mendel's Accountant (MENDEL) is an advanced numerical simulation program for modeling genetic change over time"
+   "category": "genetics", 
+   "name": "mendel", 
+   "input_format": "namelist", 
+   "language": "python", 
+   "command": "../../../../apps/mendel/mendel", 
+   "postprocess": "None", 
+   "preprocess": "None", 
+   "plots": [
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.hst", 
+               "data_def": "{label: 'deleterious', data: d1, lines: { show: true }, color: 'rgb(200,0,0)'}", 
+               "cols": "1:4", 
+               "line_range": "1:10000", 
+               "label": "deleterious"
+            }, 
+            {
+               "filename": "<cid>.000.hst", 
+               "data_def": "{label: 'favorable', data: d2, lines: { show: true }, color: 'rgb(0,200,0)'}", 
+               "cols": "1:5", 
+               "line_range": "1:10000", 
+               "label": "favorable"
+            }, 
+            {
+               "filename": "<cid>.000.hst", 
+               "data_def": "{label: 'neutrals', data: d3, lines: { show: true }, color: 'rgb(0,0,200)'}", 
+               "cols": "1:6", 
+               "line_range": "1:10000", 
+               "label": "neutrals"
+            }
+         ], 
+         "options": "legend: { position: 'nw' }, xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Mutations', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Average mutation/individual"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.hst", 
+               "data_def": "{label: 'fitness', data: d1, lines: { show: true }, color: 'rgb(255,50,50)'}", 
+               "cols": "1:2", 
+               "line_range": "1:10000", 
+               "label": "fitness"
+            }, 
+            {
+               "filename": "<cid>.000.hst", 
+               "data_def": "{label: 'pop size', data: d2, lines: { show: true }, color: 'rgb(0,0,255)', yaxis: 2, position: 'right'}", 
+               "cols": "1:7", 
+               "line_range": "1:10000", 
+               "label": "pop size"
+            }
+         ], 
+         "options": "xaxes: [ { axisLabel: 'Generations', axisLabelFontSizePixels: 12 } ],  yaxes: [ { min: 0, axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, { position: 'right', min: 0, axisLabel: 'Population Size', axisLabelFontSizePixels: 12} ], legend: { position: 'se'}, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Fitness & Population Size History"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.dst", 
+               "data_def": "{ label: 'Dominant', data: d1, bars: { show: true, autoWidth: true }, color: 'rgb(0,200,0)' }", 
+               "cols": "1:3", 
+               "line_range": "4:53", 
+               "label": "dominant"
+            }, 
+            {
+               "filename": "<cid>.000.dst", 
+               "data_def": "{ label: 'Recessive', data: d2, bars: { show: true, autoWidth: true }, color: 'rgb(200,0,0)'}", 
+               "cols": "1:2", 
+               "line_range": "4:53", 
+               "label": "recessive"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return -Math.exp(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }", 
+         "ptype": "flot-line", 
+         "title": "Distribution of accumulated mutations (deleterious)"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.dst", 
+               "data_def": "{ label: 'Dominant', data: d1, bars: { show: true, autoWidth: true }, color: 'rgb(0,200,0)' }", 
+               "cols": "1:3", 
+               "line_range": "55:105", 
+               "label": "dominant"
+            }, 
+            {
+               "filename": "<cid>.000.dst", 
+               "data_def": "{ label: 'Recessive', data: d2, bars: { show: true, autoWidth: true }, color: 'rgb(200,0,0)'}", 
+               "cols": "1:2", 
+               "line_range": "55:105", 
+               "label": "recessive"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Mutational Fitness Enhancement', axisLabelFontSizePixels: 12, transform: function (x) { return Math.log(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'],[1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'],[1e-7,'1e-7'],[1e-8,'1e-8']], tickDecimals: 6, max: <max_fav_fitness_gain> },yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12}, legend: { position: 'nw' }", 
+         "ptype": "flot-line", 
+         "title": "Distribution of accumulated mutations (beneficial)"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.thr", 
+               "data_def": "{ label: 'Deleterious threshold', data: d1, color: 'rgb(200,0,0)'}", 
+               "cols": "1:2", 
+               "line_range": "1:100000", 
+               "label": "deleterious threshold"
+            }, 
+            {
+               "filename": "<cid>.000.thr", 
+               "data_def": "{ label: 'Favorable threshold', data: d2, color: 'rgb(0,200,0)'}", 
+               "cols": "1:4", 
+               "line_range": "1:100000", 
+               "label": "favorable threshold"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Generations', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Selection Threshold', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Selection threshold history"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Theoretical', data: d1, color: 'rgb(200,0,0)' }", 
+               "cols": "1:2", 
+               "line_range": "3:103", 
+               "label": "theoretical"
+            }, 
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Dominant', bars: { show: true, barWidth: 0.0001 }, data: d2, color: 'rgb(0,200,0)' }", 
+               "cols": "1:4", 
+               "line_range": "3:103", 
+               "label": "dominant"
+            }, 
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Recessive', bars: { show: true, barWidth: 0.0001 }, data: d3, color: 'rgb(0,0,200)' }", 
+               "cols": "1:5", 
+               "line_range": "3:103", 
+               "label": "recessive"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: -0.01, max: 0.0}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01}, legend: { position: 'nw' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Near neutral deleterious effects"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Theoretical', data: d1, color: 'rgb(200,0,0)' }", 
+               "cols": "1:2", 
+               "line_range": "103:204", 
+               "label": "theoretical"
+            }, 
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Dominant', bars: { show: true, barWidth: 0.0001 }, data: d2, color: 'rgb(0,200,0)' }", 
+               "cols": "1:4", 
+               "line_range": "103:204", 
+               "label": "dominant"
+            }, 
+            {
+               "filename": "<cid>.000.hap", 
+               "data_def": "{ label: 'Recessive', bars: { show: true, barWidth: 0.0001 }, data: d3, color: 'rgb(0,0,200)' }", 
+               "cols": "1:5", 
+               "line_range": "103:204", 
+               "label": "recessive"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Fitness Effect', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: <max_fav_fitness_gain>}, yaxis: { axisLabel: 'Frequency', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0, max: 0.01 }, legend: { position: 'ne' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Near neutral beneficial effects"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.sel", 
+               "data_def": "{ label: '<< Before selection', bars: { show: true, barWidth: 0.01 }, data: d1, color: 'rgb(200,0,0)' }", 
+               "cols": "1:2", 
+               "line_range": "1:100000", 
+               "label": "before selection"
+            }, 
+            {
+               "filename": "<cid>.000.sel", 
+               "data_def": "{ label: '<< After selection', bars: { show: true, barWidth: 0.01 }, data: d2, color: 'rgb(0,200,0)' }", 
+               "cols": "1:3", 
+               "line_range": "1:100000", 
+               "label": "after selection"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Fitness', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Individuals', axisLabelFontSizePixels: 12, ticks: 10, min: 0.0 }, y2axis: { ticks: 5, min: 0.0, max: 1.0 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Selection effects"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{ label: 'Deleterious', data: d1, bars: { show: true }, color: 'rgb(200,0,0)'}", 
+               "cols": "1:5", 
+               "line_range": "-109:100000", 
+               "label": "deleterious"
+            }, 
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{ label: 'Favorable', data: d2, bars: { show: true }, color: 'rgb(0,200,0)'}", 
+               "cols": "1:6", 
+               "line_range": "-109:100000", 
+               "label": "favorable"
+            }, 
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}", 
+               "cols": "1:7", 
+               "line_range": "-109:100000", 
+               "label": "neutrals"
+            }, 
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{label: \"Initial alleles\", data: d4, bars: { show: true, autoWidth: true }, color: \"rgb(0,0,0)\"}", 
+               "cols": "1:8", 
+               "line_range": "-109:100000", 
+               "label": "initial alleles"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Allele Frequency', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Number of Alleles', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Allele Frequencies"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{label: \"Initial deleterious alleles\", data: d1, bars: { show: true }, color: \"rgb(200,0,0)\"}", 
+               "cols": "1:8", 
+               "line_range": "-109:10000", 
+               "label": "Initial deleterious alleles"
+            }, 
+            {
+               "filename": "<cid>.000.plm", 
+               "data_def": "{label: \"Initial favorable alleles\", data: d2, bars: { show: true }, color: \"rgb(0,200,0)\"}", 
+               "cols": "1:9", 
+               "line_range": "-109:10000", 
+               "label": "Initial favorable alleles"
+            }
+         ], 
+         "options": "legend: { position: 'nw'}, xaxis: { axisLabel: 'Allele frequency'}, yaxis: { min: 0, axisLabel: 'Number of alleles' }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Initial Allele Frequencies"
+      }, 
+      {
+         "datasource": [
+            {
+               "filename": "<cid>.000.plmcor", 
+               "data_def": "{ label: 'Deleterious', data: d1, bars: { show: true }, color: 'rgb(200,0,0)'}", 
+               "cols": "1:5", 
+               "line_range": "-109:100000", 
+               "label": "deleterious"
+            }, 
+            {
+               "filename": "<cid>.000.plmcor", 
+               "data_def": "{ label: 'Favorable', data: d2, bars: { show: true }, color: 'rgb(0,200,0)'}", 
+               "cols": "1:6", 
+               "line_range": "-109:100000", 
+               "label": "favorable"
+            }, 
+            {
+               "filename": "<cid>.000.plmcor", 
+               "data_def": "{ label: 'Neutrals', data: d3, bars: { show: true }, color: 'rgb(0,0,200)'}", 
+               "cols": "1:7", 
+               "line_range": "-109:100000", 
+               "label": "neutrals"
+            }
+         ], 
+         "options": "xaxis: { axisLabel: 'Allele Frequency Class', axisLabelFontSizePixels: 12 }, yaxis: { axisLabel: 'Total Number of Variants', axisLabelFontSizePixels: 12 }, grid: { hoverable: true, clickable: true }, selection: { mode: 'xy' }", 
+         "ptype": "flot-line", 
+         "title": "Total number of variants vs. allele frequencies"
+      }
+   ], 
+   "assets": [
+      "about.html", 
+      "mendel.js", 
+      "help.html"
+   ], 
+   "description": "Mendel's Accountant (MENDEL) is an advanced numerical simulation program for modeling genetic change over time"
 }
