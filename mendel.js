@@ -12,7 +12,7 @@ function fxn_init() {
   fxn_dynamic_linkage_able()
   fxn_bottleneck_able()
   fxn_restart_case_able()
-  fxn_is_parallel()
+  fxn_is_parallel_init()
   fxn_migration()
   fxn_clone()
   fxn_fraction_neutral()
@@ -152,6 +152,15 @@ function fxn_haploid() {
    } else {
       dmi.dominant_hetero_expression.value = 0.5
       status("Setting dominant_hetero_expression back to 0.5")
+   }
+}
+
+function fxn_is_parallel_init() {
+   if (dmi.is_parallel.checked) {
+      document.getElementById("psdiv").style.display = "block"
+   } else {
+      document.getElementById("psdiv").style.display = "none"
+      document.getElementById("num_procs").value = 1
    }
 }
 
@@ -610,10 +619,10 @@ function fxn_tribes(max_tribes) {
       num_procs = max_tribes
    }
    // set min number of tribes
-   if(num_procs < 2) {
-      myobject.value = 2;
-      num_procs = 2
-   }
+   //if(num_procs < 2) {
+   //   myobject.value = 2;
+   //   num_procs = 2
+   //}
 
    //if (dmi.homogenous_tribes.checked) {
    //   document.getElementById("tribediv").style.display = "none"
