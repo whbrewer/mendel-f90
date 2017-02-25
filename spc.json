@@ -284,7 +284,8 @@
    "assets": [
       "about.html", 
       "mendel.js", 
-      "help.html"
+      "help.html",
+      "upload_mutations.xlsx"
    ], 
    "description": "Mendel's Accountant (MENDEL) is an advanced numerical simulation program for modeling genetic change over time"
 }

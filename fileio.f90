@@ -1,13 +1,13 @@
 subroutine read_restart_dump(dmutn,nmutn,fmutn,lb_mutn_count, &
                              linkage_block_fitness,           &
                              initial_allele_effects,          &
-                             generation_number,max_size,myid_str) 
+                             generation_number,max_size,myid_str)
 
 ! This routine reads a dump file containing the mutation arrays
 ! dmutn and fmutn and the linkage block mutation count array
-! lb_mutn_count and the linkage block fitness array 
+! lb_mutn_count and the linkage block fitness array
 ! linkage_block_fitness for purposes of restart.  The argument
-! generation_number is the generation number of the dump file 
+! generation_number is the generation number of the dump file
 ! being read.
 use inputs
 use profiler
@@ -39,9 +39,9 @@ fmutn = num_linkage_subunits*lb_modulo + 1
 do i=1,pop_size
       read(10,*) ! read label '=== individual: # ==='
       read(10,*) ! read label 'lb_mutn_count:'
-      read(10,'(12i6)') lb_mutn_count(:,:,:,i) 
+      read(10,'(12i6)') lb_mutn_count(:,:,:,i)
       read(10,*) ! read label 'linkage_block_fitness:'
-      read(10,'(6f12.8)') linkage_block_fitness(:,:,i) 
+      read(10,'(6f12.8)') linkage_block_fitness(:,:,i)
 
       read(10,*) ! read label 'deleterious mutations:'
       read(10,'( i12)') dmutn(1,1,i)
@@ -93,7 +93,7 @@ use inputs
 include 'common.h'
 integer id, lb, hap_id, mutn, dominance
 real    fitness, w
-integer i, npath, max_size
+integer i, npath, max_size, io
 integer nimpi(pop_size), encode_mutn
 integer dmutn(max_del_mutn_per_indiv/2,2,max_size)
 integer nmutn(max_neu_mutn_per_indiv/2,2,max_size)
@@ -103,48 +103,59 @@ real*8 linkage_block_fitness(num_linkage_subunits,2,max_size)
 
 npath = index(data_file_path,' ') - 1
 
-open (10, file=data_file_path(1:npath)//case_id// &
-      '_mutn.in',status='unknown')
+! open (10, file=data_file_path(1:npath)//case_id// &
+!       '_mutn.in',status='unknown')
+open (10, file="../../_uploads/mendel.mutn", status='unknown')
 
-read(10,*) num_uploaded_mutn
-write(*,*) 'Reading mutation file with ', num_uploaded_mutn, &
-           'mutations'
+! read(10,*) num_uploaded_mutn
 write(*,*) '#     id, linkage_block, haplotype, fitness, dominant/recessive, mutn_id'
-read(10,*) ! header
+! read(10,*) ! header
 
 w = multiplicative_weighting
 
-do i=1,num_uploaded_mutn
+num_uploaded_mutn = 0
 
-   read(10,*) id,lb,hap_id,fitness,dominance
-   mutn = encode_mutn(fitness,lb,dominance)
-   uploaded_mutn(i) = mutn
-   write(*,*) id,lb,hap_id,fitness,dominance,mutn
+do i = 1, 100000
 
-   if(fitness > 0.) then
-      fmutn(1,hap_id,id) = fmutn(1,hap_id,id) + 1
-      fmutn(fmutn(1,hap_id,id)+1,hap_id,id) = mutn
-      lb_mutn_count(lb,hap_id,2,id) = lb_mutn_count(lb,hap_id,2,id) + 1
-   elseif(fitness < 0.) then
-      dmutn(1,hap_id,id) = dmutn(1,hap_id,id) + 1
-      dmutn(dmutn(1,hap_id,id)+1,hap_id,id) = mutn
-      lb_mutn_count(lb,hap_id,1,id) = lb_mutn_count(lb,hap_id,1,id) + 1
-   else ! fitness = 0 --> neutral mutation
-      nmutn(1,hap_id,id) = nmutn(1,hap_id,id) + 1
-      nmutn(nmutn(1,hap_id,id)+1,hap_id,id) = mutn
-      lb_mutn_count(lb,hap_id,3,id) = lb_mutn_count(lb,hap_id,3,id) + 1
-   end if
+   read(10, *, iostat=io) id,lb,hap_id,fitness,dominance
 
-   linkage_block_fitness(lb,hap_id,id) =   &
-      (linkage_block_fitness(lb,hap_id,id) &
-       + (1. - w)*fitness) * (1.d0 + w*fitness)
-  
+   if (io < 0) then ! reached end of file
+       exit
+   else
+       num_uploaded_mutn = num_uploaded_mutn + 1
+       mutn = encode_mutn(fitness,lb,dominance)
+       uploaded_mutn(i) = mutn
+       write(*,*) id,lb,hap_id,fitness,dominance,mutn
+
+       if(fitness > 0.) then
+          fmutn(1,hap_id,id) = fmutn(1,hap_id,id) + 1
+          fmutn(fmutn(1,hap_id,id)+1,hap_id,id) = mutn
+          lb_mutn_count(lb,hap_id,2,id) = lb_mutn_count(lb,hap_id,2,id) + 1
+       elseif(fitness < 0.) then
+          dmutn(1,hap_id,id) = dmutn(1,hap_id,id) + 1
+          dmutn(dmutn(1,hap_id,id)+1,hap_id,id) = mutn
+          lb_mutn_count(lb,hap_id,1,id) = lb_mutn_count(lb,hap_id,1,id) + 1
+       else ! fitness = 0 --> neutral mutation
+          nmutn(1,hap_id,id) = nmutn(1,hap_id,id) + 1
+          nmutn(nmutn(1,hap_id,id)+1,hap_id,id) = mutn
+          lb_mutn_count(lb,hap_id,3,id) = lb_mutn_count(lb,hap_id,3,id) + 1
+       end if
+
+       linkage_block_fitness(lb,hap_id,id) =   &
+          (linkage_block_fitness(lb,hap_id,id) &
+           + (1. - w)*fitness) * (1.d0 + w*fitness)
+    endif
+
 end do
-   
+
+write(*,*) 'Read mutation file with ', num_uploaded_mutn, 'mutations'
+
+200 continue
+
 close (10)
 
 end subroutine read_mutn_file
-     
+
 subroutine write_output_dump(dmutn,nmutn,fmutn,lb_mutn_count, &
                              linkage_block_fitness,     &
                              initial_allele_effects,    &
@@ -161,7 +172,7 @@ include 'common.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*), &
         fmutn(max_fav_mutn_per_indiv/2,2,*), &
         nmutn(max_neu_mutn_per_indiv/2,2,*), &
-               lb_mutn_count(num_linkage_subunits,2,3,*) 
+               lb_mutn_count(num_linkage_subunits,2,3,*)
 real*8 linkage_block_fitness(num_linkage_subunits,2,*)
 real  initial_allele_effects(num_linkage_subunits)
 integer generation_number, i, lb, npath
@@ -181,9 +192,9 @@ do i=1,pop_size
       write(10,*) '=========== individual:',i,'================================='
 
       write(10,*) 'lb_mutn_count:'
-      write(10,'(12i6)') lb_mutn_count(:,:,:,i) 
+      write(10,'(12i6)') lb_mutn_count(:,:,:,i)
       write(10,*) 'linkage_block_fitness:'
-      write(10,'(6f12.8)') linkage_block_fitness(:,:,i) 
+      write(10,'(6f12.8)') linkage_block_fitness(:,:,i)
 
       write(10,*) 'deleterious mutations:'
       write(10,'( i12)') dmutn(1,1,i)
@@ -253,7 +264,7 @@ lb_per_chrom = num_linkage_subunits/haploid_chromosome_number
 
 do k = 1, pop_size
    do j = 1, 2
-      do i = 2, dmutn(1,j,k) 
+      do i = 2, dmutn(1,j,k)
          call decode_mutn_del(dmutn(i,j,k), lb, dominance, fitness)
          if (lb == 0) cycle ! if for some reason the linkage block number
                             ! is zero ignore for now... for some reason about
@@ -273,7 +284,7 @@ do k = 1, pop_size
          write(id_str, '(f7.5)') id
          write(27,'(15a)') chrom_str//tab//pos_str//tab//id_str//tab//ref//tab//alt//tab//dot//tab//dot//tab//dot
       end do
-   end do 
+   end do
 end do
 
 close(27)
@@ -306,7 +317,7 @@ open(27, file='alleles.csv', status='unknown')
 do k = 1, pop_size
    write(27, '(i12, a1, $)') k, comma
    do j = 1, 2
-      do i = 2, dmutn(1,j,k) 
+      do i = 2, dmutn(1,j,k)
          id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
          write(27, '(i12, a1, $)') dmutn(i,j,k), comma
       end do
@@ -409,7 +420,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          lb_mutn_count(lb,1,1,i), linkage_block_fitness(lb,1,i)
 
       if(tracking_threshold /= 1.0) then
-  
+
       j = 0
       do m=1,del_mutn(lb,1)
          if(defect(lb,1,m) < 0) then
@@ -422,7 +433,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness degradations of tracked deleterious " &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,del_mutn(lb,1)
@@ -436,7 +447,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness degradations of tracked deleterious " &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,fav_mutn(lb,1)
@@ -450,7 +461,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness improvements of tracked favorable " &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,fav_mutn(lb,1)
@@ -464,13 +475,13 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness improvements of tracked favorable " &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
-      end if 
+      end if
 
       write(fid,'("Haplotype 2: total deleterious mutn count = ", &
                  i6, "  composite fitness = ",f9.6)') &
-         lb_mutn_count(lb,2,1,i), linkage_block_fitness(lb,2,i) 
+         lb_mutn_count(lb,2,1,i), linkage_block_fitness(lb,2,i)
 
       if(tracking_threshold /= 1.0) then
 
@@ -486,7 +497,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness degradations of tracked deleterious " &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,del_mutn(lb,2)
@@ -500,7 +511,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness degradations of tracked deleterious " &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,fav_mutn(lb,2)
@@ -514,7 +525,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness improvements of tracked favorable " &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
       j = 0
       do m=1,fav_mutn(lb,2)
@@ -528,9 +539,9 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
          write(fid,'("Fitness improvements of tracked favorable " &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
-      end if 
+      end if
 
-      end if 
+      end if
 
    end do
 
@@ -553,7 +564,7 @@ use inputs
 integer unit, gen, current_pop_size, num_polygenics
 real*8  pre_sel_fitness, pre_sel_geno_sd, pre_sel_pheno_sd, &
         pre_sel_corr, post_sel_fitness, post_sel_geno_sd, &
-        post_sel_pheno_sd, post_sel_corr 
+        post_sel_pheno_sd, post_sel_corr
 real*8  total_del_mutn, tracked_del_mutn, total_fav_mutn, &
         frac_recessive, neu_mutn
 
@@ -572,7 +583,7 @@ write(unit,'(/"generation =",i10,"  population size =", i6, &
       pre_sel_corr, post_sel_corr, &
       int(total_del_mutn/current_pop_size), &
       int(tracked_del_mutn/current_pop_size), &
-      total_fav_mutn/current_pop_size 
+      total_fav_mutn/current_pop_size
       if(neu_mutn > 0 .and. .not.polygenic_beneficials) write(unit, &
          '("neu mutn/indiv =",i6,$)'), int(neu_mutn/current_pop_size)
       if(num_polys_cumulative > 0) then
@@ -580,6 +591,6 @@ write(unit,'(/"generation =",i10,"  population size =", i6, &
                num_polys_this_gen, num_polys_cumulative
       else
          write(unit, *)
-      endif 
+      endif
 
 end subroutine write_status

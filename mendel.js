@@ -310,7 +310,7 @@ function compute_memory() {
   var uneu = u*dmi.fraction_neutral.value
   var uben = (u-uneu)*dmi.frac_fav_mutn.value
   var udel = (u-uneu)*(1-dmi.frac_fav_mutn.value)
-  
+
   var est_max_del = ng*udel
   var est_max_neu = ng*uneu
   var est_max_fav = ng*uben
@@ -571,29 +571,29 @@ function show_hide_parser() {
 }
 
 function show_hide_mutation_upload_form(i) {
-        // if user checks upload mutations on the mutation pane
-        // then automatically also check the upload mutations box
-        // under population substructure, and vice-versa
-        if(i==2) {
-           if (dmi.altruistic.checked) {
-              dmi.upload_mutations.checked = true
-           } else {
-              dmi.upload_mutations.checked = false
-           }
-        }
-
-        // if user checks upload mutations on the mutation pane
-        // then automatically also check the upload mutations box
-        // under population substructure, and vice-versa
-    if (dmi.upload_mutations.checked) {
-           document.getElementById("upload_mutations_div").style.display = "block"
-           //dmi.mutn_file_id.readOnly = false
-        } else if (dmi.altruistic.checked) {
-           document.getElementById("upload_mutations_div").style.display = "block"
+    // if user checks upload mutations on the mutation pane
+    // then automatically also check the upload mutations box
+    // under population substructure, and vice-versa
+    if(i==2) {
+        if (dmi.altruistic.checked) {
+            dmi.upload_mutations.checked = true
         } else {
-          document.getElementById("upload_mutations_div").style.display = "none"
-          //dmi.mutn_file_id.readOnly = true
+            dmi.upload_mutations.checked = false
         }
+    }
+
+    // if user checks upload mutations on the mutation pane
+    // then automatically also check the upload mutations box
+    // under population substructure, and vice-versa
+    if (dmi.upload_mutations.checked) {
+        $("#upload_mutations_div").slideDown()
+        //dmi.mutn_file_id.readOnly = false
+    } else if (dmi.altruistic.checked) {
+        $("#upload_mutations_div").slideDown()
+    } else {
+        $("#upload_mutations_div").slideUp()
+        //dmi.mutn_file_id.readOnly = true
+    }
 }
 
 function fxn_migration() {

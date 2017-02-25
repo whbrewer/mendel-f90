@@ -2,7 +2,6 @@
 
 <html lang=en>
 <head>
-<title>Mendel - web interface</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="text/javascript" src="/static/apps/mendel/mendel.js"></script>
 <style>
@@ -391,13 +390,13 @@
         </div>
       </div>
 
-      <div class="form-group" style="display:none">
+      <div class="form-group">
         <hr>
         <label for="upload_mutations" class="control-label col-xs-10 col-sm-6">
           <a data-toggle="popover" title="upload_mutations" data-content="A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This options is currently not implemented in this SPC version.">6. Upload set of custom mutations?</a></label>
         <div class="col-xs-2 col-sm-3">
           <input type="checkbox" name="upload_mutations"
-                 value="on" onclick="show_hide_mutation_upload_form(1)" disabled="true"
+                 value="on" onclick="show_hide_mutation_upload_form(1)"
                    %if upload_mutations=='T':
                     checked
                    %end
@@ -780,7 +779,7 @@
             <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>d. upload altruistic mutations?</a></label>
           <div class="col-xs-2 col-sm-3">
             <input type="checkbox" name="altruistic" value="on"
-                   onclick="show_hide_mutation_upload_form(2)" disabled="true"></td>
+                   onclick="show_hide_mutation_upload_form(2)"></td>
           </div>
         </div>
 
@@ -1169,25 +1168,22 @@
   </div>
   <!--*********************** END TAB CONTENT *************************-->
 
-
-  <div id="upload_mutations_div" style="display:none" align="center">
-    <fieldset style="background-color: white">
-      <legend>Upload Mutations</legend>
-      <table>
-      <tr>
-        <td><input type="hidden" name="mutn_file_id" style="width:7em;"
-                   title="Currently this filename cannot be changed"
-                   readOnly="true"></td>
-        <td></td>
-      </tr>
-      </table>
-
-      <font size="+1">
-        <a href="/static/apps/mendel/upload_mutations.xlsx">download worksheet</a>
-        <label name="upload_mutn_link"><a href="javascript:cid=dmi.case_id.value;popUp('mutn_upload.pl?run_dir=/Library/WebServer/Documents/mendel_user_data&user_id=wes&case_id=' + cid + '&mutn_file_id=',600,600);">upload mutations</a></label>
-        <label name="upload_mutn_link"><a href="javascript:cid=dmi.case_id.value;mfid=dmi.mutn_file_id.value;popUp('more.pl?user_id=wes&case_id='+cid+'&file_name='+mfid+'&nothing=',600,600);">view mutations</a></label>
-      </font>
-    </fieldset>
+  <div id="upload_mutations_div" class="panel panel-primary" style="display:none">
+      <div class="panel-heading">
+          <h3 class="panel-title">Upload Mutations</h3>
+      </div>
+      <div class="panel-body" align="center">
+          <div class="btn-group">
+              <font size="+1">
+                <a class="btn btn-info" href="/static/apps/mendel/upload_mutations.xlsx">download worksheet</a>
+                <!-- <a class="btn btn-info" href="https://docs.google.com/spreadsheets/d/1nnnSm1AQCVqFRAvwhF--c6LqTXvXJxTsfOKKYO2YUnE/edit?usp=sharing">download worksheet</a> -->
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#upload_modal" >upload mutations</button>
+              </font>
+          </div>
+          <input type="hidden" name="mutn_file_id" style="width:7em;"
+                     title="Currently this filename cannot be changed"
+                     readOnly="true">
+      </div>
   </div>
 
   <input type="hidden" name="data_file_path" value="{{data_file_path}}">
@@ -1202,14 +1198,41 @@
 
 </div> <!-- container-fluid -->
 
-<div class="bs-example">
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Content will be loaded here -->
+<div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="">Paste in mutations to upload</h4>
+            </div>
+            <div class="modal-body">
+                <p> Note: the mutation table should have the following form:</p>
+
+                <table>
+                    <tr>
+                        <th><label title="1 to pop_size">individual</label></th>
+                        <th><label title="1 to num_linkage_blocks">linkage_block</label></th>
+                        <th><label title="1 or 2">hap_id</label></th>
+                        <th><label title="0.00001~1\n+ beneficial\n- deleterious">fitness</label></th>
+                        <th><label title="+1:dominant\n-1:recessive">dominance</label></th>
+                        <tr><td>1 to pop_size</td><td>1 to num_linkage_blocks</td> <td>1 or 2</td> <td>+/-0.000001 to +/-1<br>-: deleterious<br>+:favorable</td><td>-1 or 1<br>1:dominant<br>-1:recessive</td></tr>
+                    </tr>
+                </table>
+
+                <p>Also, there should <u>not</u> be a header row. So, for example:</p>
+
+                <table>
+                    <tr><td>56</td> <td>407</td> <td>2</td> <td>-0.000117976</td><td>1</td></tr>
+                </table>
+
+                <form name="upload_mutations_form" method=post action="/upload_data">
+                    <textarea class="form-control" name="upload_data" rows="7"></textarea><br />
+                    <input type="hidden" name="filename" value="mendel.mutn">
+                    <input type="submit" class="btn btn-success" value="Upload Mutations">
+                    <input class="btn btn-danger" type="reset">
+                </form>
             </div>
         </div>
-
     </div>
 </div>
 
