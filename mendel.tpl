@@ -1175,9 +1175,9 @@
       <div class="panel-body" align="center">
           <div class="btn-group">
               <font size="+1">
-                <a class="btn btn-info" href="/static/apps/mendel/upload_mutations.xlsx">download worksheet</a>
-                <!-- <a class="btn btn-info" href="https://docs.google.com/spreadsheets/d/1nnnSm1AQCVqFRAvwhF--c6LqTXvXJxTsfOKKYO2YUnE/edit?usp=sharing">download worksheet</a> -->
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#upload_modal" >upload mutations</button>
+                <a class="btn btn-warning" href="/static/apps/mendel/upload_mutations.xlsx"><span class="glyphicon glyphicon-cloud-download"></span> download worksheet</a>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#upload_modal" ><span class="glyphicon glyphicon-cloud-upload"></span> upload mutations</button>
+                <span class="text-success" id="upload_status"></span>
               </font>
           </div>
           <input type="hidden" name="mutn_file_id" style="width:7em;"
@@ -1225,11 +1225,10 @@
                     <tr><td>56</td> <td>407</td> <td>2</td> <td>-0.000117976</td><td>1</td></tr>
                 </table>
 
-                <form name="upload_mutations_form" method=post action="/upload_data">
-                    <textarea class="form-control" name="upload_data" rows="7"></textarea><br />
+                <form id="upload_mutations" name="upload_mutations_form" method=post action="/upload_data">
+                    <textarea id="payload" class="form-control" name="upload_data" rows="7"></textarea><br />
                     <input type="hidden" name="filename" value="mendel.mutn">
-                    <input type="submit" class="btn btn-success" value="Upload Mutations">
-                    <input class="btn btn-danger" type="reset">
+                    <a class="btn btn-success center-block" href="javascript:UploadData()">Upload</a>
                 </form>
             </div>
         </div>
@@ -1243,15 +1242,17 @@
       $('#desc').tagsinput('add', '{{tags}}');
     %end
     $('[data-toggle="tooltip"]').tooltip();
-  });
+    $('[data-toggle="popover"]').popover();
+  })
 
-  $(document).ready(function(){
-      $('[data-toggle="popover"]').popover();
-  });
+  function UploadData() {
+      data = document.getElementById("payload").value
+      $.post( "/upload_data", { filename: "mendel.mutn", upload_data: data } )
+      $('#upload_status').html("<span class=\"glyphicon glyphicon-ok\"></span> mutations uploaded")
+      $('#upload_modal').modal('hide');
+  }
 
-  $('[data-toggle="popover"]').popover({
-      container: 'body'
-  });
+  $('[data-toggle="popover"]').popover({ container: 'body' })
 
   dmi = document.mendel_input;
   //fxn_synergistic_epistasis_disable();
