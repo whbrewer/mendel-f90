@@ -1082,7 +1082,7 @@
       <div class="form-group">
         <label for="initial_alleles_amp_factor" class="control-label col-xs-12 col-sm-6">
           &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="initial_alleles_amp_factor"
-          data-content=''>d. amplification factor:</a><br>
+          data-content='This value is multiplied times the initial alleles during file output, so it only used to amplify the alleles in the Allele Frequency Plot.'>d. amplification factor:</a><br>
         </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="initial_alleles_amp_factor" title="0 - 1"
