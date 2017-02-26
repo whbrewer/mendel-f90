@@ -1237,7 +1237,7 @@
 
 <script>
   $(document).ready(function() {
-    $('#desc').tagsinput('add', 'v2.6.2');
+    $('#desc').tagsinput('add', 'v2.6.3');
     %if defined('tags'):
       $('#desc').tagsinput('add', '{{tags}}');
     %end
