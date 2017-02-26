@@ -1,5 +1,7 @@
 INSTALL_DIR = /usr/local/bin
 
+GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
+
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
@@ -16,7 +18,7 @@ FC = /usr/local/bin/mpif90
 #LIBS = -L/usr/lib64/mpi/gcc/openmpi/lib64 -lopen-rte -lmpi
 
 # when using Open MPI
-#INCLUDE = /usr/lib64/mpi/gcc/openmpi/include 
+#INCLUDE = /usr/lib64/mpi/gcc/openmpi/include
 # when using MPICH
 INCLUDE = /usr/local/lib
 
@@ -38,9 +40,9 @@ TARGET = mendel
 MODULES = sort.o random_pkg.o inputs.o genome.o profile.o polygenic.o \
           init.o selection.o
 
-OTHERS = $(MODULES) mutation.o mating.o fileio.o 
+OTHERS = $(MODULES) mutation.o mating.o fileio.o
 
-POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o 
+POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o
 
 SOBJECTS = $(OTHERS) $(SERIALFN).o init_serial.o
 
@@ -59,10 +61,13 @@ debug: $(POBJECTS)
 test: $(TOBJECTS)
 	$(FC) $(FCFLAGS) $(LDFLAGS) -o test $(TOBJECTS) $(LIBS)
 
-release: $(POBJECTS)
+pre-build:
+	sed -i.bak 's/VERSION.*VERSION/VERSION >>> $(GIT_VERSION) <<< VERSION/' init.f90
+
+release: pre-build $(POBJECTS)
 	$(FC) $(FCFLAGS) $(LDFLAGS) -o $(TARGET) $(POBJECTS) $(LIBS)
 
-# in order to build the serial version, first 
+# in order to build the serial version, first
 # run "make preserial", then "make serial"
 parallel: release
 
@@ -76,12 +81,12 @@ uninstall:
 	echo "removing file $(INSTALL_DIR)/$(TARGET)"
 	rm $(INSTALL_DIR)/$(TARGET)
 
-preserial: 
+preserial:
 	cp mendel.f90 $(SERIALFN).f90
 	cat diagnostics.f90 >> $(SERIALFN).f90
 	cp init.f90 init_serial.f90
-	sed -i -e '/START_MPI/,/END_MPI/d' init_serial.f90
-	sed -i -e '/START_MPI/,/END_MPI/d' $(SERIALFN).f90
+	sed -i.bak '/START_MPI/,/END_MPI/d' init_serial.f90
+	sed -i.bak '/START_MPI/,/END_MPI/d' $(SERIALFN).f90
 
 cln:
 	\rm -f mendel.o migration.o mendel
@@ -147,5 +152,3 @@ inputs.o:       inputs.f90
 
 genome.o:       genome.f90
 	        $(FC) $(FCFLAGS) -c genome.f90
-
-

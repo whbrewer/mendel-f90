@@ -26,15 +26,14 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) &
- '$Id: init.f90,v 1.5 2013/07/25 16:13:45 wes Exp $'
+write(6,*) 'VERSION >>> v2.6.2-13-g1067c76-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 
 if(is_parallel) then
    !START_MPI
    call mpi_myinit(myid,ierr)
-   
+
    write(myid_str,'(i3.3)') myid+1
 
    ! Open files containing run parameters for heterogeneous tribes
@@ -61,7 +60,7 @@ if(is_parallel) then
 else
    write(myid_str,'(i3.3)') 0
    myid = 0
-end if 
+end if
 
 npath = index(data_file_path,' ') - 1
 
@@ -117,13 +116,13 @@ if (verbosity > 0) then
          //'.thr',status='unknown')
    write(25,'("#  generation",20x,"selection thresholds"/"#",13x,&
      "del_dom_thres  del_rec_thres  fav_dom_thres  fav_rec_thres")')
-    
+
    if (num_contrasting_alleles > 0) then
       open(30, file=data_file_path(1:npath)//case_id//'.'//myid_str &
            //'.ica',status='unknown')
    endif
 
-endif 
+endif
 
 ! Output rarely used ancillary files only when verbosity switch is set to 3
 if (verbosity == 2) then
@@ -189,10 +188,10 @@ if (is_parallel) then
             //'.tim',status='unknown')
       write(23,'("# generation",2x,"time_per_gen(s)",2x, &
                  "time_offspring(s)",2x,"time_selection(s)")')
-   endif 
+   endif
 
 end if
- 
+
 if(myid==0) &
    write(6, '(/" Case started ",i2,"/",i2,"/",i4," at ",i2,":", &
       i2,":",i2/)') values(2:3), values(1), values(5:7)
@@ -219,7 +218,7 @@ heritability = max(1.e-20, heritability)
 
 if(fraction_neutral == 0.) track_neutrals = .false.
 
-! If neutrals are to be tracked, set the tracking threshold to 
+! If neutrals are to be tracked, set the tracking threshold to
 ! zero.
 
 if(track_neutrals) tracking_threshold = 0.
@@ -240,7 +239,7 @@ if(.not.dynamic_linkage) haploid_chromosome_number = 1
 if(polygenic_beneficials) then
    fitness_distrib_type = 0
    polygenic_fixed = .false.
-   if(len(polygenic_target) > 40) then 
+   if(len(polygenic_target) > 40) then
       write(*,*) 'ERROR: polygenic_target > 40. Need to increase bound.'
       stop
    endif
@@ -268,9 +267,9 @@ if(recombination_model == suppressed) then
    dynamic_linkage = .false.
 end if
 
-! For the case of dynamic linkage, ensure that the number of linkage 
+! For the case of dynamic linkage, ensure that the number of linkage
 ! subunits is an integer times the haploid chromosome number.
- 
+
 if(dynamic_linkage) num_linkage_subunits = (num_linkage_subunits &
            /haploid_chromosome_number)*haploid_chromosome_number
 
@@ -285,7 +284,7 @@ call write_parameters(9)
 
 ! If the genome_size is zero, most likely means equal effect fitness
 ! mutation distribution is selected, in which case genome_size is ignored
-! concerning the mutational data, however it is still used for computing 
+! concerning the mutational data, however it is still used for computing
 ! the tracking threshold.
 if(genome_size == 0) genome_size = 1.e8
 
@@ -443,7 +442,7 @@ fraction_del_tracked = del_scale*(lb_modulo-2)
 if(tracking_threshold == 1./genome_size) fraction_del_tracked = 1.
 if(myid == 0) then
    write(6,*) " Tracking threshold = ", tracking_threshold
-   write(6,*) " Fraction deleterious mutations tracked = ", & 
+   write(6,*) " Fraction deleterious mutations tracked = ", &
                 fraction_del_tracked
    write(6,*) " Fraction favorable   mutations tracked = ", &
                 fav_scale*(lb_modulo-2)
@@ -454,10 +453,10 @@ write(9,*) " Fraction deleterious mutations tracked = ", &
 write(9,*) " Fraction favorable   mutations tracked = ", &
              fav_scale*(lb_modulo-2)
 
-! Impose a reasonable limit of the number of tracked mutations 
+! Impose a reasonable limit of the number of tracked mutations
 ! based on the number of new mutations per offspring, the number
 ! of generations, and the fraction of deleterious mutations tracked.
-! If the run is a restart run, double the number again.  Limit the 
+! If the run is a restart run, double the number again.  Limit the
 ! number by the input value for max_tracted_mutn_per_indiv.
 
 k = 1.8*mutn_rate*num_generations*fraction_del_tracked
@@ -483,7 +482,7 @@ max_fav_mutn_per_indiv = max(max_fav_mutn_per_indiv, &
 
 if(tracking_threshold == 1.0) then
    max_del_mutn_per_indiv = 4
-   max_fav_mutn_per_indiv = 4 
+   max_fav_mutn_per_indiv = 4
    fraction_recessive     = 0.
    dominant_hetero_expression  = 0.5
    recessive_hetero_expression = 0.5
@@ -494,12 +493,12 @@ if(myid == 0) &
              " Maximum  beneficial  mutations tracked = ",i8/   &
              " Maximum  neutral     mutations tracked = ",i8)') &
                max_del_mutn_per_indiv, max_fav_mutn_per_indiv,  &
-               max_neu_mutn_per_indiv 
+               max_neu_mutn_per_indiv
    write(9,'(" Maximum  deleterious mutations tracked = ",i8/   &
              " Maximum  beneficial  mutations tracked = ",i8/   &
              " Maximum  neutral     mutations tracked = ",i8)') &
                max_del_mutn_per_indiv, max_fav_mutn_per_indiv,  &
-               max_neu_mutn_per_indiv 
+               max_neu_mutn_per_indiv
 
 ! Initialize random number generator.
 
@@ -532,7 +531,7 @@ else
    hst_gens = 10000
    output_gens = 100000
    diagnostic_gens = 200000
-endif 
+endif
 
 end subroutine initialize
 
@@ -542,7 +541,7 @@ subroutine gen_initial_contrasting_alleles(dmutn, fmutn, &
 ! This routine generates a small number (no larger than the number
 ! of linkage subunits) of paired alleles, with a random fitness
 ! effect on one haplotype set and an effect with the same magnitude
-! but the opposite sign on the other haplotype set.  Variation of 
+! but the opposite sign on the other haplotype set.  Variation of
 ! of fitness effect is according to a uniform random distribution
 ! with a user-specified mean value.
 
@@ -578,14 +577,14 @@ do n=1,num_contrasting_alleles
 
    lb = 1 + (n - 1)*nskp
 
-!    Use the same mutation effect index for all of these paired 
+!    Use the same mutation effect index for all of these paired
 !    alleles. This index, lb_modulo-1, is reserved exclusively for
-!    these alleles.  When treated as an ordinary mutation, the 
+!    these alleles.  When treated as an ordinary mutation, the
 !    fitness effect it would imply is the smallest effect possible.
-!    The fitness effects associated with these alleles, however, 
+!    The fitness effects associated with these alleles, however,
 !    are handled via the linkage_block_fitness array.  We tag these
 !    alleles with a mutation index to be able to track them over
-!    successive generations and obtain statistics on them at the 
+!    successive generations and obtain statistics on them at the
 !    end of a run.
 
    mutn = lb_modulo - 1
@@ -602,13 +601,13 @@ do n=1,num_contrasting_alleles
    m = dmutn(1,h1_id,1) + 1
    dmutn(m+1,h1_id,1:np) = mutn_indx
    dmutn(  1,h1_id,1:np) = m
-   
+
    m = fmutn(1,h2_id,1) + 1
    fmutn(m+1,h2_id,1:np) = mutn_indx
    fmutn(  1,h2_id,1:np) = m
 
 !  Generate the uniformly distributed random fitness effect
-!  associated with the allele pair. 
+!  associated with the allele pair.
 
    effect = 2.*initial_alleles_mean_effect*randomnum(1)
    if(num_contrasting_alleles < 11) &
@@ -623,10 +622,10 @@ do n=1,num_contrasting_alleles
 !  and when heterozygous have an effect given by the allele
 !  fitness effect multiplied by recessive_hetero_expression.
 !  Similarly, we assume favorable alleles behave in a dominant
-!  manner and when heterozygous have an effect given by the 
+!  manner and when heterozygous have an effect given by the
 !  allele fitness effect times dominant_hetero_expression.  The
 !  full allele fitness effect is realized only when the same
-!  version of the allele occurs on both instances of its linkage 
+!  version of the allele occurs on both instances of its linkage
 !  block, that is, is homozygous.
 
 !  Apply the appropriate fitness effects to the appropriate
@@ -723,4 +722,3 @@ end do
 end subroutine tabulate_initial_alleles
 
 end module init
-
