@@ -1,8 +1,5 @@
 %include('header')
 
-<html lang=en>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <script type="text/javascript" src="/static/apps/mendel/mendel.js"></script>
 <style>
   .form-horizontal .control-label{
@@ -36,7 +33,7 @@
 <div id="danger" align="center" class="alert-danger"></div>
 <div id="warning" align="center" class="alert-warning"></div>
 
-<body onload="fxn_init()">
+<body>
 
 <div class="container-fluid">
 
@@ -1237,6 +1234,7 @@
 
 <script>
   $(document).ready(function() {
+    fxn_init();
     $('#desc').tagsinput('add', 'v2.6.3');
     %if defined('tags'):
       $('#desc').tagsinput('add', '{{tags}}');

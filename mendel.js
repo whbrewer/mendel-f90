@@ -6,7 +6,6 @@ function fxn_init() {
   // we need to store these, in case we need access them later
   tracking_threshold = dmi.tracking_threshold.value
   fraction_neutral = dmi.fraction_neutral.value
-  compute_u()
   // properly grey out items
   fxn_combine_mutns_able()
   fxn_dynamic_linkage_able()
@@ -26,6 +25,7 @@ function fxn_init() {
   fxn_initial_alleles_init()
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
+  compute_u()
 }
 
 function fxn_set_caseid() {
