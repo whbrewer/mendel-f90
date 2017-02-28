@@ -1,4 +1,4 @@
-%include('header',title="confirm")
+%include('header')
 
 <html lang=en>
 <head>
