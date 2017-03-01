@@ -176,7 +176,8 @@
 
         <div class="form-group">
           <label for="uniform_fitness_effect_del" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp; a. equal effect for each deleterious mutation:</label>
+            &nbsp;&nbsp;&nbsp;
+            <a data-toggle="popover" title="uniform_fitness_effect_del" data-html="true" data-content='each deleterious mutation has exactly the same effect on fitness'>a. equal effect for each deleterious mutation:</a></label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="uniform_fitness_effect_del" class="form-control"
                    min="0" max="0.1" step="0.001" title="0 - 0.1" onchange="validate(this)"
@@ -186,7 +187,7 @@
 
         <div class="form-group">
           <label for="uniform_fitness_effect_fav" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp; b. equal effect for each beneficial mutation:</label>
+            &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="uniform_fitness_effect_fav" data-html="true" data-content='each favorable mutation has exactly the same effect on fitness'>b. equal effect for each beneficial mutation:</a></label>
           <div class="col-xs-12 col-sm-3">
             <input type="number" name="uniform_fitness_effect_fav" class="form-control"
                    min="0" max="0.1" step="0.0001" title="0 - 0.1" onchange="validate(this)"
