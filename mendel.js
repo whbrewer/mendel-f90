@@ -43,12 +43,14 @@ function fxn_initial_alleles() {
     dmi.max_total_fitness_increase.value = "1.0"
     dmi.initial_alleles_pop_frac.value = "1.0"
     dmi.num_contrasting_alleles.focus()
+    $('#desc').tagsinput('add', 'Initial alleles');
   } else {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
     dmi.initial_alleles_amp_factor.readOnly = true
     dmi.num_contrasting_alleles.value = 0
+    $('#desc').tagsinput('remove', 'Initial alleles');
   }
 }
 
@@ -169,16 +171,17 @@ function fxn_is_parallel_init() {
 }
 
 function fxn_is_parallel() {
+   tag = "Tribes"
    if (dmi.is_parallel.checked) {
       document.getElementById("psdiv").style.display = "block"
       np = document.getElementById("num_procs")
-      if (np.value == 1) {
-         np.value = 2
-      }
+      if (np.value == 1) { np.value = 2 }
+      $('#desc').tagsinput('add', tag);
    } else {
       document.getElementById("psdiv").style.display = "none"
       document.getElementById("num_procs").value = 1
       status("")
+      $('#desc').tagsinput('remove', tag);
    }
 }
 
@@ -411,7 +414,7 @@ function fxn_polygenic_beneficials(init) {
    fraction_neutral = dmi.fraction_neutral.value
    fraction_fav_mutn = dmi.frac_fav_mutn.value
    plot_allele_gens = dmi.plot_allele_gens.value
-
+   tag = "Waiting time"
    if(dmi.polygenic_beneficials.checked) {
       dmi.polygenic_init.readOnly = false
       dmi.polygenic_target.readOnly = false
@@ -434,6 +437,7 @@ function fxn_polygenic_beneficials(init) {
       }
       compute_u()
       status("turning on track_neutrals, setting fraction_neutral = 1.0, turning off dynamic linkage, setting num_linkage_subunits to length of target string, suppressing recombination, setting all mutations to equal effect")
+      $('#desc').tagsinput('add', tag);
    } else {
       dmi.polygenic_init.readOnly = true
       dmi.polygenic_target.readOnly = true
@@ -445,6 +449,7 @@ function fxn_polygenic_beneficials(init) {
       dmi.fraction_neutral.value = fraction_neutral
       dmi.frac_fav_mutn.value = fraction_fav_mutn
       dmi.plot_allele_gens.value = plot_allele_gens
+      $('#desc').tagsinput('remove', tag);
       status("")
    }
    fxn_auto_malloc()
@@ -473,12 +478,14 @@ function fxn_track_neutrals() {
       fxn_track_all_mutn()
       //document.getElementById("mutn_rate").innerText = "Total mutation rate per individual per generation:"
       status("including neutrals in analysis will require more memory and will slow run, and all mutations will be tracked")
+      $('#desc').tagsinput('add', 'Neutrals');
    } else {
       // Modify mutation rate -- multiply by fraction_neutrals
       //dmi.mutn_rate.value = Math.round(dmi.mutn_rate.value*(1-dmi.fraction_neutral.value))
       //document.getElementById("mutn_rate").innerText = "Total non-neutral mutation rate per individual per generation:"
       dmi.fraction_neutral.value = 0.0
       dmi.fraction_neutral.readOnly = true
+      $('#desc').tagsinput('remove', 'Neutrals');
       status("")
    }
    compute_u()
@@ -553,6 +560,7 @@ function fxn_fitness_distrib_type_change() {
    fdt = dmi.fitness_distrib_type.value
    if (fdt == 0) {
       dmi.dominant_hetero_expression.value = 1.0
+      $('#desc').tagsinput('add', 'Equal effect mutations');
    } else {
       dmi.dominant_hetero_expression.value = 0.5
    }
@@ -591,9 +599,11 @@ function show_hide_mutation_upload_form(i) {
     // under population substructure, and vice-versa
     if (dmi.upload_mutations.checked) {
         $("#upload_mutations_div").slideDown()
+        $('#desc').tagsinput('add', 'Upload mutations');
         //dmi.mutn_file_id.readOnly = false
     } else if (dmi.altruistic.checked) {
         $("#upload_mutations_div").slideDown()
+        $('#desc').tagsinput('add', 'Upload altruistic alleles');
     } else {
         $("#upload_mutations_div").slideUp()
         //dmi.mutn_file_id.readOnly = true
@@ -699,14 +709,17 @@ function fxn_selection(i) {
 }
 
 function check_back_mutn() {
+   tag = "Back mutations"
    if(dmi.allow_back_mutn.checked) {
       tt = dmi.tracking_threshold.value
       dmi.tracking_threshold.value = "0.0"
       status("NOTE: Changed tracking threshold to 0.0 so that all mutations will be tracked")
+      $('#desc').tagsinput('add', tag);
    } else {
       if(tt<=0) tt = 1.e-5;
       dmi.tracking_threshold.value = tt
       status("NOTE: Changed tracking threshold back to " + tt )
+      $('#desc').tagsinput('remove', tag);
    }
 }
 
@@ -723,6 +736,9 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.value = "1.01";
      dmi.pop_growth_rate.title = "1.00 - 1.26";
      status("WARNING: dynamic populations are experimental and largely untested")
+     $('#desc').tagsinput('add', 'Exponential growth');
+     $('#desc').tagsinput('remove', 'Carrying capacity');
+     $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 2) { // Carrying capacity
      dmi.pop_growth_rate.readOnly = false
      dmi.carrying_capacity.readOnly = false
@@ -731,6 +747,9 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.value = "0.1";
      dmi.pop_growth_rate.title = "0.0 - 1.0";
      status("WARNING: dynamic populations are experimental and largely untested")
+     $('#desc').tagsinput('add', 'Carrying capacity');
+     $('#desc').tagsinput('remove', 'Exponential growth');
+     $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true
      dmi.carrying_capacity.readOnly = true
@@ -745,6 +764,9 @@ function fxn_pop_growth_model(i) {
      dmi.bottleneck_pop_size.value = 10
      document.getElementById("bydiv").style.display = "block"
      document.getElementById("nbg").style.display = "none"
+     $('#desc').tagsinput('add', 'Founder');
+     $('#desc').tagsinput('remove', 'Carrying capacity');
+     $('#desc').tagsinput('remove', 'Exponential growth');
   } else {
      dmi.pop_growth_rate.readOnly = false
      status("")
