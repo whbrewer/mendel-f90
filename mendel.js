@@ -606,8 +606,124 @@ function show_hide_mutation_upload_form(i) {
         $('#desc').tagsinput('add', 'Upload altruistic alleles');
     } else {
         $("#upload_mutations_div").slideUp()
+        $('#desc').tagsinput('remove', 'Upload mutations');
         //dmi.mutn_file_id.readOnly = true
     }
+}
+
+function correct_lb() {
+    var num_linkage_subunits = dmi.num_linkage_subunits.value
+    var haploid_chromosome_number = dmi.haploid_chromosome_number.value
+    var linkage_subunits_per_chromosome = parseInt(num_linkage_subunits / haploid_chromosome_number)
+    // recompute num_linkage_subunits to be a integer multiplier of the number of chromosomes
+    num_linkage_subunits = linkage_subunits_per_chromosome * haploid_chromosome_number
+    dmi.num_linkage_subunits.value = num_linkage_subunits
+}
+
+function range(start, stop, step) {
+  var a=[start], b=start;
+  while(b < stop)  {b+=step; a.push(b)}
+  return a;
+}
+
+function generate_mutations() {
+    var pop_size = dmi.pop_size.value
+    var num_linkage_subunits = dmi.num_linkage_subunits.value
+    var haploid_chromosome_number = dmi.haploid_chromosome_number.value
+    var linkage_subunits_per_chromosome = parseInt(num_linkage_subunits / haploid_chromosome_number)
+    // recompute num_linkage_subunits to be a integer multiplier of the number of chromosomes
+    num_linkage_subunits = linkage_subunits_per_chromosome * haploid_chromosome_number
+
+    // handle combination of chromosome inputs, such as 1-3, 5-7, 21-23
+    var chromosomes = $("#chromosome_range").val()
+    console.log(chromosomes)
+
+    nmutn = pop_size * num_linkage_subunits * 2
+    if (nmutn > 10000) {
+        $("#payload").text("Asking to generate " + nmutn + " mutations... too many.  Please reduce either pop_size or num_linkage_subunits such that pop_size x num_linkage_subunits x 2 <= 10000");
+        return -1;
+    }
+
+    if (!chromosomes) {
+        $("#payload").text("ERROR: must specify a chromosome number, e.g. 1")
+        return -1;
+    } else {
+        $("#payload").text("")
+    }
+
+    var dominance = 1
+    var frac_fav_mutn = dmi.frac_fav_mutn.value
+    var genome_size = dmi.genome_size.value
+    var max_fav_fitness_gain = dmi.max_fav_fitness_gain.value
+    var high_impact_mutn_threshold = dmi.high_impact_mutn_threshold.value
+    var high_impact_mutn_fraction = dmi.high_impact_mutn_fraction.value
+
+    var alpha_del = Math.log(genome_size)
+    var alpha_fav = Math.log(genome_size*max_fav_fitness_gain)
+    var gamma_del = Math.log(-Math.log(high_impact_mutn_threshold)/alpha_del) /
+                    Math.log(high_impact_mutn_fraction)
+    var gamma_fav = Math.log(-Math.log(high_impact_mutn_threshold)/alpha_fav) /
+                    Math.log(high_impact_mutn_fraction)
+    // console.log(alpha_del)
+
+
+    var fitness_distrib_type = dmi.fitness_distrib_type.value
+    var chromo_array = chromosomes.split(',')
+    console.log(chromo_array)
+
+    new_chromo_array = Array()
+
+    for (c in chromo_array) {
+        x = chromo_array[c].split("-")
+        console.log('x:' + x)
+        start = parseInt(x[0])
+        end = parseInt(x[1])
+        if (end) {
+            // new_chromo_array = range(start, end, 1)
+            new_chromo_array.push.apply(new_chromo_array, range(start, end, 1))
+        } else {
+            new_chromo_array.push(start)
+        }
+    }
+    console.log(new_chromo_array)
+
+    var allele_id = 0
+    for (i = 1; i <= pop_size; i++) {
+        for (c in new_chromo_array) {
+            chromosome = new_chromo_array[c]
+            lb1 = (chromosome-1)*linkage_subunits_per_chromosome + 1
+            lb2 = chromosome*linkage_subunits_per_chromosome
+            for (lb = lb1; lb <= lb2; lb++) {
+                x = Math.random()
+                y = Math.random()
+                if (y > frac_fav_mutn) {
+                    if (fitness_distrib_type == 0) {
+                        fitness = -dmi.uniform_fitness_effect_del.value*1.0
+                    } else {
+                        fitness = -Math.exp(-alpha_del*x**gamma_del)
+                    }
+                } else {
+                    if (fitness_distrib_type == 0) {
+                        fitness = dmi.uniform_fitness_effect_fav.value*1.0
+                    } else {
+                        fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*x**gamma_fav)
+                    }
+                }
+                for (haplotype = 1; haplotype <= 2; haplotype++) {
+                    allele_id += 1
+                    $("#payload").append(String(i) + ' ' + String(lb) + ' ' + String(haplotype) + ' ' + String(fitness.toExponential(8)) + ' ' + String(dominance)  + '&#xA;');
+                }
+            }
+        }
+    }
+
+    if (allele_id > 3772) {
+        $("#payload").text("ERROR: The number of alleles is too large to POST through the website.  Try reducing some combination of pop_size and num_linkage_subunits.  The current limit is set to 3772 alleles.");
+        return -1;
+    } else {
+        $("#gen_stats").text("generated " + allele_id + " mutations")
+    }
+
 }
 
 function fxn_migration() {

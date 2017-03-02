@@ -548,7 +548,7 @@
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="num_linkage_subunits" title="1 - 10,000"
                  min="1" max="10000" data-warning="1000" step="1"
-                 onchange="fxn_auto_malloc(); validate(this)"
+                 onchange="correct_lb(); fxn_auto_malloc(); validate(this)"
                  class="form-control" value="{{num_linkage_subunits}}">
         </div>
       </div>
@@ -1223,8 +1223,20 @@
                     <tr><td>56</td> <td>407</td> <td>2</td> <td>-0.000117976</td><td>1</td></tr>
                 </table>
 
+                <form class="form-group">
+                    <label for="chromosome_range" class="control-label col-xs-12 col-sm-3"><a data-toggle="popover" title="chromosome_range" data-content="List of chromosomes with min of 1 and max of 23. Can be comma-separated list such as: 1, 3, 5.  Or a range, such as: 1-23.  Or can be combination of both, e.g. 1, 3, 5, 7-10">List of Chromosomes</a></label>
+                    <div class="col-xs-12 col-sm-6">
+                        <input id="chromosome_range" class="form-control input-lg col-xs-3" />
+                    </div>
+                    <div class="col-xs-12 col-sm-3">
+                        <a class="btn btn-primary" href="javascript:generate_mutations()">Generate</a>
+                    </div>
+                </form>
+
+                <p align="center" style="line-height:20px"> <span class="text-success" id="gen_stats"></span> </p>
+
                 <form id="upload_mutations" name="upload_mutations_form" method=post action="/upload_data">
-                    <textarea id="payload" class="form-control" name="upload_data" rows="7"></textarea><br />
+                    <textarea id="payload" class="form-control" name="upload_data" rows="7" style="font-family: monospace"></textarea><br />
                     <input type="hidden" name="filename" value="mendel.mutn">
                     <a class="btn btn-success center-block" href="javascript:UploadData()">Upload</a>
                 </form>
