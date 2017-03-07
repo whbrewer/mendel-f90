@@ -69,10 +69,6 @@ function fxn_initial_alleles_init() {
   }
 }
 
-function alpha_warning() {
-   status("WARNING: this function is experimental and largely untested.");
-}
-
 function validate(obj) {
   var val = parseFloat(obj.value)
   var max = parseFloat(obj.max)
@@ -180,13 +176,32 @@ function fxn_is_parallel() {
    } else {
       document.getElementById("psdiv").style.display = "none"
       document.getElementById("num_procs").value = 1
-      status("")
       $('#desc').tagsinput('remove', tag);
    }
 }
 
 function status(msg) {
-  document.getElementById("warning").innerText = msg
+    try { // this will throw error if bootstrap-notify.min.js not included
+        $.notify({ message: msg } , { placement: { from: "bottom", align: "right" } });
+    } catch(err) { // the old way of doing things
+        document.getElementById("warning").innerText = msg
+    }
+}
+
+function warn(msg) {
+    try {
+        $.notify({ message: msg } , { type: 'warning', placement: { from: "bottom", align: "right" } });
+    } catch(err) {
+        document.getElementById("warning").innerText = msg
+    }
+}
+
+function danger(msg) {
+    try {
+        $.notify({ message: msg } , { type: 'danger', placement: { from: "bottom", align: "right" } });
+    } catch(err) {
+        document.getElementById("danger").innerText = msg
+    }
 }
 
 function fxn_restart_case() {
@@ -249,7 +264,7 @@ function check_bottleneck() {
    if (selectedIndex == 4 && bgen < dmi.num_generations.value) {
       if (pgr.value - parseInt(pgr.value) == 0) {
         pgr.value = parseInt(pgr.value) + 0.2
-        status("updated pop growth rate to valid number")
+        status("Updated pop growth rate to valid number")
       }
    }
 }
@@ -436,7 +451,7 @@ function fxn_polygenic_beneficials(init) {
          dmi.plot_allele_gens.value = 1
       }
       compute_u()
-      status("turning on track_neutrals, setting fraction_neutral = 1.0, turning off dynamic linkage, setting num_linkage_subunits to length of target string, suppressing recombination, setting all mutations to equal effect")
+      status("Turning on track_neutrals, setting fraction_neutral = 1.0, turning off dynamic linkage, setting num_linkage_subunits to length of target string, suppressing recombination, setting all mutations to equal effect")
       $('#desc').tagsinput('add', tag);
    } else {
       dmi.polygenic_init.readOnly = true
@@ -450,7 +465,6 @@ function fxn_polygenic_beneficials(init) {
       dmi.frac_fav_mutn.value = fraction_fav_mutn
       dmi.plot_allele_gens.value = plot_allele_gens
       $('#desc').tagsinput('remove', tag);
-      status("")
    }
    fxn_auto_malloc()
 }
@@ -458,7 +472,7 @@ function fxn_polygenic_beneficials(init) {
 function fxn_polygenic_target() {
    dmi.num_linkage_subunits.value = dmi.polygenic_target.value.length
    if(dmi.polygenic_init.value.length != dmi.polygenic_target.value.length) {
-      alert("WARNING: polygenic init string must be same length as target")
+      danger("ERROR: polygenic init string must be same length as target")
       dmi.polygenic_init.select()
    }
 }
@@ -477,7 +491,7 @@ function fxn_track_neutrals() {
       dmi.track_all_mutn.checked = true
       fxn_track_all_mutn()
       //document.getElementById("mutn_rate").innerText = "Total mutation rate per individual per generation:"
-      status("including neutrals in analysis will require more memory and will slow run, and all mutations will be tracked")
+      warn("including neutrals in analysis will require more memory and will slow run, and all mutations will be tracked")
       $('#desc').tagsinput('add', 'Neutrals');
    } else {
       // Modify mutation rate -- multiply by fraction_neutrals
@@ -486,7 +500,6 @@ function fxn_track_neutrals() {
       dmi.fraction_neutral.value = 0.0
       dmi.fraction_neutral.readOnly = true
       $('#desc').tagsinput('remove', 'Neutrals');
-      status("")
    }
    compute_u()
 }
@@ -734,7 +747,7 @@ function fxn_migration() {
    } else {
       dmi.migration_generations.readOnly = false
       //dmi.migration_generations.value = 1
-      if(x > max || x < 0) alert("Value must be between 0 and " + max)
+      if(x > max || x < 0) danger("ERROR: Value must be between 0 and " + max)
    }
    dmi.num_indiv_exchanged.value = x
 }
@@ -764,14 +777,13 @@ function fxn_tribes(max_tribes) {
       dmi.tc_scaling_factor.readOnly = false
       dmi.group_heritability.readOnly = false
       dmi.tc_scaling_factor.select()
-      status("Group competition is still under development. Proceed with caution. Must set extinction threshold > 0 for tribal fission.")
+      warn("Group competition is still under development. Proceed with caution. Must set extinction threshold > 0 for tribal fission.")
       if(dmi.extinction_threshold.value == 0.0)  {
          dmi.extinction_threshold.value = 0.1
       }
    } else {
       dmi.tc_scaling_factor.readOnly = true
       dmi.group_heritability.readOnly = true
-      status("")
    }
 
    dmi.num_procs.title = "2 - " + max_tribes
@@ -829,12 +841,12 @@ function check_back_mutn() {
    if(dmi.allow_back_mutn.checked) {
       tt = dmi.tracking_threshold.value
       dmi.tracking_threshold.value = "0.0"
-      status("NOTE: Changed tracking threshold to 0.0 so that all mutations will be tracked")
+      status("Changed tracking threshold to 0.0 so that all mutations will be tracked")
       $('#desc').tagsinput('add', tag);
    } else {
       if(tt<=0) tt = 1.e-5;
       dmi.tracking_threshold.value = tt
-      status("NOTE: Changed tracking threshold back to " + tt )
+      status("Changed tracking threshold back to " + tt )
       $('#desc').tagsinput('remove', tag);
    }
 }
@@ -843,7 +855,6 @@ function fxn_pop_growth_model(i) {
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true
      dmi.carrying_capacity.readOnly = true
-     status("")
   } else if (i == 1) { // Exponential growth
      dmi.pop_growth_rate.readOnly = false
      dmi.carrying_capacity.readOnly = true
@@ -851,7 +862,7 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "2000";
      dmi.pop_growth_rate.value = "1.01";
      dmi.pop_growth_rate.title = "1.00 - 1.26";
-     status("WARNING: dynamic populations are experimental and largely untested")
+     warn("WARNING: dynamic populations are experimental and largely untested")
      $('#desc').tagsinput('add', 'Exponential growth');
      $('#desc').tagsinput('remove', 'Carrying capacity');
      $('#desc').tagsinput('remove', 'Founder');
@@ -862,7 +873,7 @@ function fxn_pop_growth_model(i) {
      dmi.num_generations.value = "1000";
      dmi.pop_growth_rate.value = "0.1";
      dmi.pop_growth_rate.title = "0.0 - 1.0";
-     status("WARNING: dynamic populations are experimental and largely untested")
+     warn("WARNING: dynamic populations are experimental and largely untested")
      $('#desc').tagsinput('add', 'Carrying capacity');
      $('#desc').tagsinput('remove', 'Exponential growth');
      $('#desc').tagsinput('remove', 'Founder');
@@ -885,6 +896,5 @@ function fxn_pop_growth_model(i) {
      $('#desc').tagsinput('remove', 'Exponential growth');
   } else {
      dmi.pop_growth_rate.readOnly = false
-     status("")
   }
 }
