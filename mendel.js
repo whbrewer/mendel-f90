@@ -182,7 +182,7 @@ function fxn_is_parallel() {
 
 function status(msg) {
     try { // this will throw error if bootstrap-notify.min.js not included
-        $.notify({ message: msg } , { placement: { from: "bottom", align: "right" } });
+        $.notify({ message: msg } , { placement: { from: "bottom", align: "right" }});
     } catch(err) { // the old way of doing things
         document.getElementById("warning").innerText = msg
     }
@@ -713,13 +713,13 @@ function generate_mutations() {
                     if (fitness_distrib_type == 0) {
                         fitness = -dmi.uniform_fitness_effect_del.value*1.0
                     } else {
-                        fitness = -Math.exp(-alpha_del*x**gamma_del)
+                        fitness = -Math.exp(-alpha_del*Math.pow(x, gamma_del))
                     }
                 } else {
                     if (fitness_distrib_type == 0) {
                         fitness = dmi.uniform_fitness_effect_fav.value*1.0
                     } else {
-                        fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*x**gamma_fav)
+                        fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*Math.pow(x, gamma_fav))
                     }
                 }
                 for (haplotype = 1; haplotype <= 2; haplotype++) {
