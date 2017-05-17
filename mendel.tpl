@@ -668,7 +668,7 @@
           <label for="homogenous_tribes" class="control-label col-xs-10 col-sm-6">
             <a data-toggle="popover" title="homogenous_tribes" data-content='If this option is selected, all Mendel parameters will be applied to each single sub-population equally, so that all sub-populations will start out the same. If this is de-selected, each tribe can have its own parameters defined separately (currently not supported in this version).'>1. Homogeneous subpopulations?</a></label>
           <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="homogenous_tribes" disabled="true"
+            <input type="checkbox" name="homogenous_tribes" readonly="true"
                    onclick="fxn_tribes(16)" value="on"
                    %if homogenous_tribes=='T':
                        checked

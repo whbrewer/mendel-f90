@@ -1315,7 +1315,9 @@ real*8 ufpbin(NB), ufpbin_count(NB), ufpbin_max, ufsum ! uploaded favorable alle
 
 real*8 par_dpbin(NB), par_fpbin(NB), dsum, fsum
 real*8 par_npbin(NB), par_npbin_count(NB), nsum
-real*8 par_dpbin_count(NB),par_fpbin_count(NB)
+real*8 par_dpbin_count(NB), par_fpbin_count(NB)
+real*8 par_idpbin_count(NB), par_ifpbin_count(NB)
+real*8 par_udpbin_count(NB), par_ufpbin_count(NB)
 real*8 febin(10,NB), fe_bin_width
 
 real   bin_fitness(11), bin_center(10)
@@ -1651,6 +1653,12 @@ if(is_parallel) then
    call mpi_davg(fpbin_count, par_fpbin_count, NB)
    call mpi_davg(npbin_count, par_npbin_count, NB)
 
+   call mpi_davg(idpbin_count, par_idpbin_count, NB)
+   call mpi_davg(ifpbin_count, par_ifpbin_count, NB)
+
+   call mpi_davg(udpbin_count, par_udpbin_count, NB)
+   call mpi_davg(ufpbin_count, par_ufpbin_count, NB)
+
    call mpi_davg(num_dalleles, par_num_dalleles, 3)
    call mpi_davg(num_falleles, par_num_falleles, 3)
    call mpi_davg(num_nalleles, par_num_nalleles, 3)
@@ -1665,9 +1673,11 @@ if(is_parallel) then
       write(21,'("# generation = ",i8)') gen
       write(21,'("# frequency del_normalized fav_normalized", &
            "  neu_normalized, del_count fav_count neu_count")')
-      write(21,'(i11,2f15.11,2f11.0,f15.11,f11.0)') (k, par_dpbin(k), &
-          par_fpbin(k), par_npbin(k), par_dpbin_count(k), &
-          par_fpbin_count(k), par_npbin_count(k), k=1,NB)
+      write(21,'(i11,3f15.11,7f11.0)')  (k, par_dpbin(k),  &
+            par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
+            par_npbin_count(k), par_idpbin_count(k)*initial_alleles_amp_factor, &
+            par_ifpbin_count(k)*initial_alleles_amp_factor, par_udpbin_count(k), &
+            par_ufpbin_count(k), k=1,NB)
       write(21,'("# Allele summary statistics:")')
       write(21,'("#  Very rare",6x,"Polymorphic",9x,"Fixed", &
                  11x,"Total")')
