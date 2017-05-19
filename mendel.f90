@@ -635,6 +635,14 @@ do gen=gen_0+1,gen_0+num_generations
    end if
 
    ! START_MPI
+   if (grow_fission) then
+       if (mod(gen, grow_fission_threshold) == 0) then
+           print *, "split tribes"
+       endif
+   endif
+   ! END_MPI
+
+   ! START_MPI
    ! For the limiting case of two tribes, we must turn off the parallel
    ! switch if one of the tribes goes extinct.  So, every generation
    ! communicate the status of each tribe to the other.

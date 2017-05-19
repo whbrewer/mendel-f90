@@ -11,7 +11,7 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         max_neu_mutn_per_indiv,                                   &
         num_initial_fav_mutn, num_indiv_exchanged,                &
         random_number_seed, restart_dump_number,                  &
-        haploid_chromosome_number,                                &
+        haploid_chromosome_number, grow_fission_threshold,        &
         selection_scheme, migration_generations,                  &
         migration_model, num_contrasting_alleles,                 &
         pop_growth_model, plot_allele_gens, verbosity,            &
@@ -41,7 +41,8 @@ logical :: fitness_dependent_fertility, dynamic_linkage,             &
            clonal_haploid, write_vcf,                                &
            upload_mutations, altruistic, allow_back_mutn,            &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
-           polygenic_beneficials, tribal_fission, reseed_rng
+           polygenic_beneficials, tribal_fission, reseed_rng,        &
+           grow_fission
 
 ! note: if changing the string length of polygenic_target below,
 ! need to make corresponding change in polygenic.f90 function poly_match
@@ -54,6 +55,7 @@ integer nf
 
 namelist /basic/ case_id, mutn_rate, frac_fav_mutn, &
      reproductive_rate, pop_size, num_generations
+
 namelist /mutations/ fitness_distrib_type, fraction_neutral, &
      genome_size, high_impact_mutn_fraction, &
      high_impact_mutn_threshold, uniform_fitness_effect_del, &
@@ -69,6 +71,7 @@ namelist /mutations/ fitness_distrib_type, fraction_neutral, &
 namelist /selection/ fraction_random_death, heritability, &
      non_scaling_noise, fitness_dependent_fertility, &
      selection_scheme, partial_truncation_value
+
 namelist /population/ recombination_model, clonal_haploid, &
      num_contrasting_alleles, max_total_fitness_increase, &
      dynamic_linkage, haploid_chromosome_number, &
@@ -77,10 +80,13 @@ namelist /population/ recombination_model, clonal_haploid, &
      bottleneck_generation, bottleneck_pop_size, &
      num_bottleneck_generations, initial_alleles_mean_effect, &
      carrying_capacity, initial_alleles_pop_frac, initial_alleles_amp_factor
+
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
-     altruistic, social_bonus_factor, tribal_fission
+     altruistic, social_bonus_factor, tribal_fission, grow_fission, &
+     grow_fission_threshold
+
 namelist /computation/ tracking_threshold, extinction_threshold, &
      max_del_mutn_per_indiv, max_fav_mutn_per_indiv, &
      max_neu_mutn_per_indiv, random_number_seed, reseed_rng, &

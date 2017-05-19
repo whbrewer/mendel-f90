@@ -761,7 +761,7 @@
         <div class="form-group">
           <label for="tribal_fission" class="control-label col-xs-10 col-sm-6">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="tribal_fission" data-content='For the case of tribal competition, one one tribe dies, split the surviving tribe to form a new tribe.'>c. fission tribe?</a></label>
+            <a data-toggle="popover" title="tribal_fission" data-content='For the case of tribal competition, one one tribe dies, split the surviving tribe to form a new tribe.'>c. fission winning tribe?</a></label>
           <div class="col-xs-2 col-sm-3">
             <input type="checkbox" name="tribal_fission" value="on"
               %if tribal_fission=='T':
@@ -790,6 +790,31 @@
             <input type="number" style="width:7em;" name="social_bonus_factor"
                    class="form-control" min="0" max="1" step="0.1"
                    value="1.0" onchange="validate(this)" title="0 - 1"></td>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="grow_fission" class="control-label col-xs-10 col-sm-6">
+            <a data-toggle="popover" title="grow_fission" data-html="true" data-content=''>6. Fission growing tribes to make new tribes?</a></label>
+          <div class="col-xs-2 col-sm-3">
+            <input type="checkbox" name="grow_fission"
+              id="grow_fission" value="on"
+              %if grow_fission=='T':
+                 checked
+              %end
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="grow_fission_threshold" class="control-label col-xs-12 col-sm-6">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a data-toggle="popover" title="grow_fission_threshold" data-content='Split the tribe in two when it reaches this threshold'>a. fission when tribe reaches pop size of:</a></label>
+          <div class="col-xs-12 col-sm-3">
+            <input type="number" name="grow_fission_threshold" id="grow_fission_threshold"
+                   min="0" max="1000" step="100" onchange="validate(this)"
+                   class="form-control" value="{{grow_fission_threshold}}"
+                   title="0 - 1000">
           </div>
         </div>
 
