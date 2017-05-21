@@ -39,6 +39,7 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
+integer :: num_demes
 
 real*8 accum(50), reproductive_advantage_factor
 real selection_coefficient, aoki, migration_rate, x
@@ -124,6 +125,7 @@ if(is_parallel) then
 ! remember the original state.
   am_parallel = .true.
   num_tribes_at_start = num_tribes
+  num_demes = 1 ! for grow_fission
 ! compute global population size
   !START_MPI
   call mpi_isum(pop_size,global_pop_size,1)
@@ -635,14 +637,6 @@ do gen=gen_0+1,gen_0+num_generations
    end if
 
    ! START_MPI
-   if (grow_fission) then
-       if (mod(gen, grow_fission_threshold) == 0) then
-           print *, "split tribes"
-       endif
-   endif
-   ! END_MPI
-
-   ! START_MPI
    ! For the limiting case of two tribes, we must turn off the parallel
    ! switch if one of the tribes goes extinct.  So, every generation
    ! communicate the status of each tribe to the other.
@@ -919,17 +913,29 @@ do gen=gen_0+1,gen_0+num_generations
          current_pop_size = pop_size
       else if (pop_growth_model == 4) then ! Founder effects
          if (gen < bottleneck_generation .and. pop_size < carrying_capacity) then
-            pop_size = min(ceiling(gr1*pop_size),carrying_capacity)
+            pop_size = min(ceiling(gr1*pop_size), carrying_capacity)
             reproductive_rate = gr1
          else if (gen == bottleneck_generation) then
             pop_size = bottleneck_pop_size
          else if (gen > bottleneck_generation .and. pop_size < carrying_capacity) then
-            pop_size = min(ceiling(gr2*pop_size),carrying_capacity)
+            pop_size = min(ceiling(gr2*pop_size), carrying_capacity)
             reproductive_rate = gr2
          else
             pop_size = carrying_capacity
             reproductive_rate = reproductive_rate_saved
          end if
+         ! START_MPI
+         if (grow_fission) then
+             ! print *, gen, current_pop_size
+             if (current_pop_size > grow_fission_threshold) then
+                 print *, "split tribes", myid, gen, current_pop_size
+                 pop_size = current_pop_size/2
+                 num_demes = num_demes*2
+                 current_pop_size = pop_size
+                 print *, "pop_size/deme:", pop_size, "total_pop_size:", num_demes*pop_size, "num_demes:", num_demes
+             endif
+         endif
+         ! END_MPI
       else
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
                     'not supported'
