@@ -4,7 +4,7 @@ mutn_rate = 10.0,
 frac_fav_mutn = 0.001,
 reproductive_rate = 2.0,
 pop_size = 2,
-num_generations = 10,
+num_generations = 20,
 /
 
 &mutations
@@ -52,10 +52,10 @@ dynamic_linkage = T,
 haploid_chromosome_number = 23,
 num_linkage_subunits = 989,
 pop_growth_model = 4,
-pop_growth_rate = 8,
+pop_growth_rate = 8.2,
 carrying_capacity = 1000,
 bottleneck_yes = T,
-bottleneck_generation = 1001,
+bottleneck_generation = 10,
 bottleneck_pop_size = 10,
 num_bottleneck_generations = 0,
 /

@@ -26,7 +26,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.6.3-11-g7489a61-dirty <<< VERSION'
+write(6,*) 'VERSION >>> v2.6.3-12-gf4a350e-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 

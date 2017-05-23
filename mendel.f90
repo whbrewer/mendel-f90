@@ -926,13 +926,19 @@ do gen=gen_0+1,gen_0+num_generations
          end if
          ! START_MPI
          if (grow_fission) then
-             ! print *, gen, current_pop_size
-             if (current_pop_size > grow_fission_threshold) then
-                 print *, "split tribes", myid, gen, current_pop_size
+             !print *, gen, current_pop_size
+             !print *, gen, bottleneck_generation, current_pop_size, grow_fission_threshold, num_demes, gr2
+             if (gen > bottleneck_generation .and. &
+                 current_pop_size > grow_fission_threshold .and. &
+                 num_demes < num_tribes .and. gen < 50) then
+                 print *, "split tribes", myid, gen, current_pop_size, "num_tribes:", num_tribes
                  pop_size = current_pop_size/2
                  num_demes = num_demes*2
                  current_pop_size = pop_size
                  print *, "pop_size/deme:", pop_size, "total_pop_size:", num_demes*pop_size, "num_demes:", num_demes
+                 !call mpi_send_int(pop_size_winner,1-myid,msg_num,ierr)
+                 !msg_num = msg_num + 1
+                 !call mpi_send_int(run_status,1,msg_num,ierr)
              endif
          endif
          ! END_MPI
