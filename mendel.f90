@@ -928,17 +928,29 @@ do gen=gen_0+1,gen_0+num_generations
          if (grow_fission) then
              !print *, gen, current_pop_size
              !print *, gen, bottleneck_generation, current_pop_size, grow_fission_threshold, num_demes, gr2
+             if (myid == 0) &
+                print *, gen, current_pop_size, current_pop_size*num_demes
+
              if (gen > bottleneck_generation .and. &
                  current_pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
+
+                 ! now migrate half the population take individuals between 
+                 ! current_pop_size/2 and current_pop_size and use them to create
+                 ! a new population
+                 do k = 1, current_pop_size/2
+                    i = k + current_pop_size 
+                    j = k
+                    !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
+                    call migrate_individual(0, 1, i, j, dmutn, fmutn, nmutn,  &
+                                            lb_mutn_count, linkage_block_fitness, winner)
+                 end do
+
                  print *, "split tribes", myid, gen, current_pop_size, "num_tribes:", num_tribes
                  pop_size = current_pop_size/2
                  num_demes = num_demes*2
                  current_pop_size = pop_size
                  print *, "pop_size/deme:", pop_size, "total_pop_size:", num_demes*pop_size, "num_demes:", num_demes
-                 !call mpi_send_int(pop_size_winner,1-myid,msg_num,ierr)
-                 !msg_num = msg_num + 1
-                 !call mpi_send_int(run_status,1,msg_num,ierr)
              endif
          endif
          ! END_MPI
