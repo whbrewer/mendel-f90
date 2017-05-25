@@ -39,7 +39,7 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
-integer :: num_demes
+integer :: num_demes, src, dest
 
 real*8 accum(50), reproductive_advantage_factor
 real selection_coefficient, aoki, migration_rate, x
@@ -935,18 +935,24 @@ do gen=gen_0+1,gen_0+num_generations
                  current_pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
+                 print *, "split tribes", myid, gen, current_pop_size, "num_tribes:", num_tribes, &
+                          "num_demes:", num_demes
                  ! now migrate half the population take individuals between 
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
-                 do k = 1, current_pop_size/2
-                    i = k + current_pop_size 
-                    j = k
-                    !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
-                    call migrate_individual(0, 1, i, j, dmutn, fmutn, nmutn,  &
-                                            lb_mutn_count, linkage_block_fitness, winner)
+                 do m = 1, num_demes             
+                    do k = 1, current_pop_size/2
+                       i = k + current_pop_size/2
+                       j = k
+                       !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
+                       src = num_demes - 1
+                       dest = num_demes + m - 1
+                       print *, myid, 'src:', src, 'dest:', dest, 'individual:', i, 'to:', j
+                       call migrate_individual(src, dest, i, j, dmutn, fmutn, nmutn,  &
+                                               lb_mutn_count, linkage_block_fitness, winner)
+                    end do
                  end do
 
-                 print *, "split tribes", myid, gen, current_pop_size, "num_tribes:", num_tribes
                  pop_size = current_pop_size/2
                  num_demes = num_demes*2
                  current_pop_size = pop_size

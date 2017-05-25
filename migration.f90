@@ -543,10 +543,10 @@ integer :: offsets(NV)
 integer :: i, myint
 integer :: status(MPI_Status_size)
 
-if (num_tribes /= 2) then
-  write (6,*) "ERROR in migrate_individual: needs 2 procs."
-  call exit(1)
-endif
+!if (num_tribes /= 2) then
+!  write (6,*) "ERROR in migrate_individual: needs 2 procs."
+!  call exit(1)
+!endif
 
 if (num_linkage_subunits > m) then
   write(6,*) "ERROR in migrate_individual: need to increase m array bounds"
