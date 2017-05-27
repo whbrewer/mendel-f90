@@ -39,7 +39,7 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
-integer :: num_demes, src, dest
+integer :: num_demes, src, dest, active_demes(100)
 
 real*8 accum(50), reproductive_advantage_factor
 real selection_coefficient, aoki, migration_rate, x
@@ -125,7 +125,11 @@ if(is_parallel) then
 ! remember the original state.
   am_parallel = .true.
   num_tribes_at_start = num_tribes
-  num_demes = 1 ! for grow_fission
+  ! for grow_fission
+  num_demes = 1 
+  active_demes = 0 ! iniitialize all values to zero
+  active_demes(1) = 1 ! number of currently active demes
+  active_demes(2) = 0 ! MPI id of first active deme (zero-based)
 ! compute global population size
   !START_MPI
   call mpi_isum(pop_size,global_pop_size,1)
@@ -929,34 +933,35 @@ do gen=gen_0+1,gen_0+num_generations
              !print *, gen, current_pop_size
              !print *, gen, bottleneck_generation, current_pop_size, grow_fission_threshold, num_demes, gr2
              if (myid == 0) &
-                print *, gen, current_pop_size, current_pop_size*num_demes
+                print '(a,i5,x,a,i5,x,a,i5,x,a,i5)', 'gen:', gen, 'pop_size/tribe:', current_pop_size, &
+                      '#demes:', num_demes, 'total_pop_size:', current_pop_size*num_demes
 
              if (gen > bottleneck_generation .and. &
                  current_pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
-                 print *, "split tribes", myid, gen, current_pop_size, "num_tribes:", num_tribes, &
-                          "num_demes:", num_demes
+                 if (myid == 0) print *, "*** FISSION EVENT ***"
                  ! now migrate half the population take individuals between 
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
-                 do m = 1, num_demes             
-                    do k = 1, current_pop_size/2
-                       i = k + current_pop_size/2
-                       j = k
-                       !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
-                       src = num_demes - 1
-                       dest = num_demes + m - 1
-                       print *, myid, 'src:', src, 'dest:', dest, 'individual:', i, 'to:', j
-                       call migrate_individual(src, dest, i, j, dmutn, fmutn, nmutn,  &
-                                               lb_mutn_count, linkage_block_fitness, winner)
-                    end do
+                 src = mod(myid, num_tribes/2) 
+                 dest = src + num_tribes/2
+                 print *, myid, 'migrating... src:', src, 'dest:', dest
+
+                 do k = 1, current_pop_size/2
+                    i = k + current_pop_size/2
+                    j = k
+                    call migrate_individual(src, dest, i, j, dmutn, fmutn, nmutn,  &
+                                            lb_mutn_count, linkage_block_fitness, winner)
                  end do
 
                  pop_size = current_pop_size/2
                  num_demes = num_demes*2
+                 active_demes(1) = num_demes
+                 do i = 1, num_demes
+                    active_demes(i) = i
+                 end do
                  current_pop_size = pop_size
-                 print *, "pop_size/deme:", pop_size, "total_pop_size:", num_demes*pop_size, "num_demes:", num_demes
              endif
          endif
          ! END_MPI

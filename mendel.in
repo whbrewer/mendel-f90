@@ -78,7 +78,7 @@ social_bonus_factor = 1.0,
 &computation
 tracking_threshold = 0.0,
 extinction_threshold = 0.0,
-max_del_mutn_per_indiv = 9990,
+max_del_mutn_per_indiv = 1000,
 max_neu_mutn_per_indiv = 100,
 max_fav_mutn_per_indiv = 100,
 random_number_seed = 42,
