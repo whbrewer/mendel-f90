@@ -39,7 +39,7 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
-integer :: num_demes, src, dest, active_demes(100)
+integer :: num_demes, src, dest, active_demes(100), fission_count
 
 real*8 accum(50), reproductive_advantage_factor
 real selection_coefficient, aoki, migration_rate, x
@@ -130,6 +130,7 @@ if(is_parallel) then
   active_demes = 0 ! iniitialize all values to zero
   active_demes(1) = 1 ! number of currently active demes
   active_demes(2) = 0 ! MPI id of first active deme (zero-based)
+  fission_count = 0 ! keep track of how many times fission happens
 ! compute global population size
   !START_MPI
   call mpi_isum(pop_size,global_pop_size,1)
@@ -944,7 +945,7 @@ do gen=gen_0+1,gen_0+num_generations
                  ! now migrate half the population take individuals between 
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
-                 src = mod(myid, num_tribes/2) 
+                 src = mod(myid, num_tribes/2)
                  dest = src + num_tribes/2
                  print *, myid, 'migrating... src:', src, 'dest:', dest
 
@@ -954,6 +955,7 @@ do gen=gen_0+1,gen_0+num_generations
                     call migrate_individual(src, dest, i, j, dmutn, fmutn, nmutn,  &
                                             lb_mutn_count, linkage_block_fitness, winner)
                  end do
+                 fission_count = fission_count + 1
 
                  pop_size = current_pop_size/2
                  num_demes = num_demes*2
