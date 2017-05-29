@@ -40,7 +40,7 @@ integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
 integer :: num_demes, dest, active_demes(100)
-integer :: num_zombies, fission_count, fission_state
+integer :: fission_count, tribe_state
 integer, parameter :: ZOMBIE = 0, LIVE = 1
 
 real*8 accum(50), reproductive_advantage_factor
@@ -134,9 +134,9 @@ if(is_parallel) then
   active_demes(2) = 0 ! MPI id of first active deme (zero-based)
   fission_count = 0 ! keep track of how many times fission happens
   if (myid == 0) then 
-      fission_state = LIVE
+      tribe_state = LIVE
   else
-      fission_state = ZOMBIE
+      tribe_state = ZOMBIE
   endif
 ! compute global population size
   !START_MPI
@@ -948,21 +948,14 @@ do gen=gen_0+1,gen_0+num_generations
                  current_pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
-                 num_zombies = num_tribes - num_demes*2
-
                  if (myid == 0) print *, ">>> FISSION EVENT <<<"
                  ! now migrate half the population take individuals between 
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
-                 if (myid < num_demes*2) fission_state = LIVE
+                 if (myid < num_demes*2) tribe_state = LIVE
 
-                 if (fission_state == LIVE) then
+                 if (tribe_state == LIVE) then
                     dest = mod(myid + num_demes, 2*num_demes)
-                 else ! ZOMBIE
-                    dest = mod(myid + num_zombies/2 - 2*num_demes, num_zombies) + 2*num_demes
-                 endif
-
-                 if (fission_state == LIVE) then
                     do k = 1, current_pop_size/2
                        i = k + current_pop_size/2
                        j = k
