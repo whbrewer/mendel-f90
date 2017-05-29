@@ -39,7 +39,9 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
-integer :: num_demes, src, dest, active_demes(100), fission_count
+integer :: num_demes, dest, active_demes(100)
+integer :: num_zombies, fission_count, fission_state
+integer, parameter :: ZOMBIE = 0, LIVE = 1
 
 real*8 accum(50), reproductive_advantage_factor
 real selection_coefficient, aoki, migration_rate, x
@@ -131,6 +133,11 @@ if(is_parallel) then
   active_demes(1) = 1 ! number of currently active demes
   active_demes(2) = 0 ! MPI id of first active deme (zero-based)
   fission_count = 0 ! keep track of how many times fission happens
+  if (myid == 0) then 
+      fission_state = LIVE
+  else
+      fission_state = ZOMBIE
+  endif
 ! compute global population size
   !START_MPI
   call mpi_isum(pop_size,global_pop_size,1)
@@ -711,8 +718,10 @@ do gen=gen_0+1,gen_0+num_generations
                   j = pop_size_loser + k
                   !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
                   id_loser = 1 - id_winner
-                  call migrate_individual(id_winner,id_loser,i,j,dmutn,fmutn,nmutn, &
-                       lb_mutn_count,linkage_block_fitness,winner)
+                  ! here the myid == winner returns a logical indicating if this
+                  ! is sender or receiver
+                  call migrate_individual(1-myid, i, j, dmutn, fmutn, nmutn, &
+                       lb_mutn_count, linkage_block_fitness, myid == id_winner)
                end do
 
             end if
@@ -931,8 +940,6 @@ do gen=gen_0+1,gen_0+num_generations
          end if
          ! START_MPI
          if (grow_fission) then
-             !print *, gen, current_pop_size
-             !print *, gen, bottleneck_generation, current_pop_size, grow_fission_threshold, num_demes, gr2
              if (myid == 0) &
                 print '(a,i5,x,a,i5,x,a,i5,x,a,i5)', 'gen:', gen, 'pop_size/tribe:', current_pop_size, &
                       '#demes:', num_demes, 'total_pop_size:', current_pop_size*num_demes
@@ -941,20 +948,29 @@ do gen=gen_0+1,gen_0+num_generations
                  current_pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
-                 if (myid == 0) print *, "*** FISSION EVENT ***"
+                 num_zombies = num_tribes - num_demes*2
+
+                 if (myid == 0) print *, ">>> FISSION EVENT <<<"
                  ! now migrate half the population take individuals between 
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
-                 src = mod(myid, num_tribes/2)
-                 dest = src + num_tribes/2
-                 print *, myid, 'migrating... src:', src, 'dest:', dest
+                 if (myid < num_demes*2) fission_state = LIVE
 
-                 do k = 1, current_pop_size/2
-                    i = k + current_pop_size/2
-                    j = k
-                    call migrate_individual(src, dest, i, j, dmutn, fmutn, nmutn,  &
-                                            lb_mutn_count, linkage_block_fitness, winner)
-                 end do
+                 if (fission_state == LIVE) then
+                    dest = mod(myid + num_demes, 2*num_demes)
+                 else ! ZOMBIE
+                    dest = mod(myid + num_zombies/2 - 2*num_demes, num_zombies) + 2*num_demes
+                 endif
+
+                 if (fission_state == LIVE) then
+                    do k = 1, current_pop_size/2
+                       i = k + current_pop_size/2
+                       j = k
+                       ! we define sender if myid < dest, and receiver otherwise
+                       call migrate_individual(dest, i, j, dmutn, fmutn, nmutn,  &
+                                lb_mutn_count, linkage_block_fitness, myid < dest)
+                    end do
+                 end if
                  fission_count = fission_count + 1
 
                  pop_size = current_pop_size/2
@@ -975,7 +991,7 @@ do gen=gen_0+1,gen_0+num_generations
 
       this_size = int((1.1*reproductive_rate*pop_size &
                   *(1. - fraction_random_death)))
-      !print *, 'this_size, max_size', this_size, max_size
+
       if(this_size > max_size) then
          write(0,*) "OUT OF MEMORY! SHUTTING DOWN!", this_size, max_size
          goto 20

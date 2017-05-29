@@ -4,7 +4,7 @@ mutn_rate = 10.0,
 frac_fav_mutn = 0.001,
 reproductive_rate = 2.0,
 pop_size = 2,
-num_generations = 20,
+num_generations = 100,
 /
 
 &mutations
@@ -63,7 +63,7 @@ num_bottleneck_generations = 0,
 &substructure
 is_parallel = T,
 homogenous_tribes = T,
-num_indiv_exchanged = 1,
+num_indiv_exchanged = 0,
 migration_generations = 10,
 migration_model = 1,
 tribal_competition = F,

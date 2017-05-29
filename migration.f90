@@ -501,8 +501,8 @@ subroutine mpi_isum(i, isum, n)
    call MPI_REDUCE(i,isum,n,MPI_INTEGER,MPI_SUM,0,MYCOMM,ierr)
 end
 
-subroutine migrate_individual(src,dest,sid,did,dmutn,fmutn,nmutn,lb_mutn_count, &
-           linkage_block_fitness,winner)
+subroutine migrate_individual(other,sid,did,dmutn,fmutn,nmutn,lb_mutn_count, &
+           linkage_block_fitness,sender)
 ! This subroutine just passes a single individual to another tribes
 ! in a unidirectional sense (i.e. one tribe sends, the other tribe
 ! receives).  sid is the number of the individual that is to be sent
@@ -520,14 +520,14 @@ include 'common.h'
 include 'mpif.h'
 
 integer, parameter :: n = 5000, m = 1000, NV = 5
-integer, intent(in) :: src, dest ! source tribe, destination tribe
 integer, intent(in) :: sid, did  ! source id, destination id
+integer, intent(in) :: other
 integer, intent(inout) :: dmutn(max_del_mutn_per_indiv/2,2,*)
 integer, intent(inout) :: fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer, intent(inout) :: nmutn(max_neu_mutn_per_indiv/2,2,*)
 integer, intent(inout) :: lb_mutn_count(num_linkage_subunits,2,3,*)
 real*8,  intent(inout) :: linkage_block_fitness(num_linkage_subunits,2,*)
-logical, intent(in) :: winner
+logical, intent(in) :: sender
 
 type individual
   integer :: del(n,2)
@@ -543,11 +543,6 @@ integer :: offsets(NV)
 integer :: i, myint
 integer :: status(MPI_Status_size)
 
-!if (num_tribes /= 2) then
-!  write (6,*) "ERROR in migrate_individual: needs 2 procs."
-!  call exit(1)
-!endif
-
 if (num_linkage_subunits > m) then
   write(6,*) "ERROR in migrate_individual: need to increase m array bounds"
   call exit(1)
@@ -558,7 +553,7 @@ if (dmutn(1,1,sid) > n .or. fmutn(1,1,sid) > n .or. nmutn(1,1,sid) > n) then
   call exit(1)
 endif
 
-if (myid == src) then
+if (sender) then
   bob%del(:n,:) = dmutn(:n,:,sid)
   bob%fav(:n,:) = fmutn(:n,:,sid)
   bob%neu(:n,:) = nmutn(:n,:,sid)
@@ -592,23 +587,19 @@ blockcounts = (/2*n, 2*n, 2*n, 6*m, 2*m/)
 call mpi_type_struct(NV, blockcounts, offsets, oldtypes, datatype, ierr)
 call mpi_type_commit(datatype, ierr)
 
-!print *, 'myid:',myid,'winner:',winner
-
-if (myid == src) then
-  call mpi_send(bob, 1, datatype, dest, 0,  MYCOMM, ierr)
-else
-  call mpi_recv(bob, 1, datatype, src, 0,  MYCOMM, status, ierr)
+if (sender) then
+  call mpi_send(bob, 1, datatype, other, 0, MYCOMM, ierr)
+else ! receiver
+  call mpi_recv(bob, 1, datatype, other, 0, MYCOMM, status, ierr)
 end if
 
-if (myid == dest) then
+! receiver
+if (.not. sender) then
   dmutn(:n,:,did) = bob%del(:n,:)
   fmutn(:n,:,did) = bob%fav(:n,:)
   nmutn(:n,:,did) = bob%neu(:n,:)
   lb_mutn_count(:m,:,:,did) = bob%lmc(:m,:,:)
   linkage_block_fitness(:m,:,did) = bob%lbf(:m,:)
 endif
-
-!if(winner) print *, 'Tribe:',myid,'successfully migrated individual',sid, &
-!                    'to:',did
 
 end
