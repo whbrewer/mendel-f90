@@ -945,7 +945,7 @@ do gen=gen_0+1,gen_0+num_generations
                       '#demes:', num_demes, 'total_pop_size:', current_pop_size*num_demes
 
              if (gen > bottleneck_generation .and. &
-                 current_pop_size > grow_fission_threshold .and. &
+                 pop_size > grow_fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
                  if (myid == 0) print *, ">>> FISSION EVENT <<<"
@@ -956,8 +956,8 @@ do gen=gen_0+1,gen_0+num_generations
 
                  if (tribe_state == LIVE) then
                     dest = mod(myid + num_demes, 2*num_demes)
-                    do k = 1, current_pop_size/2
-                       i = k + current_pop_size/2
+                    do k = 1, pop_size/2
+                       i = k + pop_size/2
                        j = k
                        ! we define sender if myid < dest, and receiver otherwise
                        call migrate_individual(dest, i, j, dmutn, fmutn, nmutn,  &
@@ -966,7 +966,7 @@ do gen=gen_0+1,gen_0+num_generations
                  end if
                  fission_count = fission_count + 1
 
-                 pop_size = current_pop_size/2
+                 pop_size = pop_size/2
                  num_demes = num_demes*2
                  active_demes(1) = num_demes
                  do i = 1, num_demes
