@@ -68,6 +68,8 @@
               migration_model = 1
            tribal_competition = F
                tribal_fission = F
+                 grow_fission = F
+       grow_fission_threshold = 100
             tc_scaling_factor = 0.0
            group_heritability = 0.0
           social_bonus_factor = 1.0
