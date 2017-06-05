@@ -971,15 +971,9 @@ do gen=gen_0+1,gen_0+num_generations
                        call migrate_individual(other, i, j, dmutn, fmutn, nmutn,  &
                                 lb_mutn_count, linkage_block_fitness, myid < other)
                     end do
-                    ! live_pop_size is used to tally the population of living tribes
-                    live_pop_size = current_pop_size
-                 else ! zombie tribes
-                    live_pop_size = 0
                  end if
                  fission_count = fission_count + 1
-
                  pop_size = current_pop_size
-
                  num_demes = num_demes*2
                  active_demes(1) = num_demes
                  do i = 1, num_demes
@@ -1028,7 +1022,14 @@ do gen=gen_0+1,gen_0+num_generations
           endif
        end do
        pop_size = current_pop_size
+       tribe_state = LIVE
+   endif
+
+   ! live_pop_size is used to tally the global population of living tribes
+   if (is_parallel .and. tribe_state == LIVE) then
        live_pop_size = pop_size
+   else
+       live_pop_size = 0
    endif
 
    call flush(6)
