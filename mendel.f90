@@ -39,7 +39,7 @@ integer :: pop_size_winner, pop_size_loser, num_migrate
 integer :: id_winner, id_loser
 integer :: num_dmutns, num_fmutns, encode_mutn, string(40)
 integer :: OLDGROUP,NEWGROUP,ranks(1),num_tribes_at_start
-integer :: num_demes, dest, active_demes(100)
+integer :: num_demes, other, active_demes(100)
 integer :: fission_count, tribe_state
 integer, parameter :: ZOMBIE = 0, LIVE = 1
 
@@ -955,13 +955,13 @@ do gen=gen_0+1,gen_0+num_generations
                  if (myid < num_demes*2) tribe_state = LIVE
 
                  if (tribe_state == LIVE) then
-                    dest = mod(myid + num_demes, 2*num_demes)
+                    other = mod(myid + num_demes, 2*num_demes)
                     do k = 1, pop_size/2
                        i = k + pop_size/2
                        j = k
-                       ! we define sender if myid < dest, and receiver otherwise
-                       call migrate_individual(dest, i, j, dmutn, fmutn, nmutn,  &
-                                lb_mutn_count, linkage_block_fitness, myid < dest)
+                       ! we define sender if myid < other, and receiver otherwise
+                       call migrate_individual(other, i, j, dmutn, fmutn, nmutn,  &
+                                lb_mutn_count, linkage_block_fitness, myid < other)
                     end do
                  end if
                  fission_count = fission_count + 1
@@ -991,6 +991,17 @@ do gen=gen_0+1,gen_0+num_generations
       end if
 
    end if
+
+   if (radial_divergence .and. gen == radial_divergence_gen) then
+       current_pop_size = int(pop_size/num_tribes)
+       if (myid == 0) print *, ">>> RADIAL DIVERGENCE EVENT <<<"
+       do k = 1, current_pop_size
+          other = 0
+          call migrate_individual(other, i, j, dmutn, fmutn, nmutn,  &
+                lb_mutn_count, linkage_block_fitness, myid < other)
+       enddo
+       pop_size = current_pop_size
+   endif
 
    call flush(6)
    call flush(9)

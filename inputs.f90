@@ -8,7 +8,7 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         bottleneck_generation, bottleneck_pop_size,               &
         num_bottleneck_generations, fitness_distrib_type,         &
         max_del_mutn_per_indiv, max_fav_mutn_per_indiv,           &
-        max_neu_mutn_per_indiv,                                   &
+        max_neu_mutn_per_indiv, radial_divergence_gen,            &
         num_initial_fav_mutn, num_indiv_exchanged,                &
         random_number_seed, restart_dump_number,                  &
         haploid_chromosome_number, grow_fission_threshold,        &
@@ -16,6 +16,7 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         migration_model, num_contrasting_alleles,                 &
         pop_growth_model, plot_allele_gens, verbosity,            &
         poisson_method, recombination_model, carrying_capacity
+
 
 real    reproductive_rate, mutn_rate,                             &
         genome_size, high_impact_mutn_fraction,                   &
@@ -42,7 +43,7 @@ logical :: fitness_dependent_fertility, dynamic_linkage,             &
            upload_mutations, altruistic, allow_back_mutn,            &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
            polygenic_beneficials, tribal_fission, reseed_rng,        &
-           grow_fission
+           grow_fission, radial_divergence
 
 ! note: if changing the string length of polygenic_target below,
 ! need to make corresponding change in polygenic.f90 function poly_match
@@ -81,7 +82,7 @@ namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
      altruistic, social_bonus_factor, tribal_fission, grow_fission, &
-     grow_fission_threshold
+     grow_fission_threshold, radial_divergence, radial_divergence_gen
 
 namelist /computation/ tracking_threshold, extinction_threshold, &
      max_del_mutn_per_indiv, max_fav_mutn_per_indiv, &
@@ -204,6 +205,10 @@ write(nf,'(a32,f12.7)') ' tc_scaling_factor = '     , tc_scaling_factor
 write(nf,'(a32,f12.7)') ' group_heritability = '    , group_heritability
 write(nf,'(a32,l)')     ' altruistic = '            , altruistic
 write(nf,'(a32,f12.7)') ' social_bonus_factor = '   , social_bonus_factor
+write(nf,'(a32,l)')     ' grow_fission = '          , grow_fission
+write(nf,'(a32,i12)')   ' grow_fission_threshold = ', grow_fission_threshold
+write(nf,'(a32,l)')     ' radial_divergence = '     , radial_divergence
+write(nf,'(a32,i12)')   ' radial_divergence_gen = ' , radial_divergence_gen
 write(nf,'("/")')
 
 write(nf,'(/"&computation")')
@@ -295,6 +300,10 @@ altruistic = .false.
 social_bonus_factor = 1.0
 tracking_threshold = 0
 extinction_threshold = 0
+grow_fission = .false.
+grow_fission_threshold = 100
+radial_divergence = .false.
+radial_divergence_gen = 100
 
 ! computation
 max_del_mutn_per_indiv = 10000

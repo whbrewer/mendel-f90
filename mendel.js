@@ -24,6 +24,7 @@ function fxn_init() {
   fxn_auto_malloc()
   fxn_initial_alleles_init()
   fxn_grow_fission()
+  fxn_radial_divergence()
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
   compute_u()
@@ -857,6 +858,14 @@ function fxn_grow_fission() {
         dmi.grow_fission_threshold.readOnly = false
     } else {
         dmi.grow_fission_threshold.readOnly = true
+    }
+}
+
+function fxn_radial_divergence() {
+    if (dmi.radial_divergence.checked) {
+        dmi.radial_divergence_gen.readOnly = false
+    } else {
+        dmi.radial_divergence_gen.readOnly = true
     }
 }
 

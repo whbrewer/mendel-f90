@@ -818,6 +818,31 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label for="radial_divergence" class="control-label col-xs-10 col-sm-6">
+            <a data-toggle="popover" title="radial_divergence" data-html="true" data-content='fission 1:N tribes in single event'>7. Radial divergence?</a></label>
+          <div class="col-xs-2 col-sm-3">
+            <input type="checkbox" name="radial_divergence" onclick="fxn_radial_divergence()"
+              id="radial_divergence" value="on"
+              %if radial_divergence=='T':
+                 checked
+              %end
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="radial_divergence_gen" class="control-label col-xs-12 col-sm-6">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a data-toggle="popover" title="radial_divergence_gen" data-content='Split the tribe into N tribes when it reaches this generation'>a. fission at generation number:</a></label>
+          <div class="col-xs-12 col-sm-3">
+            <input type="number" name="radial_divergence_gen" id="radial_divergence_gen"
+                   min="0" max="1000" step="100" onchange="validate(this)"
+                   class="form-control" value="{{radial_divergence_gen}}"
+                   title="0 - 1000">
+          </div>
+        </div>
+
       </div>
     </div>
 
