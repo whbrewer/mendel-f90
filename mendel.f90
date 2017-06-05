@@ -994,12 +994,26 @@ do gen=gen_0+1,gen_0+num_generations
 
    if (radial_divergence .and. gen == radial_divergence_gen) then
        current_pop_size = int(pop_size/num_tribes)
-       if (myid == 0) print *, ">>> RADIAL DIVERGENCE EVENT <<<"
+       if (myid == 0) then
+          print *
+          print *, ">>>>>>>>>>>> RADIAL DIVERGENCE EVENT <<<<<<<<<<<<"
+          print *, "gen", gen, "splitting into", num_tribes, &
+                   "demes, each w/ pop size:", current_pop_size
+          print *
+       end if
        do k = 1, current_pop_size
-          other = 0
-          call migrate_individual(other, i, j, dmutn, fmutn, nmutn,  &
-                lb_mutn_count, linkage_block_fitness, myid < other)
-       enddo
+          if (myid == 0) then ! sender
+             do other = 1, num_tribes-1 ! send to every other tribe
+                i = current_pop_size*other + k
+                call migrate_individual(other, i, k, dmutn, fmutn, nmutn,  &
+                     lb_mutn_count, linkage_block_fitness, .true.)
+             end do
+          else ! receive from tribe 0
+             i = current_pop_size*myid + k
+             call migrate_individual(0, i, k, dmutn, fmutn, nmutn,  &
+                  lb_mutn_count, linkage_block_fitness, .false.)
+          endif
+       end do
        pop_size = current_pop_size
    endif
 
