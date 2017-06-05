@@ -649,180 +649,186 @@
     <!--*************************** SUBSTRUCTURE TAB ****************************-->
     <div role="tabpanel" class="tab-pane fade" id="substructure">
 
-      <div class="form-group">
-        <label for="is_parallel" class="control-label col-xs-10 col-sm-6">
-          <a data-toggle="popover" title="is_parallel" data-content='Perfectly random mating within a population probably never happens, especially in larger dispersed populations. MENDEL allows creation of multiple sub-populations (tribes), to account for this reality.'>Population substructure?</a></label>
-        <div class="col-xs-2 col-sm-3">
-          <input type="checkbox" name="is_parallel" onclick="fxn_is_parallel()"
-                 value="on"
-                 %if is_parallel=='T':
-                    checked
-                 %end
-          >
-        </div>
-      </div>
-
-      <div id="psdiv" style="display:none">
-
         <div class="form-group">
-          <label for="homogenous_tribes" class="control-label col-xs-10 col-sm-6">
-            <a data-toggle="popover" title="homogenous_tribes" data-content='If this option is selected, all Mendel parameters will be applied to each single sub-population equally, so that all sub-populations will start out the same. If this is de-selected, each tribe can have its own parameters defined separately (currently not supported in this version).'>1. Homogeneous subpopulations?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="homogenous_tribes" readonly="true"
-                   onclick="fxn_tribes(16)" value="on"
-                   %if homogenous_tribes=='T':
-                       checked
-                   %end
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="num_procs" class="control-label col-xs-12 col-sm-6">
-            <a data-toggle="popover" title="num_procs" data-content='The number of sub-populations (a.k.a. tribes or demes) can be specified here.  Each population is assigned to a separate process/thread on the CPU.'>2. Number of subpopulations:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" id="num_procs" name="num_procs" class="form-control"
-                   min="2" max="100" step="1" onchange="fxn_tribes(16)"
-                   value="{{num_procs}}" title="2 - 100">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="migration_model" class="control-label col-xs-12 col-sm-6">
-            <a data-toggle="popover" title="migration_model" data-content='One of three possible methods of migration can be selected: ring pass, stepping stone, and island models. The ring pass is the simplest mode of communications, and is typically used in testing parallel computing systems. In ring pass, the number of tribes are arranged as a circle, and each tribe sends the user-specified number of individuals to the neighbor to its right. In the stepping-stone model, the tribes are also arranged as a circle each tribe exchanges individuals with its neighber. In the island model, every tribe exchanges individuals with every other tribe.'>3. Migration model:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <select class="form-control" id="migration_model" style="width:auto"
-                    name="migration_model">
-                  %opts = {'1': 'Ring pass', '2': 'Stepping-stone model', '3': 'Island model'}
-                  %for key, value in opts.iteritems():
-                      %if key == migration_model:
-                          <option selected value="{{key}}">{{value}}
-                      %else:
-                          <option value="{{key}}">{{value}}
-                      %end
-                  %end
-              </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-xs-12 col-sm-6">
-            <a data-toggle="popover" title="migration_model" data-content='The rate of migration can be specified. The rate of migration can be less than one (one migration event every X generations), and also can be zero.'>4. Migrate:</a></label>
-
-          <div class="input-group col-xs-12 col-sm-3" style="width:320px; padding-left:15px">
-            <input class="form-control" type="number" name="num_indiv_exchanged"
-                   title="1 to Pop Size" onchange="fxn_migration()";
-                   min="1" size=2 value="{{num_indiv_exchanged}}">
-            <span class="input-group-addon">individual(s) per</span>
-            <input type="number" name="migration_generations" class="form-control"
-                   min="1" size=2 value="{{migration_generations}}">
-            <span class="input-group-addon">gens</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="tribal_competition" class="control-label col-xs-10 col-sm-6">
-            <a data-toggle="popover" title="tribal_competition" data-html="true" data-content='Tribal competition can be specified (differential growth/shrinkage of tribes). Tribal competition works by first computing the global weighted average genetic fitness of all the tribes. Then, the tribal_fitness_factor is computed which is each tribes fitness relative to the global genetic fitness is computed. <a target="_blank" href="/static/apps/mendel/help.html#tc">Read more...</a>'>5. Competition between subpopulations?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="tribal_competition"
-              id="tribal_competition" onchange="fxn_tribes(16)" value="on"
-              %if tribal_competition=='T':
-                 checked
-              %end
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="tc_scaling_factor" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="tc_scaling_factor" data-content='A scaling factor specifies the strength of tribal competition.
-'>a. group selection scaling factor:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" name="tc_scaling_factor" id="tc_scaling_factor"
-                   min="0" max="1" step="0.1" onchange="validate(this)"
-                   class="form-control" value="{{tc_scaling_factor}}"
-                   title="0 - 1." readOnly=true>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="group_heritability" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="group_heritability" data-content='Group heritability species the amount of environmental effect on differential tribal growth/shrinkage.'>b. group heritability:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" name="group_heritability"
-                   title="0-1, 0: max noise 1: no noise"
-                   min="0" max="1" step="0.1" value="{{group_heritability}}"
-                   onchange="validate(this)" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="altruistic" class="control-label col-xs-10 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>d. upload altruistic mutations?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="altruistic" value="on"
-                   onclick="show_hide_mutation_upload_form(2)"></td>
-          </div>
-        </div>
-
-        <div class="form-group" style="display:none">
-          <label for="social_bonus_factor" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            :: social bonus scaling factor:</label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" style="width:7em;" name="social_bonus_factor"
-                   class="form-control" min="0" max="1" step="0.1"
-                   value="1.0" onchange="validate(this)" title="0 - 1"></td>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="fission_tribes" class="control-label col-xs-10 col-sm-6">
-            <a data-toggle="popover" title="fission_tribes" data-html="true" data-content='This option may be used for dynamically splitting a single tribe into one or more subtribes.'>6. Tribal Fissioning?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="fission_tribes" onclick="fxn_fission()"
-              id="fission_tribes" value="on"
-              %if fission_tribes=='T':
-                 checked
-              %end
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
-            <label for="fission_type" class="control-label col-xs-12 col-sm-6">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a data-toggle="popover" title="fission_type" data-content='(1) Competition - this is only valid in the context of group selection.  When one tribe dies, the winning tribe sends half of its individuals to the losing tribe. (2) Doubling - in the case of growing populations, when the tribe reaches a critical population size defined by the fission_threshold, it splits into two tribes. (3) Radial divergence - fission the tribe into N tribes (where N is the number of subpopulations) at a generation specified by the parameter fission_threshold.'>a. type of fission:</a>
-            </label>
-            <div class="col-xs-12 col-sm-3">
-                <select id="fission_type" name="fission_type"   class="form-control">
-                %opts = {'1': 'Competition', '2': 'Doubling', '3': 'Radial Divergence'}
-                %for key, value in opts.iteritems():
-                    %if key == fission_type:
-                        <option selected value="{{key}}">{{value}}</option>
-                    %else:
-                        <option value="{{key}}">{{value}}</option>
-                    %end
-                %end
-                </select>
+            <label for="is_parallel" class="control-label col-xs-10 col-sm-6">
+            <a data-toggle="popover" title="is_parallel" data-content='Perfectly random mating within a population probably never happens, especially in larger dispersed populations. MENDEL allows creation of multiple sub-populations     (tribes), to account for this reality.'>Population substructure?</a></label>
+            <div class="col-xs-2 col-sm-3">
+                <input type="checkbox" name="is_parallel" onclick="fxn_is_parallel()"
+                    value="on"
+                    %if is_parallel=='T':
+                        checked
+                        %end
+                        >
             </div>
         </div>
 
-        <div class="form-group">
-          <label for="fission_threshold" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="fission_threshold" data-content='For the case of "doubling" this is the population size threshold.  For the case of "radial divergence", this is the generation number.  This value is not used for "competition" fissioning'>b. fission threshold:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" name="fission_threshold" id="fission_threshold"
-                   min="0" max="1000" step="100" onchange="validate(this)"
-                   class="form-control" value="{{fission_threshold}}"
-                   title="0 - 1000">
-          </div>
+        <div id="psdiv" style="display:none">
+
+            <div class="form-group">
+              <label for="homogenous_tribes" class="control-label col-xs-10 col-sm-6">
+                <a data-toggle="popover" title="homogenous_tribes" data-content='If this option is selected, all Mendel parameters will be applied to each single sub-population equally, so that all sub-populations will start out the same. If this is de-selected, each tribe can have its own parameters defined separately (currently not supported in this version).'>1. Homogeneous subpopulations?</a></label>
+              <div class="col-xs-2 col-sm-3">
+                <input type="checkbox" name="homogenous_tribes" readonly="true"
+                       onclick="fxn_tribes(16)" value="on"
+                       %if homogenous_tribes=='T':
+                           checked
+                       %end
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="num_procs" class="control-label col-xs-12 col-sm-6">
+                <a data-toggle="popover" title="num_procs" data-content='The number of sub-populations (a.k.a. tribes or demes) can be specified here.  Each population is assigned to a separate process/thread on the CPU.'>2. Number of subpopulations:</a></label>
+              <div class="col-xs-12 col-sm-3">
+                <input type="number" id="num_procs" name="num_procs" class="form-control"
+                       min="2" max="100" step="1" onchange="fxn_tribes(16)"
+                       value="{{num_procs}}" title="2 - 100">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="migration_model" class="control-label col-xs-12 col-sm-6">
+                <a data-toggle="popover" title="migration_model" data-content='One of three possible methods of migration can be selected: ring pass, stepping stone, and island models. The ring pass is the simplest mode of communications, and is typically used in testing parallel computing systems. In ring pass, the number of tribes are arranged as a circle, and each tribe sends the user-specified number of individuals to the neighbor to its right. In the stepping-stone model, the tribes are also arranged as a circle each tribe exchanges individuals with its neighber. In the island model, every tribe exchanges individuals with every other tribe.'>3. Migration model:</a></label>
+                <div class="col-xs-12 col-sm-3">
+                    <select class="form-control" id="migration_model" style="width:auto" name="migration_model">
+                    %opts = {'1': 'Ring pass', '2': 'Stepping-stone model', '3': 'Island model'}
+                    %for key, value in opts.iteritems():
+                        %if key == migration_model:
+                            <option selected value="{{key}}">{{value}}
+                        %else:
+                            <option value="{{key}}">{{value}}
+                        %end
+                    %end
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-xs-12 col-sm-6">
+                <a data-toggle="popover" title="migration_model" data-content='The rate of migration can be specified. The rate of migration can be less than one (one migration event every X generations), and also can be zero.'>4. Migrate:</a></label>
+
+                <div class="input-group col-xs-12 col-sm-3" style="width:320px; padding-left:15px">
+                    <input class="form-control" type="number" name="num_indiv_exchanged"
+                    title="1 to Pop Size" onchange="fxn_migration()";
+                    min="1" size=2 value="{{num_indiv_exchanged}}">
+                    <span class="input-group-addon">individual(s) per</span>
+                    <input type="number" name="migration_generations" class="form-control"
+                    min="1" size=2 value="{{migration_generations}}">
+                    <span class="input-group-addon">gens</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tribal_competition" class="control-label col-xs-10 col-sm-6">
+                    <a data-toggle="popover" title="tribal_competition" data-html="true" data-content='Tribal competition can be specified (differential growth/shrinkage of tribes). Tribal competition works by first computing the global weighted average genetic fitness of all the tribes. Then, the tribal_fitness_factor is computed which is each tribes fitness relative to the global genetic fitness is computed. <a target="_blank" href="/static/apps/mendel/help.html#tc">Read more...</a>'>5. Competition between subpopulations?</a>
+                </label>
+                <div class="col-xs-2 col-sm-3">
+                    <input type="checkbox" name="tribal_competition"
+                    id="tribal_competition" onchange="fxn_tribes(16)" value="on"
+                    %if tribal_competition=='T':
+                    checked
+                    %end
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="tc_scaling_factor" class="control-label col-xs-12 col-sm-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a data-toggle="popover" title="tc_scaling_factor" data-content='A scaling factor specifies the strength of tribal competition.
+                    '>a. group selection scaling factor:</a>
+                </label>
+                <div class="col-xs-12 col-sm-3">
+                    <input type="number" name="tc_scaling_factor" id="tc_scaling_factor"
+                    min="0" max="1" step="0.1" onchange="validate(this)"
+                    class="form-control" value="{{tc_scaling_factor}}"
+                    title="0 - 1." readOnly=true>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="group_heritability" class="control-label col-xs-12 col-sm-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a data-toggle="popover" title="group_heritability" data-content='Group heritability species the amount of environmental effect on differential tribal growth/shrinkage.'>b. group heritability:</a>
+                </label>
+                <div class="col-xs-12 col-sm-3">
+                    <input type="number" name="group_heritability"
+                    title="0-1, 0: max noise 1: no noise"
+                    min="0" max="1" step="0.1" value="{{group_heritability}}"
+                    onchange="validate(this)" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="altruistic" class="control-label col-xs-10 col-sm-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>d. upload altruistic mutations?</a>
+            </label>
+                <div class="col-xs-2 col-sm-3">
+                    <input type="checkbox" name="altruistic" value="on"
+                    onclick="show_hide_mutation_upload_form(2)">
+                </div>
+            </div>
+
+            <div class="form-group" style="display:none">
+              <label for="social_bonus_factor" class="control-label col-xs-12 col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                :: social bonus scaling factor:</label>
+              <div class="col-xs-12 col-sm-3">
+                <input type="number" style="width:7em;" name="social_bonus_factor"
+                       class="form-control" min="0" max="1" step="0.1"
+                       value="1.0" onchange="validate(this)" title="0 - 1">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fission_tribes" class="control-label col-xs-10 col-sm-6">
+                <a data-toggle="popover" title="fission_tribes" data-html="true" data-content='This option may be used for dynamically splitting a single tribe into one or more subtribes.'>6. Tribal Fissioning?</a></label>
+              <div class="col-xs-2 col-sm-3">
+                <input type="checkbox" name="fission_tribes" onclick="fxn_fission()"
+                  id="fission_tribes" value="on"
+                  %if fission_tribes=='T':
+                     checked
+                  %end
+                >
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fission_type" class="control-label col-xs-12 col-sm-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a data-toggle="popover" title="fission_type" data-content='(1) Competition - this is only valid in the context of group selection.  When one tribe dies, the winning tribe sends half of its individuals to the losing tribe. (2) Doubling - in the case of growing populations, when the tribe reaches a critical population size defined by the fission_threshold, it splits into two tribes. (3) Radial divergence - fission the tribe into N tribes (where N is the number of subpopulations) at a generation specified by the parameter fission_threshold.'>a. type of fission:</a>
+                </label>
+                <div class="col-xs-12 col-sm-3">
+                    <select id="fission_type" name="fission_type"   class="form-control">
+                    %opts = {'1': 'Competition', '2': 'Doubling', '3': 'Radial Divergence'}
+                    %for key, value in opts.iteritems():
+                        %if key == fission_type:
+                            <option selected value="{{key}}">{{value}}</option>
+                        %else:
+                            <option value="{{key}}">{{value}}</option>
+                        %end
+                    %end
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fission_threshold" class="control-label col-xs-12 col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a data-toggle="popover" title="fission_threshold" data-content='For the case of "doubling" this is the population size threshold.  For the case of "radial divergence", this is the generation number.  This value is not used for "competition" fissioning'>b. fission threshold:</a></label>
+              <div class="col-xs-12 col-sm-3">
+                <input type="number" name="fission_threshold" id="fission_threshold"
+                       min="0" max="1000" step="100" onchange="validate(this)"
+                       class="form-control" value="{{fission_threshold}}"
+                       title="0 - 1000">
+              </div>
+            </div>
+
         </div>
+    </div>
 
     <!--*************************** COMPUTATION TAB *****************************-->
     <div role="tabpanel" class="tab-pane fade" id="computation">
