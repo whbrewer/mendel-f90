@@ -759,19 +759,6 @@
         </div>
 
         <div class="form-group">
-          <label for="tribal_fission" class="control-label col-xs-10 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="tribal_fission" data-content='For the case of tribal competition, one one tribe dies, split the surviving tribe to form a new tribe.'>c. fission winning tribe?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="tribal_fission" value="on"
-              %if tribal_fission=='T':
-                checked
-              %end
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
           <label for="altruistic" class="control-label col-xs-10 col-sm-6">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>d. upload altruistic mutations?</a></label>
@@ -794,12 +781,12 @@
         </div>
 
         <div class="form-group">
-          <label for="grow_fission" class="control-label col-xs-10 col-sm-6">
-            <a data-toggle="popover" title="grow_fission" data-html="true" data-content=''>6. Fission growing tribes to make new tribes?</a></label>
+          <label for="fission_tribes" class="control-label col-xs-10 col-sm-6">
+            <a data-toggle="popover" title="fission_tribes" data-html="true" data-content='This option may be used for dynamically splitting a single tribe into one or more subtribes.'>6. Tribal Fissioning?</a></label>
           <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="grow_fission" onclick="fxn_grow_fission()"
-              id="grow_fission" value="on"
-              %if grow_fission=='T':
+            <input type="checkbox" name="fission_tribes" onclick="fxn_fission()"
+              id="fission_tribes" value="on"
+              %if fission_tribes=='T':
                  checked
               %end
             >
@@ -807,44 +794,35 @@
         </div>
 
         <div class="form-group">
-          <label for="grow_fission_threshold" class="control-label col-xs-12 col-sm-6">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="grow_fission_threshold" data-content='Split the tribe in two when it reaches this threshold'>a. fission when tribe reaches pop size of:</a></label>
-          <div class="col-xs-12 col-sm-3">
-            <input type="number" name="grow_fission_threshold" id="grow_fission_threshold"
-                   min="0" max="1000" step="100" onchange="validate(this)"
-                   class="form-control" value="{{grow_fission_threshold}}"
-                   title="0 - 1000">
-          </div>
+            <label for="fission_type" class="control-label col-xs-12 col-sm-6">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a data-toggle="popover" title="fission_type" data-content='(1) Competition - this is only valid in the context of group selection.  When one tribe dies, the winning tribe sends half of its individuals to the losing tribe. (2) Doubling - in the case of growing populations, when the tribe reaches a critical population size defined by the fission_threshold, it splits into two tribes. (3) Radial divergence - fission the tribe into N tribes (where N is the number of subpopulations) at a generation specified by the parameter fission_threshold.'>a. type of fission:</a>
+            </label>
+            <div class="col-xs-12 col-sm-3">
+                <select id="fission_type" name="fission_type"   class="form-control">
+                %opts = {'1': 'Competition', '2': 'Doubling', '3': 'Radial Divergence'}
+                %for key, value in opts.iteritems():
+                    %if key == fission_type:
+                        <option selected value="{{key}}">{{value}}</option>
+                    %else:
+                        <option value="{{key}}">{{value}}</option>
+                    %end
+                %end
+                </select>
+            </div>
         </div>
 
         <div class="form-group">
-          <label for="radial_divergence" class="control-label col-xs-10 col-sm-6">
-            <a data-toggle="popover" title="radial_divergence" data-html="true" data-content='fission 1:N tribes in single event'>7. Radial divergence?</a></label>
-          <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="radial_divergence" onclick="fxn_radial_divergence()"
-              id="radial_divergence" value="on"
-              %if radial_divergence=='T':
-                 checked
-              %end
-            >
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="radial_divergence_gen" class="control-label col-xs-12 col-sm-6">
+          <label for="fission_threshold" class="control-label col-xs-12 col-sm-6">
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a data-toggle="popover" title="radial_divergence_gen" data-content='Split the tribe into N tribes when it reaches this generation'>a. fission at generation number:</a></label>
+            <a data-toggle="popover" title="fission_threshold" data-content='For the case of "doubling" this is the population size threshold.  For the case of "radial divergence", this is the generation number.  This value is not used for "competition" fissioning'>b. fission threshold:</a></label>
           <div class="col-xs-12 col-sm-3">
-            <input type="number" name="radial_divergence_gen" id="radial_divergence_gen"
+            <input type="number" name="fission_threshold" id="fission_threshold"
                    min="0" max="1000" step="100" onchange="validate(this)"
-                   class="form-control" value="{{radial_divergence_gen}}"
+                   class="form-control" value="{{fission_threshold}}"
                    title="0 - 1000">
           </div>
         </div>
-
-      </div>
-    </div>
 
     <!--*************************** COMPUTATION TAB *****************************-->
     <div role="tabpanel" class="tab-pane fade" id="computation">

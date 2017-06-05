@@ -23,8 +23,7 @@ function fxn_init() {
   show_hide_mutation_upload_form()
   fxn_auto_malloc()
   fxn_initial_alleles_init()
-  fxn_grow_fission()
-  fxn_radial_divergence()
+  fxn_fission()
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
   compute_u()
@@ -853,19 +852,13 @@ function check_back_mutn() {
    }
 }
 
-function fxn_grow_fission() {
-    if (dmi.grow_fission.checked) {
-        dmi.grow_fission_threshold.readOnly = false
+function fxn_fission() {
+    if (dmi.fission_tribes.checked) {
+        dmi.fission_method.readOnly = false
+        dmi.fission_threshold.readOnly = false
     } else {
-        dmi.grow_fission_threshold.readOnly = true
-    }
-}
-
-function fxn_radial_divergence() {
-    if (dmi.radial_divergence.checked) {
-        dmi.radial_divergence_gen.readOnly = false
-    } else {
-        dmi.radial_divergence_gen.readOnly = true
+        dmi.fission_method.readOnly = true
+        dmi.fission_threshold.readOnly = true
     }
 }
 

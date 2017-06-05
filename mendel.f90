@@ -127,7 +127,7 @@ if(is_parallel) then
 ! remember the original state.
   am_parallel = .true.
   num_tribes_at_start = num_tribes
-  ! for grow_fission
+  ! for fission_tribes
   num_demes = 1
   active_demes = 0 ! iniitialize all values to zero
   active_demes(1) = 1 ! number of currently active demes
@@ -668,7 +668,7 @@ do gen=gen_0+1,gen_0+num_generations
          end if
          msg_num = msg_num + 1
 
-         if(tribal_fission) then
+         if(fission_tribes .and. fission_type==1) then
 
             ! Simple tribal fission - if one tribe goes extinct, split the
             ! surviving tribe into two and send half of its population
@@ -726,7 +726,7 @@ do gen=gen_0+1,gen_0+num_generations
 
             end if
 
-         else ! .not.tribal_fission
+        else ! .not.fission_tribes
 
             ! This is the alternative treatment to fission
             ! turn off parallel and let the one run to completion
@@ -737,7 +737,7 @@ do gen=gen_0+1,gen_0+num_generations
 
             if(run_status < 0) goto 30
 
-         end if ! tribal_fission
+        end if ! fission_tribes
 
       else if (num_tribes > 2) then
 
@@ -939,13 +939,14 @@ do gen=gen_0+1,gen_0+num_generations
             reproductive_rate = reproductive_rate_saved
          end if
          ! START_MPI
-         if (grow_fission) then
+         ! fission doubling
+         if (fission_tribes .and. fission_type == 2) then
              if (myid == 0) &
                 print '(a,i5,x,a,i5,x,a,i5,x,a,i5)', 'gen:', gen, 'pop_size/tribe:', current_pop_size, &
                       '#demes:', num_demes, 'total_pop_size:', current_pop_size*num_demes
 
              if (gen > bottleneck_generation .and. &
-                 pop_size > grow_fission_threshold .and. &
+                 pop_size > fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
                  if (myid == 0) print *, ">>> FISSION EVENT <<<"
@@ -992,7 +993,8 @@ do gen=gen_0+1,gen_0+num_generations
 
    end if
 
-   if (radial_divergence .and. gen == radial_divergence_gen) then
+   ! radial divergence fissioning
+   if (fission_tribes .and. fission_type==3 .and. gen==fission_threshold) then
        current_pop_size = int(pop_size/num_tribes)
        if (myid == 0) then
           print *
