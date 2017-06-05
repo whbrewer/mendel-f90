@@ -854,10 +854,11 @@ function check_back_mutn() {
 
 function fxn_fission() {
     if (dmi.fission_tribes.checked) {
-        dmi.fission_method.readOnly = false
+        // See https://stackoverflow.com/questions/368813
+        dmi.fission_type.style.display = "block"
         dmi.fission_threshold.readOnly = false
     } else {
-        dmi.fission_method.readOnly = true
+        dmi.fission_type.style.display = "none"
         dmi.fission_threshold.readOnly = true
     }
 }
