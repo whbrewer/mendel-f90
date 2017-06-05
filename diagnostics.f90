@@ -161,10 +161,10 @@ if(allow_back_mutn) write(9,"('mean number of back mutations', &
 
 if(is_parallel) then
    !START_MPI
-   call mpi_isum(current_pop_size,current_global_pop_size,1)
-   call mpi_isum(num_back_mutn,global_num_back_mutn,1)
-   call mpi_isum(num_polys_this_gen,global_num_polys_this_gen,1)
-   call mpi_isum(num_polys_cumulative,global_num_polys_cumulative,1)
+   call mpi_isum(live_pop_size, current_global_pop_size, 1)
+   call mpi_isum(num_back_mutn, global_num_back_mutn, 1)
+   call mpi_isum(num_polys_this_gen, global_num_polys_this_gen, 1)
+   call mpi_isum(num_polys_cumulative, global_num_polys_cumulative, 1)
    !END_MPI
 
    if (myid == 0) then

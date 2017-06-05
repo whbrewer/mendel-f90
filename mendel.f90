@@ -133,15 +133,21 @@ if(is_parallel) then
   active_demes(1) = 1 ! number of currently active demes
   active_demes(2) = 0 ! MPI id of first active deme (zero-based)
   fission_count = 0 ! keep track of how many times fission happens
-  if (myid == 0) then
-      tribe_state = LIVE
+  if (fission_tribes .and. fission_type /= 1) then
+      if (myid == 0) then
+          tribe_state = LIVE
+          live_pop_size = pop_size
+      else
+          tribe_state = ZOMBIE
+          live_pop_size = 0
+      endif
   else
-      tribe_state = ZOMBIE
+      live_pop_size = pop_size
   endif
 ! compute global population size
   !START_MPI
-  call mpi_isum(pop_size,global_pop_size,1)
-  call mpi_mybcasti(global_pop_size,1)
+  call mpi_isum(live_pop_size, global_pop_size, 1)
+  call mpi_mybcasti(global_pop_size, 1)
   !END_MPI
   allocate( global_run_status(num_tribes) )
   allocate( pop_size_array(num_tribes) )
@@ -954,26 +960,31 @@ do gen=gen_0+1,gen_0+num_generations
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
                  if (myid < num_demes*2) tribe_state = LIVE
+                 current_pop_size = pop_size/2
 
                  if (tribe_state == LIVE) then
                     other = mod(myid + num_demes, 2*num_demes)
-                    do k = 1, pop_size/2
-                       i = k + pop_size/2
+                    do k = 1, current_pop_size
+                       i = k + current_pop_size
                        j = k
                        ! we define sender if myid < other, and receiver otherwise
                        call migrate_individual(other, i, j, dmutn, fmutn, nmutn,  &
                                 lb_mutn_count, linkage_block_fitness, myid < other)
                     end do
+                    ! live_pop_size is used to tally the population of living tribes
+                    live_pop_size = current_pop_size
+                 else ! zombie tribes
+                    live_pop_size = 0
                  end if
                  fission_count = fission_count + 1
 
-                 pop_size = pop_size/2
+                 pop_size = current_pop_size
+
                  num_demes = num_demes*2
                  active_demes(1) = num_demes
                  do i = 1, num_demes
                     active_demes(i) = i
                  end do
-                 current_pop_size = pop_size
              endif
          endif
          ! END_MPI
@@ -1017,6 +1028,7 @@ do gen=gen_0+1,gen_0+num_generations
           endif
        end do
        pop_size = current_pop_size
+       live_pop_size = pop_size
    endif
 
    call flush(6)
