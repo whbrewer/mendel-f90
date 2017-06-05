@@ -131,7 +131,7 @@ endif
 
 !START_MPI
 if(is_parallel) &
-   call mpi_isum(current_pop_size,current_global_pop_size,1)
+   call mpi_isum(live_pop_size,current_global_pop_size,1)
 
 if(is_parallel .and. myid==0 .and. (mod(gen,hst_gens)==0 .or. gen <=10) ) then
 !  Unit 17 the .000 file which contains the averaged global data

@@ -21,7 +21,7 @@ real*8 :: tracked_fav_mutn, total_del_mutn, tracked_del_mutn
 common /mndl1/ new_mutn_count, uploaded_mutn, dump_number, lb_modulo, &
                current_pop_size, mutn_per_indiv, fav_fixed, fav_lost, &
                global_pop_size, new_pop_size, num_uploaded_mutn,      &
-               num_back_mutn, myid, num_tribes, MYCOMM
+               num_back_mutn, myid, num_tribes, MYCOMM, live_pop_size
 
 common /mndl2/ del_scale, fav_scale, gamma_del, gamma_fav, &
                poisson_mean, ica_mean_effect, fav_mean_freq

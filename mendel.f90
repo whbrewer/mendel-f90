@@ -1027,7 +1027,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    ! live_pop_size is used to tally the global population of living tribes
    if (is_parallel .and. tribe_state == LIVE) then
-       live_pop_size = pop_size
+       live_pop_size = current_pop_size
    else
        live_pop_size = 0
    endif
