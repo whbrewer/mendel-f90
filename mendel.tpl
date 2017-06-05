@@ -1298,7 +1298,7 @@
 <script>
   $(document).ready(function() {
     fxn_init();
-    $('#desc').tagsinput('add', 'v2.6.3');
+    $('#desc').tagsinput('add', 'v2.7.1');
     %if defined('tags'):
       $('#desc').tagsinput('add', '{{tags}}');
     %end
