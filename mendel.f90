@@ -128,12 +128,12 @@ if(is_parallel) then
   am_parallel = .true.
   num_tribes_at_start = num_tribes
   ! for grow_fission
-  num_demes = 1 
+  num_demes = 1
   active_demes = 0 ! iniitialize all values to zero
   active_demes(1) = 1 ! number of currently active demes
   active_demes(2) = 0 ! MPI id of first active deme (zero-based)
   fission_count = 0 ! keep track of how many times fission happens
-  if (myid == 0) then 
+  if (myid == 0) then
       tribe_state = LIVE
   else
       tribe_state = ZOMBIE
@@ -341,8 +341,8 @@ do gen=gen_0+1,gen_0+num_generations
 
    call second(tin_gen)
 
-!  If the generation number lies within the bottleneck interval,
-!  set the current population size to bottleneck_pop_size.
+   ! If the generation number lies within the bottleneck interval,
+   ! set the current population size to bottleneck_pop_size.
 
    if(cyclic_bottlenecking.and.                                   &
       (mod(gen,bottleneck_modulo)==0                              &
@@ -363,7 +363,7 @@ do gen=gen_0+1,gen_0+num_generations
 
    fertility_factor = 1. - fraction_random_death
 
-!  For competing tribes compute tribal fertility factor.
+   ! For competing tribes compute tribal fertility factor.
 
    if(is_parallel .and. tribal_competition .and.                  &
       gen > gen_0+1) then
@@ -418,11 +418,11 @@ do gen=gen_0+1,gen_0+num_generations
       new_mutn_count       = 0
    end if
 
-!  Re-initialize random number generator using PID xor Time.
+   ! Re-initialize random number generator using PID xor Time.
    if(reseed_rng) call init_random_seed()
 
-!  Randomly mate one half of the population with members
-!  from the other half.
+   ! Randomly mate one half of the population with members
+   ! from the other half.
 
    time_offspring = 0
 
@@ -471,10 +471,10 @@ do gen=gen_0+1,gen_0+num_generations
 
    time_offspring = time_offspring + tsub
 
-!  Because the Poisson random number generator does not yield
-!  the specified mean number of new mutations to sufficient
-!  accuracy, to improve accuracy make an adjustment to the value
-!  fed to the generator.
+   ! Because the Poisson random number generator does not yield
+   ! the specified mean number of new mutations to sufficient
+   ! accuracy, to improve accuracy make an adjustment to the value
+   ! fed to the generator.
 
    cumulative_offspring = cumulative_offspring + offspring_count
 
@@ -486,8 +486,8 @@ do gen=gen_0+1,gen_0+num_generations
 
    if(is_parallel .and. tribal_competition) then
 
-!     Modify the tribal population size such that selection
-!     intensity depends only on the default fertility.
+      ! Modify the tribal population size such that selection
+      ! intensity depends only on the default fertility.
 
       real_pop_size = offspring_count/(reproductive_rate &
                       *(1. - fraction_random_death))
@@ -497,18 +497,18 @@ do gen=gen_0+1,gen_0+num_generations
       if(real_pop_size - current_pop_size > randomnum(1)) &
          current_pop_size = current_pop_size + 1
       migration_rate = num_indiv_exchanged/real(current_pop_size)
-!     Following is the k value, what Aoki calls "group selection intensity"
-!     ref: Aoki, Kenichi, "A condition for group selection to prevail over
-!     counteracting selection" by Kenichi Aoki, Evolution 36(4), 1982,
-!     pp. 832-842.
+      ! Following is the k value, what Aoki calls "group selection intensity"
+      ! ref: Aoki, Kenichi, "A condition for group selection to prevail over
+      ! counteracting selection" by Kenichi Aoki, Evolution 36(4), 1982,
+      ! pp. 832-842.
       aoki = 2*selection_coefficient*current_pop_size*migration_rate
       if(myid.eq.0) write(*,'(a,i5,x,a,f7.4,x,a,f7.4,x,a,i7)') &
          'gen:', gen, 'group_selection_intensity: ', aoki,     &
          'migration_rate:', migration_rate,  &
          'deme_size:', current_pop_size
 
-!     Modify the tribal population size to keep the global
-!     population size nearly constant.
+      ! Modify the tribal population size to keep the global
+      ! population size nearly constant.
 
       !START_MPI
       call mpi_mybarrier()
@@ -550,8 +550,8 @@ do gen=gen_0+1,gen_0+num_generations
    call second(tout_offspring)
    sec(5) = sec(5) + tout_offspring - tin_offspring
 
-!  Impose selection based on fitness to reduce the population
-!  size to a value not to exceed the parameter pop_size.
+   ! Impose selection based on fitness to reduce the population
+   ! size to a value not to exceed the parameter pop_size.
 
    call second(tin_selection)
    call selection(dmutn, nmutn, fmutn, lb_mutn_count,  &
@@ -902,7 +902,7 @@ do gen=gen_0+1,gen_0+num_generations
    ! end do
    ! write(15,*)
 
-!  For dynamic population sizes compute new pop_size
+   ! For dynamic population sizes compute new pop_size
 
    if(pop_growth_model > 0) then
       if(pop_growth_model == 1) then ! exponential growth
@@ -949,7 +949,7 @@ do gen=gen_0+1,gen_0+num_generations
                  num_demes < num_tribes .and. gen < 50) then
 
                  if (myid == 0) print *, ">>> FISSION EVENT <<<"
-                 ! now migrate half the population take individuals between 
+                 ! now migrate half the population take individuals between
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
                  if (myid < num_demes*2) tribe_state = LIVE
