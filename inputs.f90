@@ -56,7 +56,7 @@ integer nf
 namelist /basic/ case_id, mutn_rate, frac_fav_mutn, &
      reproductive_rate, pop_size, num_generations
 
-namelist /mutations/ fitness_distrib_type, fraction_neutral, &
+namelist /mutations/ fitness_distrib_type, &
      genome_size, high_impact_mutn_fraction, &
      high_impact_mutn_threshold, uniform_fitness_effect_del, &
      uniform_fitness_effect_fav, &
@@ -64,22 +64,18 @@ namelist /mutations/ fitness_distrib_type, fraction_neutral, &
      multiplicative_weighting, fraction_recessive, &
      recessive_hetero_expression, dominant_hetero_expression, &
      upload_mutations, allow_back_mutn, se_nonlinked_scaling, &
-     se_linked_scaling, synergistic_epistasis, &
-     polygenic_beneficials, polygenic_effect, polygenic_target, &
-     polygenic_init
+     se_linked_scaling, synergistic_epistasis
 
 namelist /selection/ fraction_random_death, heritability, &
      non_scaling_noise, fitness_dependent_fertility, &
      selection_scheme, partial_truncation_value
 
 namelist /population/ recombination_model, clonal_haploid, &
-     num_contrasting_alleles, max_total_fitness_increase, &
      dynamic_linkage, haploid_chromosome_number, &
      fraction_self_fertilization, num_linkage_subunits, &
      pop_growth_model, pop_growth_rate, bottleneck_yes, &
      bottleneck_generation, bottleneck_pop_size, &
-     num_bottleneck_generations, initial_alleles_mean_effect, &
-     carrying_capacity, initial_alleles_pop_frac, initial_alleles_amp_factor
+     num_bottleneck_generations, carrying_capacity
 
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
@@ -90,9 +86,15 @@ namelist /substructure/ is_parallel, homogenous_tribes, &
 namelist /computation/ tracking_threshold, extinction_threshold, &
      max_del_mutn_per_indiv, max_fav_mutn_per_indiv, &
      max_neu_mutn_per_indiv, random_number_seed, reseed_rng, &
-     track_neutrals, write_dump, write_vcf, restart_case, &
+     write_dump, write_vcf, restart_case, &
      restart_dump_number, data_file_path, plot_allele_gens, &
      verbosity, poisson_method
+
+namelist /special_apps/ num_contrasting_alleles, &
+     max_total_fitness_increase, initial_alleles_pop_frac, &
+     initial_alleles_amp_factor, track_neutrals, fraction_neutral, &
+     polygenic_effect, polygenic_beneficials, polygenic_target, &
+     polygenic_init
 
 read (unit=nf, nml=basic)
 read (unit=nf, nml=mutations)
@@ -100,6 +102,7 @@ read (unit=nf, nml=selection)
 read (unit=nf, nml=population)
 read (unit=nf, nml=substructure)
 read (unit=nf, nml=computation)
+read (unit=nf, nml=special_apps)
 
 end subroutine read_parameters
 
@@ -222,6 +225,10 @@ write(nf,'(a32,i12)')   ' verbosity = '             , verbosity
 write(nf,'(a20,a,a)')   "  data_file_path = '", trim(data_file_path),"'"
 write(nf,'("/")')
 
+write(nf,'(/"&special_apps")')
+
+write(nf,'("/")')
+
 end subroutine write_parameters
 
 subroutine set_default_parameters()
@@ -236,7 +243,6 @@ num_generations = 500
 
 ! mutations
 fitness_distrib_type = 1 ! exponential_mutation_effect
-fraction_neutral = 0.0
 genome_size = 3.e+8
 high_impact_mutn_fraction = 0.001
 high_impact_mutn_threshold = 0.001
@@ -253,9 +259,6 @@ synergistic_epistasis = .false.
    se_linked_scaling = 0
 upload_mutations = .false.
 allow_back_mutn = .false.
-polygenic_target = 'GATACAT'
-polygenic_beneficials = .false.
-polygenic_effect = 0.001
 
 ! selection
 fraction_random_death = 0.0
@@ -269,9 +272,6 @@ selection_scheme = 2
 recombination_model = full_sexual
 clonal_haploid = .false.
 fraction_self_fertilization = 0.0
-num_contrasting_alleles = 0
-initial_alleles_mean_effect = 0.0
-initial_alleles_amp_factor = 1
 dynamic_linkage = .true.
 haploid_chromosome_number = 23
 num_linkage_subunits = 989
@@ -303,7 +303,6 @@ max_fav_mutn_per_indiv = 10000
 random_number_seed = 42
 reseed_rng = .false.
 poisson_method = 0 ! Numerical Recipes
-track_neutrals = .false.
 write_dump = .false.
 write_vcf = .false.
 restart_case = .false.
@@ -311,6 +310,17 @@ restart_dump_number = 0
 plot_allele_gens = 100
 verbosity = 1
 data_file_path = './'
+
+! special applications
+num_contrasting_alleles = 0
+initial_alleles_mean_effect = 0.0
+initial_alleles_amp_factor = 1
+track_neutrals = .false.
+fraction_neutral = 0.0
+polygenic_beneficials = .false.
+polygenic_init = 'AAAAAA'
+polygenic_target = 'TCGTCG'
+polygenic_effect = 0.001
 
 end subroutine set_default_parameters
 

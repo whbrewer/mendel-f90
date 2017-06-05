@@ -30,4 +30,4 @@ common /mndl3/ alpha_del, alpha_fav, &
   	            tribal_fitness_factor, tribal_fitness_factor_scaled,     &
 	            tribal_fitness, tribal_noise, social_bonus,              &
 	            global_genetic_fitness, fertility_factor,                &
-               tracked_fav_mutn, total_del_mutn, tracked_del_mutn
+                tracked_fav_mutn, total_del_mutn, tracked_del_mutn

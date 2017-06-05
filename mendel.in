@@ -9,7 +9,6 @@
 
 &mutations
          fitness_distrib_type = 1
-             fraction_neutral = 0.0
                   genome_size = 0.3E+09
     high_impact_mutn_fraction = 0.01
    high_impact_mutn_threshold = 0.01
@@ -26,10 +25,6 @@
             se_linked_scaling = 0.0
              upload_mutations = F
               allow_back_mutn = F
-        polygenic_beneficials = F
-               polygenic_init = 'AAAAAA'
-             polygenic_target = 'TCGTCG'
-             polygenic_effect = 0.001
 /
 
 &selection
@@ -44,10 +39,6 @@
 &population
           recombination_model = 3
   fraction_self_fertilization = 0.0
-      num_contrasting_alleles = 0
-   max_total_fitness_increase = 0
-     initial_alleles_pop_frac = 1.0
-   initial_alleles_amp_factor = 1000
               dynamic_linkage = T
     haploid_chromosome_number = 23
          num_linkage_subunits = 989
@@ -83,7 +74,6 @@
        max_fav_mutn_per_indiv = 100
            random_number_seed = 42
                    reseed_rng = F
-               track_neutrals = F
                    write_dump = F
                     write_vcf = F
                  restart_case = F
@@ -91,6 +81,19 @@
              plot_allele_gens = 100
                     verbosity = 1
   data_file_path = './'
+/
+
+&special_apps
+      num_contrasting_alleles = 0
+   max_total_fitness_increase = 0
+     initial_alleles_pop_frac = 1.0
+   initial_alleles_amp_factor = 1000
+               track_neutrals = F
+             fraction_neutral = 0.0
+        polygenic_beneficials = F
+               polygenic_init = 'AAAAAA'
+             polygenic_target = 'TCGTCG'
+             polygenic_effect = 0.001
 /
 
 &interface

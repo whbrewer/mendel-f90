@@ -797,7 +797,7 @@
           <label for="grow_fission" class="control-label col-xs-10 col-sm-6">
             <a data-toggle="popover" title="grow_fission" data-html="true" data-content=''>6. Fission growing tribes to make new tribes?</a></label>
           <div class="col-xs-2 col-sm-3">
-            <input type="checkbox" name="grow_fission"
+            <input type="checkbox" name="grow_fission" onclick="fxn_grow_fission()"
               id="grow_fission" value="on"
               %if grow_fission=='T':
                  checked
@@ -1168,7 +1168,7 @@
 
       <div class="form-group">
         <label for="polygenic_target" class="control-label col-xs-6 col-sm-6">
-          &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="polygenic_init" data-html='true' data-content='This is the target sequence.  For each instance that this target is reached by random mutation, a beneficial fitness effect specified in the next entry is added to the individual&rsquo;s total fitness <a target="_blank" href="/static/apps/mendel/help.html#adv_wait">Read more...</a>'>b. target sequence:</a></label>
+          &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="polygenic_target" data-html='true' data-content='This is the target sequence.  For each instance that this target is reached by random mutation, a beneficial fitness effect specified in the next entry is added to the individual&rsquo;s total fitness <a target="_blank" href="/static/apps/mendel/help.html#adv_wait">Read more...</a>'>b. target sequence:</a></label>
         <div class="col-xs-6 col-sm-3">
           <input type="text" name="polygenic_target" id="pbnr"
                  value="{{polygenic_target}}" class="form-control"

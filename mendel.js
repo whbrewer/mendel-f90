@@ -23,6 +23,7 @@ function fxn_init() {
   show_hide_mutation_upload_form()
   fxn_auto_malloc()
   fxn_initial_alleles_init()
+  fxn_grow_fission()
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
   compute_u()
@@ -849,6 +850,14 @@ function check_back_mutn() {
       status("Changed tracking threshold back to " + tt )
       $('#desc').tagsinput('remove', tag);
    }
+}
+
+function fxn_grow_fission() {
+    if (dmi.grow_fission.checked) {
+        dmi.grow_fission_threshold.readOnly = false
+    } else {
+        dmi.grow_fission_threshold.readOnly = true
+    }
 }
 
 function fxn_pop_growth_model(i) {
