@@ -751,7 +751,6 @@ function generate_mutations() {
                             zfitness = negate(fitness, o234%2==0)
                         }
                     }
-                    // if (contrasting && allele_id%2 == 0) { fitness = -fitness }
                     $("#payload").append(String(i) + ' ' + String(lb) + ' ' + String(haplotype) + ' ' + String(zfitness.toExponential(8)) + ' ' + String(dominance)  + '&#xA;');
                 }
             }

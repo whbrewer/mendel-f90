@@ -1263,7 +1263,7 @@
                         <input id="chromosome_range" class="form-control input-lg col-xs-3" />
                         <label>contrasting:</label> <input type="checkbox" id="contrasting" />
                         <select id="contrast_degree">
-                            <option>1:2</option>
+                            <option>1:1</option>
                             <option>1:3</option>
                         </select>
                     </div>
