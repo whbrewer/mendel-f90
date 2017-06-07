@@ -171,7 +171,11 @@ elseif (pop_growth_model == 4) then
    gr2 = (pop_growth_rate - gr1)*10.
    reproductive_rate_saved = reproductive_rate
    reproductive_rate = gr1
-   pop_size_allocation = 1.2*carrying_capacity*reproductive_rate*num_tribes
+   if (is_parallel .and. fission_tribes) then
+       pop_size_allocation = 1.2*carrying_capacity*reproductive_rate*num_tribes
+   else
+       pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
+   endif
 else
    pop_size_allocation = pop_size
 endif
@@ -935,7 +939,7 @@ do gen=gen_0+1,gen_0+num_generations
          if (fission_tribes .and. gen < fission_threshold) then
             pop_ceiling = carrying_capacity*num_tribes
          else
-            pop_ceiling = carrying_capacity 
+            pop_ceiling = carrying_capacity
          endif
          if (gen < bottleneck_generation .and. pop_size < pop_ceiling) then
             pop_size = min(ceiling(gr1*pop_size), pop_ceiling)
