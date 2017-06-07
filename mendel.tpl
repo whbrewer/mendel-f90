@@ -1261,6 +1261,11 @@
                     <label for="chromosome_range" class="control-label col-xs-12 col-sm-3"><a data-toggle="popover" title="chromosome_range" data-content="List of chromosomes with min of 1 and max of 23. Can be comma-separated list such as: 1, 3, 5.  Or a range, such as: 1-23.  Or can be combination of both, e.g. 1, 3, 5, 7-10">List of Chromosomes</a></label>
                     <div class="col-xs-12 col-sm-6">
                         <input id="chromosome_range" class="form-control input-lg col-xs-3" />
+                        <label>contrasting:</label> <input type="checkbox" id="contrasting" />
+                        <select id="contrast_degree">
+                            <option>1:2</option>
+                            <option>1:3</option>
+                        </select>
                     </div>
                     <div class="col-xs-12 col-sm-3">
                         <a class="btn btn-primary" href="javascript:generate_mutations()">Generate</a>

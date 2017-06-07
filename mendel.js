@@ -640,6 +640,10 @@ function range(start, stop, step) {
   return a;
 }
 
+function negate(f, c) {
+    return c ? -f : f
+}
+
 function generate_mutations() {
     var pop_size = dmi.pop_size.value
     var num_linkage_subunits = dmi.num_linkage_subunits.value
@@ -699,37 +703,61 @@ function generate_mutations() {
             new_chromo_array.push(start)
         }
     }
-    console.log(new_chromo_array)
+    // console.log(new_chromo_array)
+
+    if (document.getElementById("contrasting").checked) {
+        contrasting = true
+    } else {
+        contrasting = false
+    }
+
+    contrast_degree = document.getElementById("contrast_degree").value
+    console.log(contrast_degree)
 
     var allele_id = 0
-    for (i = 1; i <= pop_size; i++) {
-        for (c in new_chromo_array) {
-            chromosome = new_chromo_array[c]
-            lb1 = (chromosome-1)*linkage_subunits_per_chromosome + 1
-            lb2 = chromosome*linkage_subunits_per_chromosome
-            for (lb = lb1; lb <= lb2; lb++) {
-                x = Math.random()
-                y = Math.random()
-                if (y > frac_fav_mutn) {
-                    if (fitness_distrib_type == 0) {
-                        fitness = -dmi.uniform_fitness_effect_del.value*1.0
-                    } else {
-                        fitness = -Math.exp(-alpha_del*Math.pow(x, gamma_del))
-                    }
+
+    for (c in new_chromo_array) {
+        chromosome = new_chromo_array[c]
+        lb1 = (chromosome-1)*linkage_subunits_per_chromosome + 1
+        lb2 = chromosome*linkage_subunits_per_chromosome
+        for (lb = lb1; lb <= lb2; lb++) {
+            x = Math.random()
+            y = Math.random()
+            if (y > frac_fav_mutn) {
+                if (fitness_distrib_type == 0) {
+                    fitness = -dmi.uniform_fitness_effect_del.value*1.0
                 } else {
-                    if (fitness_distrib_type == 0) {
-                        fitness = dmi.uniform_fitness_effect_fav.value*1.0
-                    } else {
-                        fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*Math.pow(x, gamma_fav))
-                    }
+                    fitness = -Math.exp(-alpha_del*Math.pow(x, gamma_del))
                 }
+            } else {
+                if (fitness_distrib_type == 0) {
+                    fitness = dmi.uniform_fitness_effect_fav.value*1.0
+                } else {
+                    fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*Math.pow(x, gamma_fav))
+                }
+            }
+            if (contrasting && contrast_degree === "1:3") {
+                z = parseInt(Math.random()*4) + 1
+                console.log(z)
+            }
+            for (i = 1; i <= pop_size; i++) {
                 for (haplotype = 1; haplotype <= 2; haplotype++) {
                     allele_id += 1
-                    $("#payload").append(String(i) + ' ' + String(lb) + ' ' + String(haplotype) + ' ' + String(fitness.toExponential(8)) + ' ' + String(dominance)  + '&#xA;');
+                    if (contrasting) {
+                        o234 = (i-1)*pop_size + haplotype
+                        if (contrast_degree === "1:3"){
+                            zfitness = negate(fitness, o234==z)
+                        } else {
+                            zfitness = negate(fitness, o234%2==0)
+                        }
+                    }
+                    // if (contrasting && allele_id%2 == 0) { fitness = -fitness }
+                    $("#payload").append(String(i) + ' ' + String(lb) + ' ' + String(haplotype) + ' ' + String(zfitness.toExponential(8)) + ' ' + String(dominance)  + '&#xA;');
                 }
             }
         }
     }
+
 
     if (allele_id > 3772) {
         $("#payload").text("ERROR: The number of alleles is too large to POST through the website.  Try reducing some combination of pop_size and num_linkage_subunits.  The current limit is set to 3772 alleles.");
