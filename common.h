@@ -1,7 +1,7 @@
 implicit none
 
 integer :: lb_modulo
-integer :: new_mutn_count, uploaded_mutn(1000)
+integer :: new_mutn_count, uploaded_mutn(3774)
 integer :: dump_number, current_pop_size, live_pop_size
 integer :: mutn_per_indiv, fav_fixed, fav_lost
 integer :: global_pop_size, new_pop_size

@@ -91,7 +91,7 @@ subroutine read_mutn_file(dmutn,nmutn,fmutn,lb_mutn_count, &
 ! flag is set to 1.
 use inputs
 include 'common.h'
-integer id, lb, hap_id, mutn, dominance
+integer id, lb, hap_id, mutn, dominance, count_lines
 real    fitness, w
 integer i, npath, max_size, io
 integer nimpi(pop_size), encode_mutn
@@ -594,3 +594,21 @@ write(unit,'(/"generation =",i10,"  population size =", i6, &
       endif
 
 end subroutine write_status
+
+function count_lines(filename) result(nlines)
+  implicit none
+  character(len=*)    :: filename
+  integer             :: nlines
+  integer             :: io
+
+  open(10,file=filename, iostat=io, status='old')
+  if (io/=0) stop 'Cannot open file! '
+
+  nlines = 0
+  do
+    read(10,*,iostat=io)
+    if (io/=0) exit
+    nlines = nlines + 1
+  end do
+  close(10)
+end function count_lines

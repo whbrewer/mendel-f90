@@ -207,6 +207,7 @@ allocate(         dmutn(max_del_mutn_per_indiv/2,2,max_size),     &
          pheno_fitness(max_size),      fitness(max_size),         &
           work_fitness(max_size), sorted_score(max_size),         &
                         available(pop_size_allocation) )
+
 allocate( gp(max_size) )
 if(polygenic_beneficials) then
    allocate( pmutn(max_polys) )
