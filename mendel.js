@@ -682,8 +682,6 @@ function generate_mutations() {
                     Math.log(high_impact_mutn_fraction)
     var gamma_fav = Math.log(-Math.log(high_impact_mutn_threshold)/alpha_fav) /
                     Math.log(high_impact_mutn_fraction)
-    // console.log(alpha_del)
-
 
     var fitness_distrib_type = dmi.fitness_distrib_type.value
     var chromo_array = chromosomes.split(',')
@@ -697,13 +695,11 @@ function generate_mutations() {
         start = parseInt(x[0])
         end = parseInt(x[1])
         if (end) {
-            // new_chromo_array = range(start, end, 1)
             new_chromo_array.push.apply(new_chromo_array, range(start, end, 1))
         } else {
             new_chromo_array.push(start)
         }
     }
-    // console.log(new_chromo_array)
 
     if (document.getElementById("contrasting").checked) {
         contrasting = true
@@ -712,7 +708,6 @@ function generate_mutations() {
     }
 
     contrast_degree = document.getElementById("contrast_degree").value
-    console.log(contrast_degree)
 
     var allele_id = 0
 
@@ -736,9 +731,11 @@ function generate_mutations() {
                     fitness = max_fav_fitness_gain*Math.exp(-alpha_fav*Math.pow(x, gamma_fav))
                 }
             }
-            if (contrasting && contrast_degree === "1:3") {
-                z = parseInt(Math.random()*4) + 1
-                console.log(z)
+            if (contrasting) {
+                // choose one allele to negate out of four possible alleles
+                if (contrast_degree === "1:3") { z = parseInt(Math.random()*4) + 1 }
+            } else {
+                zfitness = fitness
             }
             for (i = 1; i <= pop_size; i++) {
                 for (haplotype = 1; haplotype <= 2; haplotype++) {
@@ -747,7 +744,7 @@ function generate_mutations() {
                         o234 = (i-1)*pop_size + haplotype
                         if (contrast_degree === "1:3"){
                             zfitness = negate(fitness, o234==z)
-                        } else {
+                        } else { // 1:1 case
                             zfitness = negate(fitness, o234%2==0)
                         }
                     }
