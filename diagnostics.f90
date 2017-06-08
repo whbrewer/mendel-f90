@@ -1672,7 +1672,8 @@ if(is_parallel) then
       write(21,'("# Number of tribes = ",i4)') num_tribes
       write(21,'("# generation = ",i8)') gen
       write(21,'("# frequency del_normalized fav_normalized", &
-           "  neu_normalized, del_count fav_count neu_count")')
+           "  neu_normalized, del_count fav_count neu_count", &
+           " initial_del initial_fav upload_del upload_fav")')
       write(21,'(i11,3f15.11,7f11.0)')  (k, par_dpbin(k),  &
             par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
             par_npbin_count(k), par_idpbin_count(k)*initial_alleles_amp_factor, &
