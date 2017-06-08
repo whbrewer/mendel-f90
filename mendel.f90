@@ -965,7 +965,7 @@ do gen=gen_0+1,gen_0+num_generations
                  pop_size > fission_threshold .and. &
                  num_demes < num_tribes .and. gen < 50) then
 
-                 if (myid == 0) print *, ">>> FISSION EVENT <<<"
+                 if (myid == 0) print *, ">>> FISSION DOUBLING EVENT <<<"
                  ! now migrate half the population take individuals between
                  ! current_pop_size/2 and current_pop_size and use them to create
                  ! a new population
@@ -1031,7 +1031,7 @@ do gen=gen_0+1,gen_0+num_generations
                   lb_mutn_count, linkage_block_fitness, .false.)
           endif
        end do
-       pop_size = current_pop_size
+       pop_size = current_pop_size*gr2
        tribe_state = LIVE
    endif
 
