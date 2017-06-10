@@ -1342,11 +1342,11 @@ fe_bin_width = -log(tracking_threshold)/10.
 
 if (myid == 0) then
     if(int(pbin_width) == 0) then
-       print *, 'Polymorphism analysis skipped because population', &
-                ' size is too small.'
+       print '(/a)', 'Polymorphism analysis skipped because population', &
+                     ' size is too small.'
        return
     else
-       print *, 'Doing polymorphism analysis... please wait...'
+       print '(/a)', 'Doing polymorphism analysis... please wait...'
     end if
 endif
 
@@ -1679,7 +1679,7 @@ if(is_parallel) then
 
    end if
 
-   if(myid.eq.0 .and. mod(gen,diagnostic_gens)==0 ) then
+   if(myid.eq.0 .and. mod(gen, plot_allele_gens)==0 ) then
       rewind(21)
       write(21,'("# Number of tribes = ",i4)') num_tribes
       write(21,'("# generation = ",i8)') gen
