@@ -1051,7 +1051,7 @@
           </label>
           <div class="col-xs-2 col-sm-3">
               <input type="checkbox" name="global_allele_analysis" accesskey="4" value="on"
-              %if write_vcf=='T':
+              %if global_allele_analysis=='T':
               checked
               %end
               >
