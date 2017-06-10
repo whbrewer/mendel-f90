@@ -1341,9 +1341,11 @@ if(recombination_model == clonal) pbin_width = pbin_width/2.
 fe_bin_width = -log(tracking_threshold)/10.
 
 if(int(pbin_width) == 0) then
-   write(*,*) 'Polymorphism analysis skipped because population', &
-              ' size is too small.'
+   print *, 'Polymorphism analysis skipped because population', &
+            ' size is too small.'
    return
+else
+   print *, 'Doing polymorphism analysis... please wait...'
 end if
 
 ! Compute statistics on deleterious polymorphisms.
@@ -2003,7 +2005,6 @@ do i=1,current_pop_size
 end do
 
 if (global_allele_analysis) then
-    print *, "Counting global alleles... please wait..."
 
     ! START_MPI
     if(is_parallel) then
