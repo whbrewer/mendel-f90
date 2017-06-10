@@ -1649,40 +1649,54 @@ endif
 ! Output global statistics to file caseid.000.plm
 if(is_parallel) then
 
-   call mpi_davg(dpbin, par_dpbin, NB)
-   call mpi_davg(fpbin, par_fpbin, NB)
-   call mpi_davg(npbin, par_npbin, NB)
+   if (.not.global_allele_analysis) then
 
-   call mpi_davg(dpbin_count, par_dpbin_count, NB)
-   call mpi_davg(fpbin_count, par_fpbin_count, NB)
-   call mpi_davg(npbin_count, par_npbin_count, NB)
+       call mpi_davg(dpbin, par_dpbin, NB)
+       call mpi_davg(fpbin, par_fpbin, NB)
+       call mpi_davg(npbin, par_npbin, NB)
 
-   call mpi_davg(idpbin_count, par_idpbin_count, NB)
-   call mpi_davg(ifpbin_count, par_ifpbin_count, NB)
+       call mpi_davg(dpbin_count, par_dpbin_count, NB)
+       call mpi_davg(fpbin_count, par_fpbin_count, NB)
+       call mpi_davg(npbin_count, par_npbin_count, NB)
 
-   call mpi_davg(udpbin_count, par_udpbin_count, NB)
-   call mpi_davg(ufpbin_count, par_ufpbin_count, NB)
+       call mpi_davg(idpbin_count, par_idpbin_count, NB)
+       call mpi_davg(ifpbin_count, par_ifpbin_count, NB)
 
-   call mpi_davg(num_dalleles, par_num_dalleles, 3)
-   call mpi_davg(num_falleles, par_num_falleles, 3)
-   call mpi_davg(num_nalleles, par_num_nalleles, 3)
+       call mpi_davg(udpbin_count, par_udpbin_count, NB)
+       call mpi_davg(ufpbin_count, par_ufpbin_count, NB)
 
-   dcount = par_num_dalleles(1) + par_num_dalleles(2) + par_dpbin(NB)
-   ncount = par_num_nalleles(1) + par_num_nalleles(2) + par_npbin(NB)
-   fcount = par_num_falleles(1) + par_num_falleles(2) + par_fpbin(NB)
+       call mpi_davg(num_dalleles, par_num_dalleles, 3)
+       call mpi_davg(num_falleles, par_num_falleles, 3)
+       call mpi_davg(num_nalleles, par_num_nalleles, 3)
+
+       dcount = par_num_dalleles(1) + par_num_dalleles(2) + par_dpbin(NB)
+       ncount = par_num_nalleles(1) + par_num_nalleles(2) + par_npbin(NB)
+       fcount = par_num_falleles(1) + par_num_falleles(2) + par_fpbin(NB)
+
+   end if
 
    if(myid.eq.0 .and. mod(gen,diagnostic_gens)==0 ) then
       rewind(21)
       write(21,'("# Number of tribes = ",i4)') num_tribes
       write(21,'("# generation = ",i8)') gen
-      write(21,'("# frequency del_normalized fav_normalized", &
-           "  neu_normalized, del_count fav_count neu_count", &
-           " initial_del initial_fav upload_del upload_fav")')
-      write(21,'(i11,3f15.11,7f11.0)')  (k, par_dpbin(k),  &
-            par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
-            par_npbin_count(k), par_idpbin_count(k)*initial_alleles_amp_factor, &
-            par_ifpbin_count(k)*initial_alleles_amp_factor, par_udpbin_count(k), &
-            par_ufpbin_count(k), k=1,NB)
+
+      if (global_allele_analysis) then
+          write(21,'("# frequency del_normalized fav_normalized", &
+               "  del_count fav_count neu_normalized  neu_count")')
+          write(21,'(i11,2f15.11,2f11.0,f15.11,f11.0)') (k, dpbin(k), &
+              fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
+              npbin_count(k), k=1,NB)
+      else
+          write(21,'("# frequency del_normalized fav_normalized", &
+               "  neu_normalized, del_count fav_count neu_count", &
+               " initial_del initial_fav upload_del upload_fav")')
+          write(21,'(i11,3f15.11,7f11.0)')  (k, par_dpbin(k),  &
+                par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
+                par_npbin_count(k), par_idpbin_count(k)*initial_alleles_amp_factor, &
+                par_ifpbin_count(k)*initial_alleles_amp_factor, par_udpbin_count(k), &
+                par_ufpbin_count(k), k=1,NB)
+      endif
+
       write(21,'("# Allele summary statistics:")')
       write(21,'("#  Very rare",6x,"Polymorphic",9x,"Fixed", &
                  11x,"Total")')
@@ -1989,6 +2003,7 @@ do i=1,current_pop_size
 end do
 
 if (global_allele_analysis) then
+    print *, "Counting global alleles... please wait..."
 
     ! START_MPI
     if(is_parallel) then
