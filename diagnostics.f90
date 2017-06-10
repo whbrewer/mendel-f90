@@ -1330,7 +1330,11 @@ real   bin_fitness(11), bin_center(10)
 ! mutation is the population size.  The polymorphism bin width
 ! pbin_width value reflects this difference.
 
-pbin_width = 2.*current_pop_size/NB
+if (global_allele_analysis .and. is_parallel) then
+   pbin_width = 2.*current_pop_size/NB*num_tribes
+else
+   pbin_width = 2.*current_pop_size/NB
+end if
 
 if(recombination_model == clonal) pbin_width = pbin_width/2.
 
@@ -1983,6 +1987,55 @@ do i=1,current_pop_size
         mfirst(j,i) = m
     end do
 end do
+
+if (global_allele_analysis) then
+
+    ! START_MPI
+    if(is_parallel) then
+
+       ! For parallel cases, gather all the data together
+       ! and do a single global analysis on processor 0.
+
+       call mpi_gather(mutn_list,MNP,mpi_integer,  &
+                global_mutn_list,MNP,mpi_integer,0,mycomm,ierr)
+       call mpi_gather(mutn_count,MNP,mpi_integer, &
+                global_mutn_count,MNP,mpi_integer,0,mycomm,ierr)
+       call mpi_gather(list_count,1,mpi_integer,   &
+                global_list_count,1,mpi_integer,0,mycomm,ierr)
+       call mpi_barrier(mycomm,ierr)
+
+       if(myid.eq.0) then
+
+          ! Rebuild mutn_list and mutn_count arrays from data
+          ! aggregated from all the tribes.
+
+          mutn_list  = 0
+          mutn_count = 0
+          list_count = 0
+
+          do m = 1,num_tribes
+             do i = 1, global_list_count(m)
+                new_mutn = .true.
+                do k = 1, list_count
+                   if(global_mutn_list(i,m).eq.mutn_list(k)) then
+                      mutn_count(k) = mutn_count(k) + global_mutn_count(i,m)
+                      new_mutn = .false.
+                   end if
+                end do
+                if(new_mutn) then
+                   list_count = min(MNP, list_count + 1)
+                   mutn_list(list_count)  = global_mutn_list(i,m)
+                   mutn_count(list_count) = global_mutn_count(i,m)
+                end if
+             end do
+          end do
+
+       end if
+
+    end if
+    ! END_MPI
+
+end if
 
 end subroutine count_alleles
 

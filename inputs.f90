@@ -42,7 +42,8 @@ logical :: fitness_dependent_fertility, dynamic_linkage,             &
            clonal_haploid, write_vcf,                                &
            upload_mutations, altruistic, allow_back_mutn,            &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
-           polygenic_beneficials, fission_tribes, reseed_rng
+           polygenic_beneficials, fission_tribes, reseed_rng,        &
+           global_allele_analysis
 
 ! note: if changing the string length of polygenic_target below,
 ! need to make corresponding change in polygenic.f90 function poly_match
@@ -88,7 +89,7 @@ namelist /computation/ tracking_threshold, extinction_threshold, &
      max_neu_mutn_per_indiv, random_number_seed, reseed_rng, &
      write_dump, write_vcf, restart_case, &
      restart_dump_number, data_file_path, plot_allele_gens, &
-     verbosity, poisson_method
+     global_allele_analysis, verbosity, poisson_method
 
 namelist /special_apps/ num_contrasting_alleles, &
      max_total_fitness_increase, initial_alleles_pop_frac, &
