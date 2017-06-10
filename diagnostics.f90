@@ -1340,13 +1340,15 @@ if(recombination_model == clonal) pbin_width = pbin_width/2.
 
 fe_bin_width = -log(tracking_threshold)/10.
 
-if(int(pbin_width) == 0) then
-   print *, 'Polymorphism analysis skipped because population', &
-            ' size is too small.'
-   return
-else
-   print *, 'Doing polymorphism analysis... please wait...'
-end if
+if (myid == 0) then
+    if(int(pbin_width) == 0) then
+       print *, 'Polymorphism analysis skipped because population', &
+                ' size is too small.'
+       return
+    else
+       print *, 'Doing polymorphism analysis... please wait...'
+    end if
+endif
 
 ! Compute statistics on deleterious polymorphisms.
 
