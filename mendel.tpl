@@ -763,7 +763,7 @@
             <div class="form-group">
                 <label for="altruistic" class="control-label col-xs-10 col-sm-6">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>d. upload altruistic mutations?</a>
+                    <a data-toggle="popover" title="altruistic" data-content='A specific set of mutations can be uploaded into the population before a run begins. When this option is selected a template is shown which can be used to identify mutations for uploading, or a set of mutations can be pasted into a template. This is currently not implemented in this version.'>c. upload altruistic mutations?</a>
             </label>
                 <div class="col-xs-2 col-sm-3">
                     <input type="checkbox" name="altruistic" value="on"
