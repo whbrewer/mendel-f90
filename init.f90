@@ -26,7 +26,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.7.2-1-gffc5422-dirty <<< VERSION'
+write(6,*) 'VERSION >>> v2.7.1-25-g39bc6a9-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 
@@ -37,17 +37,17 @@ if(is_parallel) then
    write(myid_str,'(i3.3)') myid+1
 
    ! Open files containing run parameters for heterogeneous tribes
-   if (.not.homogenous_tribes) then
-      inquire(file='./mendel.in.'//myid_str, exist=file_exists)
-      if ( file_exists ) then
-         open (5, file='mendel.in.'//myid_str,status='old')
-         call read_parameters(5)
-         close(5)
-      else
-         print *, 'ERROR: could not find mendel.in.'//myid_str
-         stop
-      end if
-   end if
+   !if (.not.homogenous_tribes) then
+   !   inquire(file='./mendel.in.'//myid_str, exist=file_exists)
+   !   if ( file_exists ) then
+   !      open (5, file='mendel.in.'//myid_str,status='old')
+   !      call read_parameters(5)
+   !      close(5)
+   !   else
+   !      print *, 'ERROR: could not find mendel.in.'//myid_str
+   !      stop
+   !   end if
+   !end if
 
    if (myid==0) write(*,*) 'subpopulation size is ',pop_size
 

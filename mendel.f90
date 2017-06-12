@@ -651,13 +651,13 @@ do gen=gen_0+1,gen_0+num_generations
    end if
 
    ! In case one tribe is set to run less generations than the other
-   if(is_parallel .and. .not.homogenous_tribes .and. &
-      gen==gen_0+num_generations) then
-      do i=6,9,3
-         write(i,*) 'TRIBE',myid+1,'IS SHUTTING DOWN. GEN:',gen
-      end do
-      run_status = -(myid + 1)
-   end if
+   !if(is_parallel .and. .not.homogenous_tribes .and. &
+   !   gen==gen_0+num_generations) then
+   !   do i=6,9,3
+   !      write(i,*) 'TRIBE',myid+1,'IS SHUTTING DOWN. GEN:',gen
+   !   end do
+   !   run_status = -(myid + 1)
+   !end if
 
    ! START_MPI
    ! For the limiting case of two tribes, we must turn off the parallel
@@ -1010,6 +1010,12 @@ do gen=gen_0+1,gen_0+num_generations
 
    ! radial divergence fissioning
    if (fission_tribes .and. fission_type==3 .and. gen==fission_threshold) then
+
+       if (.not.homogenous_tribes) then
+          carrying_capacity = carrying_capacity * (myid+1)/float(num_tribes)
+          print *, 'myid:', myid, 'carrying_capacity:', carrying_capacity
+       end if
+
        current_pop_size = int(pop_size/num_tribes)
        if (myid == 0) then
           print *
@@ -1018,6 +1024,7 @@ do gen=gen_0+1,gen_0+num_generations
                    "demes, each w/ pop size:", current_pop_size
           print *
        end if
+
        do k = 1, current_pop_size
           if (myid == 0) then ! sender
              do other = 1, num_tribes-1 ! send to every other tribe
