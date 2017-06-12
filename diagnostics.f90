@@ -1687,9 +1687,9 @@ if(is_parallel) then
       if (global_allele_analysis) then
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized  del_count fav_count neu_count")')
-          write(21,'(i11,3f15.11,3f11.0)') (k, dpbin(k), &
+          write(21,'(i11,3f15.11,7f11.0)') (k, dpbin(k), &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
-              npbin_count(k), k=1,NB)
+              npbin_count(k), 0, 0, 0, 0, k=1,NB)
       else
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized, del_count fav_count neu_count", &
