@@ -1310,7 +1310,7 @@ real*8 npbin(NB), npbin_count(NB), npbin_max, x ! neutral
 real*8 fpbin(NB), fpbin_count(NB), fpbin_max, scale_factor ! beneficial
 real*8 idpbin(NB), idpbin_count(NB), idpbin_max, idsum ! initial deleterious alleles
 real*8 ifpbin(NB), ifpbin_count(NB), ifpbin_max, ifsum ! initial favorable alleles
-real*8 udpbin(NB), udpbin_count(NB), udpbin_max, udsum ! initial deleterious alleles
+real*8 udpbin(NB), udpbin_count(NB), udpbin_max, udsum ! uploaded deleterious alleles
 real*8 ufpbin(NB), ufpbin_count(NB), ufpbin_max, ufsum ! uploaded favorable alleles
 
 real*8 par_dpbin(NB), par_fpbin(NB), dsum, fsum
