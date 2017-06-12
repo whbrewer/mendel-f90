@@ -1308,15 +1308,12 @@ integer nwarn, mutn_thres, mutn, jmax
 real*8 dpbin(NB), dpbin_count(NB), dpbin_max, pbin_width ! deleterious
 real*8 npbin(NB), npbin_count(NB), npbin_max, x ! neutral
 real*8 fpbin(NB), fpbin_count(NB), fpbin_max, scale_factor ! beneficial
-real*8 idpbin(NB), idpbin_count(NB), idpbin_max, idsum ! initial deleterious alleles
-real*8 ifpbin(NB), ifpbin_count(NB), ifpbin_max, ifsum ! initial favorable alleles
 real*8 udpbin(NB), udpbin_count(NB), udpbin_max, udsum ! uploaded deleterious alleles
 real*8 ufpbin(NB), ufpbin_count(NB), ufpbin_max, ufsum ! uploaded favorable alleles
 
 real*8 par_dpbin(NB), par_fpbin(NB), dsum, fsum
 real*8 par_npbin(NB), par_npbin_count(NB), nsum
 real*8 par_dpbin_count(NB), par_fpbin_count(NB)
-real*8 par_idpbin_count(NB), par_ifpbin_count(NB)
 real*8 par_udpbin_count(NB), par_ufpbin_count(NB)
 real*8 febin(10,NB), fe_bin_width
 
@@ -1496,58 +1493,6 @@ if(polygenic_beneficials) then
 
 end if
 
-! count and bin initial contrasting alleles
-if (num_contrasting_alleles > 0) then
-    ! deleterious
-    do it=it0,2
-        do lb=1,num_linkage_subunits
-
-            if(it == 1) then
-                mutn_limit = -lb_modulo*(num_linkage_subunits - lb)
-            else
-                mutn_limit =  lb_modulo*lb
-            end if
-
-            call count_initial_alleles(dmutn, max_del_mutn_per_indiv, MNP, mutn_limit, &
-            mutn_list, mutn_count, list_count, mfirst, gen)
-
-            call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, idpbin_count, idsum, idwarn)
-
-        enddo
-    enddo
-
-    ! favorables
-    do it=it0,2
-        do lb=1,num_linkage_subunits
-
-            if(it == 1) then
-                mutn_limit = -lb_modulo*(num_linkage_subunits - lb)
-            else
-                mutn_limit =  lb_modulo*lb
-            end if
-
-            call count_initial_alleles(fmutn, max_fav_mutn_per_indiv, MNP, mutn_limit, &
-            mutn_list, mutn_count, list_count, mfirst, gen)
-
-            call bin_alleles(MNP, NB, list_count, mutn_count, pbin_width, ifpbin_count, ifsum, ifwarn)
-
-        enddo
-    enddo
-else
-    idpbin_count = 0
-    ifpbin_count = 0
-endif
-
-! remove bogus values such as NaNs, etc. -- temporary
-do k = 1, NB
-  if (idpbin_count(k) > num_contrasting_alleles .or. idpbin_count(k)*0 .ne. 0) then
-    idpbin_count(k) = -1 ! negative values indicate that there is no valid value for this bin
-  endif
-  if (ifpbin_count(k) > num_contrasting_alleles .or. ifpbin_count(k)*0 .ne. 0) then
-    ifpbin_count(k) = -1
-  endif
-enddo
-
 ! count and bin uploaded alleles
 if (upload_mutations) then
     ! deleterious
@@ -1662,9 +1607,6 @@ if(is_parallel) then
        call mpi_davg(fpbin_count, par_fpbin_count, NB)
        call mpi_davg(npbin_count, par_npbin_count, NB)
 
-       call mpi_davg(idpbin_count, par_idpbin_count, NB)
-       call mpi_davg(ifpbin_count, par_ifpbin_count, NB)
-
        call mpi_davg(udpbin_count, par_udpbin_count, NB)
        call mpi_davg(ufpbin_count, par_ufpbin_count, NB)
 
@@ -1692,11 +1634,10 @@ if(is_parallel) then
       else
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized, del_count fav_count neu_count", &
-               " initial_del initial_fav upload_del upload_fav")')
+               " upload_del upload_fav")')
           write(21,'(i11,3f15.11,7f11.0)')  (k, par_dpbin(k),  &
                 par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
-                par_npbin_count(k), par_idpbin_count(k)*initial_alleles_amp_factor, &
-                par_ifpbin_count(k)*initial_alleles_amp_factor, par_udpbin_count(k), &
+                par_npbin_count(k), par_udpbin_count(k), &
                 par_ufpbin_count(k), k=1,NB)
       endif
 
@@ -1720,11 +1661,10 @@ if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
     write(11,'("# generation = ",i8)') gen
     write(11,'("# frequency del_normalized fav_normalized", &
                " neu_normalized del_count fav_count neu_count", &
-               " initial_del initial_fav upload_del upload_fav")')
-    write(11,'(i11,3f15.11,7f11.0)')  (k, dpbin(k),  &
+               " upload_del upload_fav")')
+    write(11,'(i11,3f15.11,5f11.0)')  (k, dpbin(k),  &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
-              npbin_count(k), idpbin_count(k)*initial_alleles_amp_factor, &
-              ifpbin_count(k)*initial_alleles_amp_factor, udpbin_count(k), &
+              npbin_count(k), udpbin_count(k), &
               ufpbin_count(k), k=1,NB)
 end if
 
@@ -2055,71 +1995,6 @@ if (global_allele_analysis) then
 end if
 
 end subroutine count_alleles
-
-subroutine count_initial_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mutn_list, &
-                                 mutn_count, list_count, mfirst, gen)
-use inputs
-use polygenic
-include 'common.h'
-!START_MPI
-include 'mpif.h'
-!END_MPI
-integer, intent(in)    :: MNP
-integer, intent(in)    :: max_mutn_per_indiv
-integer, intent(in)    :: xmutn(max_mutn_per_indiv/2,2,*)
-integer, intent(in)    :: mutn_limit
-integer, intent(in)    :: gen
-integer, intent(out)   :: mutn_list(MNP)
-integer, intent(out)   :: mutn_count(MNP)
-integer, intent(out)   :: list_count
-integer, intent(inout) :: mfirst(2,*)
-
-integer :: i, j, k, m
-integer :: global_mutn_count(MNP,num_tribes)
-integer :: global_mutn_list(MNP,num_tribes)
-integer :: global_list_count(num_tribes)
-logical :: new_mutn, initial_allele
-integer :: mutn, jmax
-
-! mutn_list is the list of mutation indices being analyzed for their frequency.
-! mutn_count is the number of occurrences of each mutation in mutn_list.
-! list_count is the total number of alleles being analyzed.
-
-mutn_list  = 0
-mutn_count = 0
-list_count = 0
-
-do i=1,current_pop_size
-    jmax = 2
-    if(polygenic_beneficials .and. recombination_model==clonal) jmax = 1
-    do j=1,jmax
-        m = mfirst(j,i)
-        do while(xmutn(m,j,i) < mutn_limit .and. &
-            m <=  xmutn(1,j,i)+1 .and. list_count < MNP)
-            mutn = mod(abs(xmutn(m,j,i)), lb_modulo)
-            ! lb_modulo-1 represents an initial contrasting allele
-            if(mutn == lb_modulo-1) then
-                new_mutn = .true.
-                do k=1,list_count
-                    if(xmutn(m,j,i) == mutn_list(k)) then
-                        mutn_count(k) = mutn_count(k) + 1
-                        new_mutn = .false.
-                    end if
-                end do
-                if(new_mutn .and. .not.(polygenic_beneficials  &
-                .and. xmutn(m,j,i) == 0)) then
-                list_count = min(MNP, list_count + 1)
-                mutn_list (list_count) = xmutn(m,j,i)
-                mutn_count(list_count) = 1
-            end if
-        end if
-        m = m + 1
-    end do
-    mfirst(j,i) = m
-end do
-end do
-
-end subroutine count_initial_alleles
 
 subroutine count_uploaded_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mutn_list, &
                                   mutn_count, list_count, mfirst, gen)

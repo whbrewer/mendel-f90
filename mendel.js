@@ -39,7 +39,6 @@ function fxn_initial_alleles() {
     dmi.num_contrasting_alleles.readOnly = false
     dmi.max_total_fitness_increase.readOnly = false
     dmi.initial_alleles_pop_frac.readOnly = false
-    dmi.initial_alleles_amp_factor.readOnly = false
     dmi.num_contrasting_alleles.value = "1000"
     dmi.max_total_fitness_increase.value = "1.0"
     dmi.initial_alleles_pop_frac.value = "1.0"
@@ -49,7 +48,6 @@ function fxn_initial_alleles() {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
-    dmi.initial_alleles_amp_factor.readOnly = true
     dmi.num_contrasting_alleles.value = 0
     $('#desc').tagsinput('remove', 'Initial alleles');
   }
@@ -60,12 +58,10 @@ function fxn_initial_alleles_init() {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
-    dmi.initial_alleles_amp_factor.readOnly = true
   } else {
     dmi.num_contrasting_alleles.readOnly = false
     dmi.max_total_fitness_increase.readOnly = false
     dmi.initial_alleles_pop_frac.readOnly = false
-    dmi.initial_alleles_amp_factor.readOnly = false
     dmi.initial_alleles.checked = true
   }
 }

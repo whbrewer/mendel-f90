@@ -1127,19 +1127,6 @@
       </div>
 
       <div class="form-group">
-        <label for="initial_alleles_amp_factor" class="control-label col-xs-12 col-sm-6">
-          &nbsp;&nbsp;&nbsp; <a data-toggle="popover" title="initial_alleles_amp_factor"
-          data-content='This value is multiplied times the initial alleles during file output, so it only used to amplify the alleles in the Allele Frequency Plot.'>d. amplification factor:</a><br>
-        </label>
-        <div class="col-xs-12 col-sm-3">
-          <input type="number" name="initial_alleles_amp_factor" title="0 - 1"
-              value="{{initial_alleles_amp_factor}}" min="1" max="100000" step="0.1"
-              onchange="validate(this)"
-              class="form-control">
-        </div>
-      </div>
-
-      <div class="form-group">
         <label for="track_neutrals" class="control-label col-xs-10 col-sm-6">
           <a data-toggle="popover" title="track_neutrals" data-html="true" data-content='This means that a specified fraction of all new mutations will arise within the “junk DNA” portions of the genome, and so will be perfectly neutral. If 50% of the genome is junk, then 50% of all mutations will be neutral. If the total mutation rate is 100 per generation, then the rate of neutral mutations will be 50 per generation. The remaining non-neutral mutations will have the specified benefical-to-deleterious mutation rate. Neutral mutations will then be tracked, tallied, and plotted, just as with beneficial and deleterious mutations. <a target="_blank" href="/static/apps/mendel/help.html#fraction_neutral">Read more...</a>'>2. Include neutrals in analysis:</a></label>
         <div class="col-xs-2 col-sm-3">

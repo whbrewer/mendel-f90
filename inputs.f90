@@ -31,8 +31,7 @@ real    reproductive_rate, mutn_rate,                             &
         se_linked_scaling, pop_growth_rate,                       &
         tc_scaling_factor, group_heritability, fraction_neutral,  &
         social_bonus_factor, max_total_fitness_increase,          &
-        polygenic_effect, initial_alleles_pop_frac,               &
-        initial_alleles_amp_factor
+        polygenic_effect, initial_alleles_pop_frac
 
 real*8 :: tracking_threshold, extinction_threshold
 
@@ -93,7 +92,7 @@ namelist /computation/ tracking_threshold, extinction_threshold, &
 
 namelist /special_apps/ num_contrasting_alleles, &
      max_total_fitness_increase, initial_alleles_pop_frac, &
-     initial_alleles_amp_factor, track_neutrals, fraction_neutral, &
+     track_neutrals, fraction_neutral, &
      polygenic_effect, polygenic_beneficials, polygenic_target, &
      polygenic_init
 
@@ -178,8 +177,6 @@ write(nf,'(a32,f12.7)') ' initial_alleles_mean_effect = ', &
                           initial_alleles_mean_effect
 write(nf,'(a32,f12.7)') ' initial_alleles_pop_frac = ', &
                           initial_alleles_pop_frac
-write(nf,'(a32,f12.7)') ' initial_alleles_amp_factor = ', &
-                          initial_alleles_amp_factor
 write(nf,'(a32,l)')     ' dynamic_linkage = '      , dynamic_linkage
 write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
                           haploid_chromosome_number
@@ -320,8 +317,8 @@ data_file_path = './'
 
 ! special applications
 num_contrasting_alleles = 0
-initial_alleles_mean_effect = 0.0
-initial_alleles_amp_factor = 1
+initial_alleles_mean_effect = 1.0
+initial_alleles_pop_frac = 0.5
 track_neutrals = .false.
 fraction_neutral = 0.0
 polygenic_beneficials = .false.
