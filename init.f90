@@ -26,7 +26,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.7.1-34-gb7b706a-dirty <<< VERSION'
+write(6,*) 'VERSION >>> v2.7.1-35-g0c1b90f-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 
@@ -187,6 +187,10 @@ if (is_parallel) then
             //'.thr',status='unknown')
       write(35,'("#  generation",20x,"selection thresholds"/"#",13x, &
       "del_dom_thres  del_rec_thres  fav_dom_thres  fav_rec_thres")')
+
+      open (37, file=data_file_path(1:npath)//case_id//'.'//zero_str &
+            //'.maf',status='unknown')
+      write(37,'("# frequency",4x,"del_count",4x,"fav_count")')
 
    endif
 

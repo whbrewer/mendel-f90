@@ -1631,6 +1631,9 @@ if(is_parallel) then
           write(21,'(i11,3f15.11,5f11.0)') (k, dpbin(k), &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
               npbin_count(k), 0, 0, k=1,NB)
+          ! minor allele frequency fold-over plot bins should be from 1 to 50
+          write(37,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
+                                       fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
       else
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized, del_count fav_count neu_count", &
@@ -1639,6 +1642,9 @@ if(is_parallel) then
                 par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
                 par_npbin_count(k), par_udpbin_count(k), &
                 par_ufpbin_count(k), k=1,NB)
+                ! minor allele frequency fold-over plot bins should be from 1 to 50
+          write(37,'(i11,2f11.0)') (k, par_dpbin_count(k)+par_dpbin_count(NB-k+1), &
+                                       par_fpbin_count(k)+par_fpbin_count(NB-k+1), k=1, NB/2)
       endif
 
       write(21,'("# Allele summary statistics:")')
