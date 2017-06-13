@@ -974,6 +974,16 @@ do gen=gen_0+1,gen_0+num_generations
 
                  if (tribe_state == LIVE) then
                     other = mod(myid + num_demes, 2*num_demes)
+
+                    ! clear buffers of receiving tribes
+                    if (myid > other) then
+                        dmutn = 0
+                        fmutn = 0
+                        nmutn = 0
+                        lb_mutn_count = 0
+                        linkage_block_fitness = 0
+                    endif
+
                     do k = 1, current_pop_size
                        i = k + current_pop_size
                        j = k
