@@ -26,7 +26,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.7.1-32-g480c982-dirty <<< VERSION'
+write(6,*) 'VERSION >>> v2.7.1-34-gb7b706a-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 
@@ -101,13 +101,17 @@ if (verbosity > 0) then
 
    if (.not.is_parallel) then
       open(12, file=data_file_path(1:npath)//case_id//'.'//myid_str &
-           //'.plmcor',status='unknown')
+         //'.plmcor',status='unknown')
    end if
 
    ! Maintain a separate file for windows which just has a snapshot
    ! of the most recent polymorphism information.
    open(13, file=data_file_path(1:npath)//case_id//'.'//myid_str &
-            //'.pls',status='unknown')
+         //'.pls',status='unknown')
+
+   open (27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
+         //'.maf',status='unknown')
+   write(27,'("# frequency",4x,"del_count",4x,"fav_count")')
 
    open(24, file=data_file_path(1:npath)//case_id//'.'//myid_str &
          //'.sel',status='unknown')
@@ -134,12 +138,15 @@ if (verbosity == 2) then
    !     write(15,'("255")')
    open(16, file=data_file_path(1:npath)//case_id//'.'//myid_str &
          //'.fit',status='unknown')
+
    open(19, file=data_file_path(1:npath)//case_id//'.'//myid_str &
         //'.pmd',status='unknown')
+
    open(22, file=data_file_path(1:npath)//case_id//'.'//myid_str &
         //'.tim',status='unknown')
    write(22,'("# generation",2x,"time_per_gen(s)",2x, &
            "time_offspring(s)",2x,"time_selection(s)")')
+
    open(26, file=data_file_path(1:npath)//case_id//'.'//myid_str &
         //'.acc',status='unknown')
 endif

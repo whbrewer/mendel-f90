@@ -1200,6 +1200,7 @@ if (verbosity == 2) then
    close(26)
 endif
 close(25)
+close(27)
 if (polygenic_beneficials) close(20)
 if (num_contrasting_alleles > 0) close(30)
 

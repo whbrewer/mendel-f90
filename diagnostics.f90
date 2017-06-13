@@ -1657,7 +1657,7 @@ if(is_parallel) then
 end if
 
 rewind(11)
-if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
+if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
     write(11,'("# generation = ",i8)') gen
     write(11,'("# frequency del_normalized fav_normalized", &
                " neu_normalized del_count fav_count neu_count", &
@@ -1666,6 +1666,10 @@ if (mod(gen,plot_allele_gens)==0.and.verbosity>0) then
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
               npbin_count(k), udpbin_count(k), &
               ufpbin_count(k), k=1,NB)
+
+    ! minor allele frequency fold-over plot bins should be from 1 to 50
+    write(27,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
+                                 fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
 end if
 
 ! correct data for total diversity by multiplying by each bin
@@ -2125,3 +2129,10 @@ subroutine bin_alleles(MNP,NB,list_count,mutn_count,pbin_width,pbin,xsum,warn)
   if(list_count == MNP) warn = 1
 
 end subroutine bin_alleles
+
+subroutine allele_dist_foldover()
+    implicit none
+
+
+
+end subroutine allele_dist_foldover
