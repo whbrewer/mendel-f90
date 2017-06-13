@@ -666,121 +666,121 @@ do gen=gen_0+1,gen_0+num_generations
 
    if(tribal_competition) then
 
-      if(num_tribes == 2) then
+       if(num_tribes == 2) then
 
-         if(myid == 1) then
-            call mpi_send_int(run_status,0,msg_num,ierr)
-            msg_num = msg_num + 1
-            call mpi_recv_int(other_run_status,0,msg_num,ierr)
-         else
-            call mpi_recv_int(other_run_status,1,msg_num,ierr)
-            msg_num = msg_num + 1
-            call mpi_send_int(run_status,1,msg_num,ierr)
-         end if
-         msg_num = msg_num + 1
+           if(myid == 1) then
+               call mpi_send_int(run_status,0,msg_num,ierr)
+               msg_num = msg_num + 1
+               call mpi_recv_int(other_run_status,0,msg_num,ierr)
+           else
+               call mpi_recv_int(other_run_status,1,msg_num,ierr)
+               msg_num = msg_num + 1
+               call mpi_send_int(run_status,1,msg_num,ierr)
+           end if
+           msg_num = msg_num + 1
 
-         if(fission_tribes .and. fission_type==1) then
+           if(fission_tribes .and. fission_type==1) then
 
-            ! Simple tribal fission - if one tribe goes extinct, split the
-            ! surviving tribe into two and send half of its population
-            ! to the tribe that went extinct
+               ! Simple tribal fission - if one tribe goes extinct, split the
+               ! surviving tribe into two and send half of its population
+               ! to the tribe that went extinct
 
-            if (run_status < 0 .or. other_run_status < 0 ) then
+               if (run_status < 0 .or. other_run_status < 0 ) then
 
-               if(myid==0) then
-                  write(6,*) myid,'competing pop sizes:', pop_size_array
-                  pop_size_winner = maxval(pop_size_array)
-                  pop_size_loser = minval(pop_size_array)
-                  id_winner = maxloc(pop_size_array,1) - 1
-                  call mpi_send_int(pop_size_winner,1-myid,msg_num,ierr)
-                  call mpi_send_int(pop_size_loser,1-myid,msg_num,ierr)
-                  call mpi_send_int(id_winner,1-myid,msg_num,ierr)
-               else
-                  call mpi_recv_int(pop_size_winner,1-myid,msg_num,ierr)
-                  call mpi_recv_int(pop_size_loser,1-myid,msg_num,ierr)
-                  call mpi_recv_int(id_winner,1-myid,msg_num,ierr)
-               end if
-               winner = .false.
+                   if(myid==0) then
+                       write(6,*) myid,'competing pop sizes:', pop_size_array
+                       pop_size_winner = maxval(pop_size_array)
+                       pop_size_loser = minval(pop_size_array)
+                       id_winner = maxloc(pop_size_array,1) - 1
+                       call mpi_send_int(pop_size_winner,1-myid,msg_num,ierr)
+                       call mpi_send_int(pop_size_loser,1-myid,msg_num,ierr)
+                       call mpi_send_int(id_winner,1-myid,msg_num,ierr)
+                   else
+                       call mpi_recv_int(pop_size_winner,1-myid,msg_num,ierr)
+                       call mpi_recv_int(pop_size_loser,1-myid,msg_num,ierr)
+                       call mpi_recv_int(id_winner,1-myid,msg_num,ierr)
+                   end if
+                   winner = .false.
 
-               if(run_status < 0) then ! dying tribe
-                  run_status = 0 ! resurrect tribe - reset the status as ok
-                  is_parallel = .true.
-                  call mpi_recv_int(current_pop_size,1-myid,msg_num,ierr)
-                  call mpi_recv_int(num_migrate,1-myid,msg_num,ierr)
-               else ! winning tribe... send half of its pop size to dying tribe
-                  winner = .true.
-                  write(6,*)'<font color=red>*** FISSION TRIBE ***</font>', myid
-                  other_run_status = 0
-                  num_migrate = (pop_size_winner - pop_size_loser)/2
-                  current_pop_size = (pop_size_winner + pop_size_loser)/2
-                  ! if odd, round down half the time and round up half the time
-                  if(mod(current_pop_size,2)==1 .and. randomnum(1).gt.0.5) then
-                     num_migrate = num_migrate+1
-                     current_pop_size = current_pop_size + 1
-                  end if
-                  call mpi_send_int(current_pop_size,1-myid,msg_num,ierr)
-                  call mpi_send_int(num_migrate,1-myid,msg_num,ierr)
-                  write(6,*) 'migrating half the tribe from',myid+1,' to ',2-myid
-               end if
+                   if(run_status < 0) then ! dying tribe
+                       run_status = 0 ! resurrect tribe - reset the status as ok
+                       is_parallel = .true.
+                       call mpi_recv_int(current_pop_size,1-myid,msg_num,ierr)
+                       call mpi_recv_int(num_migrate,1-myid,msg_num,ierr)
+                   else ! winning tribe... send half of its pop size to dying tribe
+                       winner = .true.
+                       write(6,*)'<font color=red>*** FISSION TRIBE ***</font>', myid
+                       other_run_status = 0
+                       num_migrate = (pop_size_winner - pop_size_loser)/2
+                       current_pop_size = (pop_size_winner + pop_size_loser)/2
+                       ! if odd, round down half the time and round up half the time
+                       if(mod(current_pop_size,2)==1 .and. randomnum(1).gt.0.5) then
+                           num_migrate = num_migrate+1
+                           current_pop_size = current_pop_size + 1
+                       end if
+                       call mpi_send_int(current_pop_size,1-myid,msg_num,ierr)
+                       call mpi_send_int(num_migrate,1-myid,msg_num,ierr)
+                       write(6,*) 'migrating half the tribe from',myid+1,' to ',2-myid
+                   end if
 
-               ! clear buffers of receiving tribes
-               if (.not.winner) then
-                   dmutn = 0
-                   fmutn = 0
-                   nmutn = 0
-                   lb_mutn_count = 0
-                   linkage_block_fitness = 0
-               endif
+                   ! clear buffers of receiving tribes
+                   if (.not.winner) then
+                       dmutn = 0
+                       fmutn = 0
+                       nmutn = 0
+                       lb_mutn_count = 0
+                       linkage_block_fitness = 0
+                   endif
 
-               ! now migrate half the population
-               do k = 1, num_migrate
-                  i = pop_size_winner-num_migrate + k
-                  j = pop_size_loser + k
-                  !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
-                  id_loser = 1 - id_winner
-                  ! here the myid == winner returns a logical indicating if this
-                  ! is sender or receiver
-                  call migrate_individual(1-myid, i, j, dmutn, fmutn, nmutn, &
+                   ! now migrate half the population
+                   do k = 1, num_migrate
+                       i = pop_size_winner-num_migrate + k
+                       j = pop_size_loser + k
+                       !if(myid.eq.0) write(*,*) 'migrating: ',i, 'to:',j
+                       id_loser = 1 - id_winner
+                       ! here the myid == winner returns a logical indicating if this
+                       ! is sender or receiver
+                       call migrate_individual(1-myid, i, j, dmutn, fmutn, nmutn, &
                        lb_mutn_count, linkage_block_fitness, myid == id_winner)
-               end do
+                   end do
 
-            end if
+               end if
 
-        else ! .not.fission_tribes
+           else ! .not.fission_tribes
 
-            ! This is the alternative treatment to fission
-            ! turn off parallel and let the one run to completion
-            if(other_run_status < 0)  then
-               num_tribes = num_tribes - 1
-               is_parallel = .false.
-            end if
+               ! This is the alternative treatment to fission
+               ! turn off parallel and let the one run to completion
+               if(other_run_status < 0)  then
+                   num_tribes = num_tribes - 1
+                   is_parallel = .false.
+               end if
 
-            if(run_status < 0) goto 30
+               if(run_status < 0) goto 30
 
-        end if ! fission_tribes
+           end if ! fission_tribes
 
-      else if (num_tribes > 2) then
+       else if (num_tribes > 2) then
 
-         ! receive status from every process in group
-         ! to check if one process has died
+           ! receive status from every process in group
+           ! to check if one process has died
 
-         call mpi_allreduce(run_status,global_run_status,1, &
-              mpi_integer,mpi_sum,mycomm,ierr)
+           call mpi_allreduce(run_status,global_run_status,1, &
+           mpi_integer,mpi_sum,mycomm,ierr)
 
-         if(sum(global_run_status) < 0) then
+           if(sum(global_run_status) < 0) then
 
-            ranks(1) = -sum(global_run_status)
+               ranks(1) = -sum(global_run_status)
 
-            call mpi_comm_group(mycomm,oldgroup,ierr)
-            call mpi_group_excl(oldgroup,1,ranks,newgroup,ierr)
-            call mpi_comm_create(mycomm,newgroup,mycomm,ierr)
+               call mpi_comm_group(mycomm,oldgroup,ierr)
+               call mpi_group_excl(oldgroup,1,ranks,newgroup,ierr)
+               call mpi_comm_create(mycomm,newgroup,mycomm,ierr)
 
-            if(run_status < 0) goto 30
+               if(run_status < 0) goto 30
 
-            call mpi_comm_size(mycomm,num_tribes,ierr)
+               call mpi_comm_size(mycomm,num_tribes,ierr)
 
-         end if
-      end if
+           end if
+       end if
    end if
 ! END_MPI
 
