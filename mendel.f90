@@ -1025,6 +1025,15 @@ do gen=gen_0+1,gen_0+num_generations
           print *
        end if
 
+       ! clear buffers of receiving tribes
+       if (myid > 0) then
+           dmutn = 0
+           fmutn = 0
+           nmutn = 0
+           lb_mutn_count = 0
+           linkage_block_fitness = 0
+       endif
+
        do k = 1, current_pop_size
           if (myid == 0) then ! sender
              do other = 1, num_tribes-1 ! send to every other tribe
