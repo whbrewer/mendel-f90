@@ -1633,6 +1633,7 @@ if(is_parallel) then
               npbin_count(k), 0, 0, k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
           rewind(37)
+          write(37,'("# frequency",4x,"del_count",4x,"fav_count")')
           write(37,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
                                        fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
       else
@@ -1676,6 +1677,7 @@ if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
               ufpbin_count(k), k=1,NB)
 
     ! minor allele frequency fold-over plot bins should be from 1 to 50
+    write(27,'("# frequency",4x,"del_count",4x,"fav_count")')
     write(27,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
                                  fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
 end if
