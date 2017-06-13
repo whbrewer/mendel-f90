@@ -1632,6 +1632,7 @@ if(is_parallel) then
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
               npbin_count(k), 0, 0, k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
+          rewind(37)
           write(37,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
                                        fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
       else
@@ -1663,6 +1664,7 @@ if(is_parallel) then
 end if
 
 rewind(11)
+rewind(27)
 if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
     write(11,'("# generation = ",i8)') gen
     write(11,'("# frequency del_normalized fav_normalized", &
