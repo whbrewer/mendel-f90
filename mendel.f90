@@ -723,6 +723,15 @@ do gen=gen_0+1,gen_0+num_generations
                   write(6,*) 'migrating half the tribe from',myid+1,' to ',2-myid
                end if
 
+               ! clear buffers of receiving tribes
+               if (.not.winner) then
+                   dmutn = 0
+                   fmutn = 0
+                   nmutn = 0
+                   lb_mutn_count = 0
+                   linkage_block_fitness = 0
+               endif
+
                ! now migrate half the population
                do k = 1, num_migrate
                   i = pop_size_winner-num_migrate + k
