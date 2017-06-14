@@ -1630,9 +1630,9 @@ if(is_parallel) then
       if (global_allele_analysis) then
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized  del_count fav_count neu_count")')
-          write(21,'(i11,3f15.11,5f11.0)') (k, dpbin(k), &
+          write(21,'(i11,3f15.11,6f11.0,f15.11)') (k, dpbin(k), &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
-              npbin_count(k), 0, 0, k=1,NB)
+              npbin_count(k), 0, 0, k/float(NB), k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
           rewind(37)
           write(37,'("# frequency",4x,"del_count",4x,"fav_count")')
@@ -1640,13 +1640,13 @@ if(is_parallel) then
                                        fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
       else
           write(21,'("# frequency del_normalized fav_normalized", &
-               "  neu_normalized, del_count fav_count neu_count", &
-               " upload_del upload_fav")')
-          write(21,'(i11,3f15.11,5f11.0)')  (k, par_dpbin(k),  &
+               "  neu_normalized  del_count fav_count neu_count", &
+               " upload_del upload_fav freq_normalized")')
+          write(21,'(i11,3f15.11,5f11.0,f15.11)')  (k, par_dpbin(k),  &
                 par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
                 par_npbin_count(k), par_udpbin_count(k), &
-                par_ufpbin_count(k), k=1,NB)
-                ! minor allele frequency fold-over plot bins should be from 1 to 50
+                par_ufpbin_count(k), k/float(NB), k=1,NB)
+          ! minor allele frequency fold-over plot bins should be from 1 to 50
           write(37,'(i11,2f11.0)') (k, par_dpbin_count(k)+par_dpbin_count(NB-k+1), &
                                        par_fpbin_count(k)+par_fpbin_count(NB-k+1), k=1, NB/2)
       endif
@@ -1667,18 +1667,18 @@ if(is_parallel) then
 end if
 
 rewind(11)
-rewind(27)
 if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
     write(11,'("# generation = ",i8)') gen
     write(11,'("# frequency del_normalized fav_normalized", &
-               " neu_normalized del_count fav_count neu_count", &
-               " upload_del upload_fav")')
-    write(11,'(i11,3f15.11,5f11.0)')  (k, dpbin(k),  &
+               " neu_normalized del_count  fav_count  neu_count", &
+               " upload_del upload_fav freq_normalized")')
+    write(11,'(i11,3f15.11,5f11.0,f15.11)')  (k, dpbin(k),  &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
               npbin_count(k), udpbin_count(k), &
-              ufpbin_count(k), k=1,NB)
+              ufpbin_count(k), k/float(NB), k=1,NB)
 
     ! minor allele frequency fold-over plot bins should be from 1 to 50
+    rewind(27)
     write(27,'("# frequency",4x,"del_count",4x,"fav_count")')
     write(27,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
                                  fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
