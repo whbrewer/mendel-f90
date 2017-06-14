@@ -1315,7 +1315,7 @@ real*8 par_dpbin(NB), par_fpbin(NB), dsum, fsum
 real*8 par_npbin(NB), par_npbin_count(NB), nsum
 real*8 par_dpbin_count(NB), par_fpbin_count(NB)
 real*8 par_udpbin_count(NB), par_ufpbin_count(NB)
-real*8 febin(10,NB), fe_bin_width
+real*8 febin(10,NB), fe_bin_width, tot_num_alleles
 
 real   bin_fitness(11), bin_center(10)
 
@@ -1566,14 +1566,16 @@ dcount = dpbin(1) + num_dalleles(2) + dpbin(NB)
 ncount = npbin(1) + num_nalleles(2) + npbin(NB)
 fcount = fpbin(1) + num_falleles(2) + fpbin(NB)
 
+tot_num_alleles = num_dalleles(2) + num_nalleles(2) + num_falleles(2)
+
 dpbin_count = dpbin
-dpbin = dpbin/dpbin_max
+dpbin = dpbin/tot_num_alleles
 
 npbin_count = npbin
-npbin = npbin/npbin_max
+npbin = npbin/tot_num_alleles
 
 fpbin_count = fpbin
-fpbin = fpbin/fpbin_max
+fpbin = fpbin/tot_num_alleles
 
 ! Compute values for fitness effect bin centers.
 
@@ -2139,10 +2141,3 @@ subroutine bin_alleles(MNP,NB,list_count,mutn_count,pbin_width,pbin,xsum,warn)
   if(list_count == MNP) warn = 1
 
 end subroutine bin_alleles
-
-subroutine allele_dist_foldover()
-    implicit none
-
-
-
-end subroutine allele_dist_foldover
