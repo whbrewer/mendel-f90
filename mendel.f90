@@ -143,6 +143,7 @@ if(is_parallel) then
       endif
   else
       live_pop_size = pop_size
+      tribe_state = LIVE
   endif
 ! compute global population size
   !START_MPI
