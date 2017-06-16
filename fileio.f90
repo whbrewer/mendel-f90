@@ -224,13 +224,15 @@ call second(tout)
 sec(10) = sec(10) + tout - tin
 end subroutine write_output_dump
 
-subroutine write_vcf_file(dmutn)
+subroutine write_vcf_file(dmutn, nmutn, fmutn)
 
 use inputs
 use polygenic
 include 'common.h'
 
 integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
+integer :: nmutn(max_neu_mutn_per_indiv/2,2,*)
+integer :: fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer :: npath, i, j, k, lb, dominance
 integer :: chrom, lb_per_chrom, pos
 real*8 :: x, fitness, id
@@ -284,6 +286,7 @@ do k = 1, pop_size
          write(id_str, '(f7.5)') id
          write(27,'(15a)') chrom_str//tab//pos_str//tab//id_str//tab//ref//tab//alt//tab//dot//tab//dot//tab//dot
       end do
+
    end do
 end do
 
@@ -291,11 +294,13 @@ close(27)
 
 end subroutine write_vcf_file
 
-subroutine write_alleles(dmutn)
+subroutine write_alleles(dmutn, nmutn, fmutn)
 
 use inputs
 include 'common.h'
 integer :: dmutn(max_del_mutn_per_indiv/2,2,*)
+integer :: nmutn(max_neu_mutn_per_indiv/2,2,*)
+integer :: fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer :: id, i, j, k, npath
 integer, parameter :: intmax = 2147483647
 character*3 :: myid_str
@@ -312,17 +317,31 @@ end if
 
 !open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
 !//'.csv',status='unknown')
-open(27, file='alleles.csv', status='unknown')
+!open(27, file='alleles.csv', status='unknown')
+open(27, file='alleles.'//myid_str//'.csv', status='unknown')
 
 do k = 1, pop_size
-   write(27, '(i12, a1, $)') k, comma
+   write(27, '(/a,i12)') '# INDIVIDUAL', k
+ 
    do j = 1, 2
+      write(27, '(/a,i2)') '# -- haplotype', j
+      write(27, '(/a,i12)') '# -- deleterious mutations', dmutn(1,j,k)
       do i = 2, dmutn(1,j,k)
-         id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
+         !id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
          write(27, '(i12, a1, $)') dmutn(i,j,k), comma
       end do
+
+      write(27, '(/a,i12)') '# -- neutral mutations', nmutn(1,j,k)
+      do i = 2, nmutn(1,j,k)
+         write(27, '(i12, a1, $)') nmutn(i,j,k), comma
+      end do
+
+      write(27, '(/a,i12)') '# -- favorable mutations', fmutn(1,j,k)
+      do i = 2, fmutn(1,j,k)
+         id = int(intmax * real(mod(fmutn(i,j,k), lb_modulo))*del_scale)
+         write(27, '(i12, a1, $)') fmutn(i,j,k), comma
+      end do
    end do
-   write(27, *)
 end do
 
 close(27)
