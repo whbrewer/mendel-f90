@@ -322,41 +322,54 @@ open(27, file='alleles.'//myid_str//'.json', status='unknown')
 
 write(27, '(a)') '{ '
 
+write(27, '(a,i8,$)') '"pop_size":', pop_size, comma
+
+write(27, '(a$)') '"deleterious": ['
 do k = 1, pop_size
    do j = 1, 2
-      write(27, '(a$)') '[ "deleterious": '
       do i = 2, dmutn(1,j,k)
-         id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
-         write(27, '(i12, a1, $)') id, comma
+         id = abs(int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale))
+         if (k == pop_size .and. j == 2 .and. i == dmutn(1,j,k)) then
+            write(27, '(i12$)') id
+         else
+            write(27, '(i12, a1, $)') id, comma
+         end if
       end do
-      write(27, '(a)') '], '
   end do
 end do
+write(27, '(a)') '], '
 
+write(27, '(a$)') '"neutral": ['
 do k = 1, pop_size
    do j = 1, 2
-      write(27, '(a$)') '[ "neutral": '
       do i = 2, nmutn(1,j,k)
-         id = int(intmax * real(mod(nmutn(i,j,k), lb_modulo)))
-         write(27, '(i12, a1, $)') id, comma
+         id = abs(int(intmax * real(mod(nmutn(i,j,k), lb_modulo))))
+         if (k == pop_size .and. j == 2 .and. i == nmutn(1,j,k)) then
+            write(27, '(i12$)') id
+         else
+            write(27, '(i12, a1, $)') id, comma
+         end if
       end do
-      write(27, '(a)') '], '
   end do
 end do
+write(27, '(a)') '], '
 
+write(27, '(a$)') '"favorable:" ['
 do k = 1, pop_size
    do j = 1, 2
-      write(27, '(a$)') '[ "favorable:" '
       do i = 2, fmutn(1,j,k)
-         id = int(intmax * real(mod(fmutn(i,j,k), lb_modulo))*del_scale)
-         write(27, '(i12, a1, $)') id, comma
+         id = abs(int(intmax * real(mod(fmutn(i,j,k), lb_modulo))*fav_scale))
+         if (k == pop_size .and. j == 2 .and. i == fmutn(1,j,k)) then
+            write(27, '(i12$)') id
+         else
+            write(27, '(i12, a1, $)') id, comma
+         end if
       end do
-      write(27, '(a)') ']'
    end do
 end do
 
+write(27, '(a)') ']'
 write(27, '(a)') '} '
-
 close(27)
 
 end subroutine write_alleles
