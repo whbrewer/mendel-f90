@@ -318,31 +318,44 @@ end if
 !open(27, file=data_file_path(1:npath)//case_id//'.'//myid_str &
 !//'.csv',status='unknown')
 !open(27, file='alleles.csv', status='unknown')
-open(27, file='alleles.'//myid_str//'.csv', status='unknown')
+open(27, file='alleles.'//myid_str//'.json', status='unknown')
+
+write(27, '(a)') '{ '
 
 do k = 1, pop_size
-   write(27, '(/a,i12)') '# INDIVIDUAL', k
- 
    do j = 1, 2
-      write(27, '(/a,i2)') '# -- haplotype', j
-      write(27, '(/a,i12)') '# -- deleterious mutations', dmutn(1,j,k)
+      write(27, '(a$)') '[ "deleterious": '
       do i = 2, dmutn(1,j,k)
-         !id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
-         write(27, '(i12, a1, $)') dmutn(i,j,k), comma
+         id = int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale)
+         write(27, '(i12, a1, $)') id, comma
       end do
+      write(27, '(a)') '], '
+  end do
+end do
 
-      write(27, '(/a,i12)') '# -- neutral mutations', nmutn(1,j,k)
+do k = 1, pop_size
+   do j = 1, 2
+      write(27, '(a$)') '[ "neutral": '
       do i = 2, nmutn(1,j,k)
-         write(27, '(i12, a1, $)') nmutn(i,j,k), comma
+         id = int(intmax * real(mod(nmutn(i,j,k), lb_modulo)))
+         write(27, '(i12, a1, $)') id, comma
       end do
+      write(27, '(a)') '], '
+  end do
+end do
 
-      write(27, '(/a,i12)') '# -- favorable mutations', fmutn(1,j,k)
+do k = 1, pop_size
+   do j = 1, 2
+      write(27, '(a$)') '[ "favorable:" '
       do i = 2, fmutn(1,j,k)
          id = int(intmax * real(mod(fmutn(i,j,k), lb_modulo))*del_scale)
-         write(27, '(i12, a1, $)') fmutn(i,j,k), comma
+         write(27, '(i12, a1, $)') id, comma
       end do
+      write(27, '(a)') ']'
    end do
 end do
+
+write(27, '(a)') '} '
 
 close(27)
 
