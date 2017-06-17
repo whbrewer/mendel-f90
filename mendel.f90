@@ -964,6 +964,7 @@ do gen=gen_0+1,gen_0+num_generations
             pop_size = pop_ceiling
             reproductive_rate = reproductive_rate_saved
          end if
+         current_pop_size = pop_size
          ! START_MPI
          ! fission doubling
          if (fission_tribes .and. fission_type == 2) then
