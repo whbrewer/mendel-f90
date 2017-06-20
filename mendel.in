@@ -16,9 +16,9 @@
          max_fav_fitness_gain = 0.1
    uniform_fitness_effect_del = 0.0
    uniform_fitness_effect_fav = 0.0
-           fraction_recessive = 0.5
-  recessive_hetero_expression = 0.1
-   dominant_hetero_expression = 0.9
+           fraction_recessive = 0.0
+  recessive_hetero_expression = 0.5
+   dominant_hetero_expression = 0.5
      multiplicative_weighting = 0.0
         synergistic_epistasis = F
          se_nonlinked_scaling = 0.0
@@ -32,7 +32,7 @@
                  heritability = 0.2
             non_scaling_noise = 0.05
   fitness_dependent_fertility = F
-             selection_scheme = 2
+             selection_scheme = 3
      partial_truncation_value = 0.5
 /
 
