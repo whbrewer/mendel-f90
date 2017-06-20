@@ -1052,7 +1052,7 @@
           <div class="col-xs-2 col-sm-3">
               <input type="checkbox" name="global_allele_analysis" accesskey="4" value="on"
               %if global_allele_analysis=='T':
-              checked
+                 checked
               %end
               >
           </div>
@@ -1063,7 +1063,7 @@
           <a data-toggle="popover" title="write_vcf" data-html="true" data-content='Selecting this option will output a very large VCF file which will contain every allele in the population, which can then be analyzed by a number of other programs (e.g. vcftools, gatk, etc.) <a target="_blank" href="https://en.wikipedia.org/wiki/Variant_Call_Format">Read more about VCF files...</a>'>
           10. Output Allele File?</a></label>
         <div class="col-xs-2 col-sm-3">
-          <input type="checkbox" name="write_vcf" accesskey="4" value="on"
+          <input type="checkbox" name="write_vcf" onclick="fxn_write_alleles()" value="on"
             %if write_vcf=='T':
                 checked
             %end

@@ -930,3 +930,11 @@ function fxn_pop_growth_model(i) {
      dmi.pop_growth_rate.readOnly = false
   }
 }
+
+function fxn_write_alleles() {
+    if (dmi.write_vcf.checked) {
+        $('#desc').tagsinput('add', 'Output alleles');
+    } else {
+        $('#desc').tagsinput('remove', 'Output alleles');
+    }
+}
