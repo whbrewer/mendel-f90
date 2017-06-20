@@ -1632,7 +1632,7 @@ if(is_parallel) then
                "  neu_normalized  del_count fav_count neu_count")')
           write(21,'(i11,3f15.11,5f11.0,f15.11)') (k, dpbin(k), &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
-              npbin_count(k), 0, 0, (k-1)/float(NB), k=1,NB)
+              npbin_count(k), 0.d0, 0.d0, (k-1)/float(NB), k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
           rewind(37)
           write(37,'("# frequency",4x,"del_count",4x,"fav_count")')
