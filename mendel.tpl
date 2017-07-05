@@ -161,7 +161,7 @@
                   class="form-control"
                   onchange="fxn_fitness_distrib_type_change();">
           %opts = {'1': 'Natural distribution (Weibull)', '0': 'All mutations equal'}
-          %for key, value in opts.iteritems():
+          %for key, value in sorted(opts.items()):
             %if key == fitness_distrib_type:
               <option selected value="{{key}}">{{value}}
             %else:
@@ -463,7 +463,7 @@
           <select id="selection_scheme" name="selection_scheme" accesskey="5"
                   class="form-control"  onchange="fxn_selection(this.value)">
             %opts = {'1': 'Truncation selection', '2': 'Unrestricted probability selection', '3': 'Strict proportionality probability selection', '4': 'Partial truncation selection'}
-            %for key, value in opts.iteritems():
+            %for key, value in sorted(opts.items()):
               %if key == selection_scheme:
                 <option selected value="{{key}}">{{value}}
               %else:
@@ -498,7 +498,7 @@
         <div class="col-xs-12 col-sm-3">
           <select id="recombination_model" name="recombination_model" class="form-control">
                   %opts = {'1': 'Clonal reproduction', '2': 'Suppressed recombination', '3': 'Full sexual recombination'}
-                  %for key, value in opts.iteritems():
+                  %for key, value in sorted(opts.items()):
                       %if key == recombination_model:
                           <option selected value="{{key}}">{{value}}
                       %else:
@@ -565,7 +565,7 @@
           <select id="pop_growth_model" name="pop_growth_model" accesskey="5"
                   class="form-control"  onchange="fxn_pop_growth_model(this.value)">
             %opts = {'0': 'Off (fixed population size)', '1': 'Exponential growth', '2': 'Carrying capacity model', '4': 'Founder effects'}
-            %for key, value in opts.iteritems():
+            %for key, value in sorted(opts.items()):
               %if key == pop_growth_model:
                 <option selected value="{{key}}">{{value}}
               %else:
@@ -693,7 +693,7 @@
                 <div class="col-xs-12 col-sm-3">
                     <select class="form-control" id="migration_model" style="width:auto" name="migration_model">
                     %opts = {'1': 'Ring pass', '2': 'Stepping-stone model', '3': 'Island model'}
-                    %for key, value in opts.iteritems():
+                    %for key, value in sorted(opts.items()):
                         %if key == migration_model:
                             <option selected value="{{key}}">{{value}}
                         %else:
@@ -804,7 +804,7 @@
                 <div class="col-xs-12 col-sm-3">
                     <select id="fission_type" name="fission_type"   class="form-control">
                     %opts = {'1': 'Competition', '2': 'Doubling', '3': 'Radial Divergence'}
-                    %for key, value in opts.iteritems():
+                    %for key, value in sorted(opts.items()):
                         %if key == fission_type:
                             <option selected value="{{key}}">{{value}}</option>
                         %else:
@@ -1032,7 +1032,7 @@
         <div class="col-xs-12 col-sm-3">
           <select name="verbosity" class="form-control" id="verbosity">
             %opts = {'0': '0-Output only history', '1': '1-Output necessary files', '2': '2-Output everything' }
-            %for key, value in opts.iteritems():
+            %for key, value in sorted(opts.items()):
                 %if key == verbosity:
                     <option selected value="{{key}}">{{value}}
                 %else:
