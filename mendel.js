@@ -49,19 +49,19 @@ function fxn_initial_alleles() {
 }
 
 function fxn_initial_alleles_init() {
-  if (dmi.initial_alleles.checked == 0) {
-    dmi.num_contrasting_alleles.readOnly = true
-    dmi.max_total_fitness_increase.readOnly = true
-    dmi.initial_alleles_pop_frac.readOnly = true
-    dmi.num_high_impact_alleles.readOnly = true
-    dmi.high_impact_amplitude.readOnly = true
-  } else {
+  if (dmi.initial_alleles.checked) {
     dmi.num_contrasting_alleles.readOnly = false
     dmi.max_total_fitness_increase.readOnly = false
     dmi.initial_alleles_pop_frac.readOnly = false
     dmi.initial_alleles.checked = true
     dmi.num_high_impact_alleles.readOnly = false
     dmi.high_impact_amplitude.readOnly = false
+  } else {
+    dmi.num_contrasting_alleles.readOnly = true
+    dmi.max_total_fitness_increase.readOnly = true
+    dmi.initial_alleles_pop_frac.readOnly = true
+    dmi.num_high_impact_alleles.readOnly = true
+    dmi.high_impact_amplitude.readOnly = true
   }
 }
 
