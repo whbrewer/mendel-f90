@@ -88,6 +88,8 @@
       num_contrasting_alleles = 0
    max_total_fitness_increase = 0
      initial_alleles_pop_frac = 1.0
+      num_high_impact_alleles = 0
+        high_impact_amplitude = 0.0
                track_neutrals = F
              fraction_neutral = 0.0
         polygenic_beneficials = F

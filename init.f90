@@ -26,7 +26,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.7.1-39-g4e9fff9-dirty <<< VERSION'
+write(6,*) 'VERSION >>> v2.7.1-50-g8f820ac-dirty <<< VERSION'
 
 call date_and_time(VALUES=values)
 
@@ -552,7 +552,7 @@ subroutine gen_initial_contrasting_alleles(dmutn, fmutn, &
 ! This routine generates a small number (no larger than the number
 ! of linkage subunits) of paired alleles, with a random fitness
 ! effect on one haplotype set and an effect with the same magnitude
-! but the opposite sign on the other haplotype set.  Variation of
+! but the opposite sign on the other haplotype set.  Variation of 
 ! of fitness effect is according to a uniform random distribution
 ! with a user-specified mean value.
 
@@ -567,8 +567,7 @@ real*8 linkage_block_fitness(num_linkage_subunits,2,max_size)
 real initial_allele_effects(num_linkage_subunits)
 real w, effect, expressed
 integer h1_id, h2_id, lb, mutn, mutn_indx
-integer m, n, nskp
-integer np
+integer m, n, np, nskp, mod_high_impact
 
 w = multiplicative_weighting
 
@@ -576,6 +575,11 @@ if(num_contrasting_alleles > 0) then
    num_contrasting_alleles = min(num_linkage_subunits, &
                                  num_contrasting_alleles)
    nskp = num_linkage_subunits/num_contrasting_alleles
+   if(num_high_impact_alleles > 0) then
+      mod_high_impact = num_contrasting_alleles/num_high_impact_alleles
+   else
+      mod_high_impact = num_contrasting_alleles + 1
+   end if
 else
    return
 end if
@@ -588,15 +592,15 @@ do n=1,num_contrasting_alleles
 
    lb = 1 + (n - 1)*nskp
 
-!    Use the same mutation effect index for all of these paired
-!    alleles. This index, lb_modulo-1, is reserved exclusively for
-!    these alleles.  When treated as an ordinary mutation, the
-!    fitness effect it would imply is the smallest effect possible.
-!    The fitness effects associated with these alleles, however,
-!    are handled via the linkage_block_fitness array.  We tag these
-!    alleles with a mutation index to be able to track them over
-!    successive generations and obtain statistics on them at the
-!    end of a run.
+!  Use the same mutation effect index for all of these paired 
+!  alleles. This index, lb_modulo-1, is reserved exclusively for
+!  these alleles.  (When treated as an ordinary mutation, the 
+!  fitness effect it would imply is the smallest effect possible.)
+!  The fitness effects associated with these alleles, however, 
+!  are handled via the linkage_block_fitness array.  We tag these
+!  alleles with a mutation index to be able to track them over
+!  successive generations and obtain statistics on them at the 
+!  end of a run.
 
    mutn = lb_modulo - 1
 
@@ -612,7 +616,6 @@ do n=1,num_contrasting_alleles
    m = dmutn(1,h1_id,1) + 1
    dmutn(m+1,h1_id,1:np) = mutn_indx
    dmutn(  1,h1_id,1:np) = m
-
    m = fmutn(1,h2_id,1) + 1
    fmutn(m+1,h2_id,1:np) = mutn_indx
    fmutn(  1,h2_id,1:np) = m
@@ -623,6 +626,11 @@ do n=1,num_contrasting_alleles
    effect = 2.*initial_alleles_mean_effect*randomnum(1)
    if(num_contrasting_alleles < 11) &
       effect = initial_alleles_mean_effect
+
+!  If allele pair is of the high-impact type, set its effect to the 
+!  value high_impact_amplitude.
+
+   if(mod(n, mod_high_impact) == 0) effect = high_impact_amplitude
 
 !  Store the value of the fitness effect for each allele pair in
 !  array initial_allele_effects.

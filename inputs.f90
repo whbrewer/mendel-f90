@@ -15,7 +15,8 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         selection_scheme, migration_generations,                  &
         migration_model, num_contrasting_alleles,                 &
         pop_growth_model, plot_allele_gens, verbosity,            &
-        poisson_method, recombination_model, carrying_capacity
+        poisson_method, recombination_model, carrying_capacity,   &
+        num_high_impact_alleles
 
 
 real    reproductive_rate, mutn_rate,                             &
@@ -31,7 +32,7 @@ real    reproductive_rate, mutn_rate,                             &
         se_linked_scaling, pop_growth_rate,                       &
         tc_scaling_factor, group_heritability, fraction_neutral,  &
         social_bonus_factor, max_total_fitness_increase,          &
-        polygenic_effect, initial_alleles_pop_frac
+        polygenic_effect, initial_alleles_pop_frac, high_impact_amplitude
 
 real*8 :: tracking_threshold, extinction_threshold
 
@@ -92,6 +93,7 @@ namelist /computation/ tracking_threshold, extinction_threshold, &
 
 namelist /special_apps/ num_contrasting_alleles, &
      max_total_fitness_increase, initial_alleles_pop_frac, &
+     num_high_impact_alleles, high_impact_amplitude, &
      track_neutrals, fraction_neutral, &
      polygenic_effect, polygenic_beneficials, polygenic_target, &
      polygenic_init
@@ -177,6 +179,10 @@ write(nf,'(a32,f12.7)') ' initial_alleles_mean_effect = ', &
                           initial_alleles_mean_effect
 write(nf,'(a32,f12.7)') ' initial_alleles_pop_frac = ', &
                           initial_alleles_pop_frac
+write(nf,'(a32,i12)')   ' num_high_impact_alleles = ',     &
+                          num_high_impact_alleles
+write(nf,'(a32,f12.7)') ' high_impact_amplitude = ', &
+                          high_impact_amplitude
 write(nf,'(a32,l)')     ' dynamic_linkage = '      , dynamic_linkage
 write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
                           haploid_chromosome_number
@@ -319,6 +325,8 @@ data_file_path = './'
 num_contrasting_alleles = 0
 initial_alleles_mean_effect = 1.0
 initial_alleles_pop_frac = 0.5
+num_high_impact_alleles = 0
+high_impact_amplitude = 0.0
 track_neutrals = .false.
 fraction_neutral = 0.0
 polygenic_beneficials = .false.
