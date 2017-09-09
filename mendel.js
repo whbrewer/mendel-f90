@@ -13,7 +13,7 @@ function fxn_init() {
   fxn_restart_case_able()
   fxn_is_parallel_init()
   fxn_migration()
-  fxn_clone()
+  fxn_clone_init()
   fxn_fraction_neutral()
   //fxn_polygenic_beneficials();
   fxn_polygenics_able()
@@ -124,7 +124,7 @@ function fxn_dynamic_linkage() {
   if (dmi.dynamic_linkage.checked) {
     //mendel_input.num_linkage_subunits.value = 989
     if (dmi.haploid_chromosome_number.value = "0")
-           dmi.haploid_chromosome_number.value = "23"
+          dmi.haploid_chromosome_number.value = "23"
   } else {
     dmi.num_linkage_subunits.value = 989
   }
@@ -818,21 +818,27 @@ function fxn_tribes(max_tribes) {
 }
 
 function fxn_clone() {
-   if (dmi.recombination_model.selectedIndex == 2) {
-      dmi.fraction_self_fertilization.readOnly = true
-      dmi.num_contrasting_alleles.readOnly = true
-      dmi.max_total_fitness_increase.readOnly = true
-      dmi.dynamic_linkage.readOnly = true
-      dmi.haploid_chromosome_number.readOnly = true
-      dmi.num_linkage_subunits.value = 1
-   } else {
-      dmi.fraction_self_fertilization.readOnly = false
-      dmi.num_contrasting_alleles.readOnly = false
-      dmi.max_total_fitness_increase.readOnly = false
-      dmi.dynamic_linkage.readOnly = false
-      dmi.haploid_chromosome_number.readOnly = false
-      //dmi.num_linkage_subunits.value = 1000
-   }
+    fxn_clone_init()
+    if (dmi.recombination_model.selectedIndex == 2) {
+        dmi.num_linkage_subunits.value = 10
+    }
+}
+
+function fxn_clone_init() {
+    if (dmi.recombination_model.selectedIndex == 2) {
+        dmi.fraction_self_fertilization.readOnly = true
+        dmi.num_contrasting_alleles.readOnly = true
+        dmi.max_total_fitness_increase.readOnly = true
+        dmi.dynamic_linkage.readOnly = true
+        dmi.haploid_chromosome_number.readOnly = true
+    } else {
+        dmi.fraction_self_fertilization.readOnly = false
+        dmi.num_contrasting_alleles.readOnly = false
+        dmi.max_total_fitness_increase.readOnly = false
+        dmi.dynamic_linkage.readOnly = false
+        dmi.haploid_chromosome_number.readOnly = false
+    }
+
 }
 
 function fxn_selection_init() {
