@@ -1132,7 +1132,7 @@
         </label>
         <div class="col-xs-12 col-sm-3">
           <input type="number" name="num_high_impact_alleles" title="0 - 1"
-              value="{{num_high_impact_alleles}}" min="0" max="1" step="0.1"
+              value="{{num_high_impact_alleles}}" min="0" max="1000" step="0.1"
               onchange="validate(this)"
               class="form-control">
         </div>
