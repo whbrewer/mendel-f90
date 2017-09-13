@@ -24,7 +24,7 @@ function fxn_init() {
   fxn_auto_malloc()
   fxn_initial_alleles_init()
   fxn_fission()
-  fxn_pop_growth_model(dmi.pop_growth_model.selectedIndex+1)
+  fxn_pop_growth_model(dmi.pop_growth_model.selectedIndex)
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
   compute_u()
@@ -928,12 +928,7 @@ function fxn_pop_growth_model(i) {
      $('#desc').tagsinput('add', 'Carrying capacity');
      $('#desc').tagsinput('remove', 'Exponential growth');
      $('#desc').tagsinput('remove', 'Founder');
-  } else if (i == 3) { // Prescribed pop size
-     dmi.pop_growth_rate.readOnly = true
-     dmi.pop_growth_rate2.readOnly = true
-     dmi.carrying_capacity.readOnly = true
-     dmi.carrying_capacity.value = 10000
-  } else if (i == 4) { // Founder effects
+  } else if (i == 3) { // Founder effects
      dmi.pop_growth_rate.readOnly = false
      dmi.pop_growth_rate2.readOnly = false
      dmi.pop_growth_rate.value = 8.0;
@@ -948,6 +943,11 @@ function fxn_pop_growth_model(i) {
      $('#desc').tagsinput('add', 'Founder');
      $('#desc').tagsinput('remove', 'Carrying capacity');
      $('#desc').tagsinput('remove', 'Exponential growth');
+  } else if (i == 4) { // Prescribed pop size
+    dmi.pop_growth_rate.readOnly = true
+    dmi.pop_growth_rate2.readOnly = true
+    dmi.carrying_capacity.readOnly = true
+    dmi.carrying_capacity.value = 10000
   } else {
      dmi.pop_growth_rate.readOnly = false
   }

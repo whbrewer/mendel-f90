@@ -164,9 +164,9 @@ if(is_parallel .and. tribal_competition) then
    pop_size_allocation = global_pop_size
    write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
                 pop_size_allocation
-elseif (pop_growth_model==2 .or. pop_growth_model==3) then
+elseif (pop_growth_model==2 .or. pop_growth_model==4) then
    pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
-elseif (pop_growth_model == 4) then
+elseif (pop_growth_model == 3) then
    bottleneck_yes = .false.
    gr1 = pop_growth_rate
    gr2 = pop_growth_rate2
@@ -189,7 +189,7 @@ if(tribal_competition) then
    nmax = 12.*(1. - fraction_random_death) + 0.999
 !  Limit the minimum value of heritability to be 10**-20.
    group_heritability = max(1.e-20, group_heritability)
-elseif (pop_growth_model == 4) then
+elseif (pop_growth_model == 3) then
    max_size = int(pop_size_allocation*(1. - fraction_random_death))
    nmax = 2.*reproductive_rate*(1. - fraction_random_death) + 0.999
 else
@@ -933,20 +933,7 @@ do gen=gen_0+1,gen_0+num_generations
          pop_size = ceiling(pop_size*(1. + pop_growth_rate* &
                     (1. - pop_size/carrying_capacity)))
          current_pop_size = pop_size
-      else if (pop_growth_model == 3) then
-         old_pop_size = pop_size
-         if (gen > 20) then
-            pop_size = prescribed_pop_growth(size(prescribed_pop_growth))
-         else
-            pop_size = prescribed_pop_growth(gen)
-         end if
-         growth_rate = pop_size/real(old_pop_size)
-         if (growth_rate > reproductive_rate) then
-            print *, 'ERROR: INCREASE REPRODUCTION RATE'
-            stop
-         end if
-         current_pop_size = pop_size
-      else if (pop_growth_model == 4) then ! Founder effects
+      else if (pop_growth_model == 3) then ! Founder effects
          if (fission_tribes .and. gen < fission_threshold) then
             pop_ceiling = carrying_capacity*num_tribes
          else
@@ -1013,6 +1000,19 @@ do gen=gen_0+1,gen_0+num_generations
              endif
          endif
          ! END_MPI
+     else if (pop_growth_model == 4) then ! prescribed growth (deprecated)
+        old_pop_size = pop_size
+        if (gen > 20) then
+           pop_size = prescribed_pop_growth(size(prescribed_pop_growth))
+        else
+           pop_size = prescribed_pop_growth(gen)
+        end if
+        growth_rate = pop_size/real(old_pop_size)
+        if (growth_rate > reproductive_rate) then
+           print *, 'ERROR: INCREASE REPRODUCTION RATE'
+           stop
+        end if
+        current_pop_size = pop_size
       else
          write(0,*) 'ERROR: pop_growth_model ', pop_growth_model, &
                     'not supported'
