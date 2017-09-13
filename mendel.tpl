@@ -46,16 +46,10 @@
 <div class="visible-xs" style="height:10px"></div>
 
 <div class="row">
-<div class="form-group">
-  <div class="hidden-xs col-sm-2">
-    <button type="submit" class="btn btn-success"> <!-- pull-right -->
-      Continue <em class="glyphicon glyphicon-forward"></em> </button>
-  </div>
-  <div class="hidden-xs col-sm-10">
-    <input type="text" id="desc" name="desc" class="form-control"
-           data-role="tagsinput" placeholder="enter tag...">
-  </div>
-</div>
+    <div class="hidden-xs col-sm-2">
+      <button type="submit" class="btn btn-success" style="position:fixed; top: 8px; left: 500px; z-index:9999"> <!-- pull-right -->
+        Continue <em class="glyphicon glyphicon-forward"></em> </button>
+    </div>
 </div>
 
 <div class="tribe" id="tribediv" style="display:none">
@@ -1250,6 +1244,15 @@
   <div class="visible-xs col-xs-12">
     <button type="submit" class="btn btn-success"> <!-- pull-right -->
       Continue <em class="glyphicon glyphicon-forward"></em> </button>
+  </div>
+
+  <div class="row">
+      <div class="form-group">
+        <div class="hidden-xs col-sm-10 col-sm-offset-1">
+          <input type="text" id="desc" name="desc" class="form-control"
+                 data-role="tagsinput" placeholder="enter tag...">
+        </div>
+      </div>
   </div>
 
   </form>
