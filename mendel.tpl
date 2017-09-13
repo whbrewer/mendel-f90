@@ -47,7 +47,7 @@
 
 <div class="row">
     <div class="hidden-xs col-sm-2">
-      <button type="submit" class="btn btn-success" style="position:fixed; top: 8px; left: 500px; z-index:9999"> <!-- pull-right -->
+      <button type="submit" class="btn btn-success" style="position:fixed; top: 8px; left: 530px; z-index:9999"> <!-- pull-right -->
         Continue <em class="glyphicon glyphicon-forward"></em> </button>
     </div>
 </div>
