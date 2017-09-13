@@ -931,8 +931,8 @@ function fxn_pop_growth_model(i) {
   } else if (i == 3) { // Founder effects
      dmi.pop_growth_rate.readOnly = false
      dmi.pop_growth_rate2.readOnly = false
-     dmi.pop_growth_rate.value = 8.0;
-     dmi.pop_growth_rate2.value = 4.0;
+     if (dmi.pop_growth_rate.value == "0.0") { dmi.pop_growth_rate.value = 8.0; }
+     if (dmi.pop_growth_rate2.value == "0.0") { dmi.pop_growth_rate2.value = 4.0; }
      dmi.carrying_capacity.readOnly = false
      dmi.pop_size.value = 2;
      dmi.bottleneck_yes.checked = true
