@@ -44,6 +44,7 @@
          num_linkage_subunits = 989
              pop_growth_model = 0
               pop_growth_rate = 0.0
+             pop_growth_rate2 = 0.0
             carrying_capacity = 1000
                bottleneck_yes = F
         bottleneck_generation = 0

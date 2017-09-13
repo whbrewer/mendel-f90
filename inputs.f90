@@ -29,7 +29,7 @@ real    reproductive_rate, mutn_rate,                             &
         fraction_random_death, fraction_self_fertilization,       &
         initial_alleles_mean_effect, non_scaling_noise,           &
         partial_truncation_value, se_nonlinked_scaling,           &
-        se_linked_scaling, pop_growth_rate,                       &
+        se_linked_scaling, pop_growth_rate, pop_growth_rate2,     &
         tc_scaling_factor, group_heritability, fraction_neutral,  &
         social_bonus_factor, max_total_fitness_increase,          &
         polygenic_effect, initial_alleles_pop_frac, high_impact_amplitude
@@ -74,8 +74,8 @@ namelist /selection/ fraction_random_death, heritability, &
 namelist /population/ recombination_model, clonal_haploid, &
      dynamic_linkage, haploid_chromosome_number, &
      fraction_self_fertilization, num_linkage_subunits, &
-     pop_growth_model, pop_growth_rate, bottleneck_yes, &
-     bottleneck_generation, bottleneck_pop_size, &
+     pop_growth_model, pop_growth_rate, pop_growth_rate2, &
+     bottleneck_yes, bottleneck_generation, bottleneck_pop_size, &
      num_bottleneck_generations, carrying_capacity
 
 namelist /substructure/ is_parallel, homogenous_tribes, &
@@ -189,6 +189,7 @@ write(nf,'(a32,i12)')   ' haploid_chromosome_number = ',   &
 write(nf,'(a32,i12)')   ' num_linkage_subunits = ' , num_linkage_subunits
 write(nf,'(a32,i12)')   ' pop_growth_model = '     , pop_growth_model
 write(nf,'(a32,f12.7)') ' pop_growth_rate = '      , pop_growth_rate
+write(nf,'(a32,f12.7)') ' pop_growth_rate2 = '     , pop_growth_rate2
 write(nf,'(a32,i12)')   ' carrying_capacity = '    , carrying_capacity
 write(nf,'(a32,l)')     ' bottleneck_yes = '       , bottleneck_yes
 write(nf,'(a32,i12)')   ' bottleneck_generation = ', bottleneck_generation
@@ -283,7 +284,8 @@ dynamic_linkage = .true.
 haploid_chromosome_number = 23
 num_linkage_subunits = 989
 pop_growth_model = 0 ! fixed_population
-pop_growth_rate = 0
+pop_growth_rate  = 0
+pop_growth_rate2 = 0
 bottleneck_yes = .false.
    bottleneck_generation = 0
    bottleneck_pop_size = 0

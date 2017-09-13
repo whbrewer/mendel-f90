@@ -168,8 +168,8 @@ elseif (pop_growth_model==2 .or. pop_growth_model==3) then
    pop_size_allocation = 1.2*carrying_capacity*reproductive_rate
 elseif (pop_growth_model == 4) then
    bottleneck_yes = .false.
-   gr1 = int(pop_growth_rate)
-   gr2 = (pop_growth_rate - gr1)*10.
+   gr1 = pop_growth_rate
+   gr2 = pop_growth_rate2
    reproductive_rate_saved = reproductive_rate
    reproductive_rate = gr1
    if (is_parallel .and. fission_tribes) then

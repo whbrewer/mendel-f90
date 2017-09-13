@@ -24,6 +24,7 @@ function fxn_init() {
   fxn_auto_malloc()
   fxn_initial_alleles_init()
   fxn_fission()
+  fxn_pop_growth_model(dmi.pop_growth_model.selectedIndex+1)
   //document.getElementById("tribediv").style.display = "none"
   //dmi.case_id.focus()
   compute_u()
@@ -901,9 +902,11 @@ function fxn_fission() {
 function fxn_pop_growth_model(i) {
   if (i == 0) {
      dmi.pop_growth_rate.readOnly = true
+     dmi.pop_growth_rate2.readOnly = true
      dmi.carrying_capacity.readOnly = true
   } else if (i == 1) { // Exponential growth
      dmi.pop_growth_rate.readOnly = false
+     dmi.pop_growth_rate2.readOnly = true
      dmi.carrying_capacity.readOnly = true
      dmi.pop_size.value = "2";
      dmi.num_generations.value = "2000";
@@ -915,6 +918,7 @@ function fxn_pop_growth_model(i) {
      $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 2) { // Carrying capacity
      dmi.pop_growth_rate.readOnly = false
+     dmi.pop_growth_rate2.readOnly = true
      dmi.carrying_capacity.readOnly = false
      dmi.pop_size.value = "2";
      dmi.num_generations.value = "1000";
@@ -926,13 +930,16 @@ function fxn_pop_growth_model(i) {
      $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 3) { // Prescribed pop size
      dmi.pop_growth_rate.readOnly = true
+     dmi.pop_growth_rate2.readOnly = true
      dmi.carrying_capacity.readOnly = true
      dmi.carrying_capacity.value = 10000
   } else if (i == 4) { // Founder effects
      dmi.pop_growth_rate.readOnly = false
-     dmi.pop_growth_rate.value = "8"
+     dmi.pop_growth_rate2.readOnly = false
+     dmi.pop_growth_rate.value = 8.0;
+     dmi.pop_growth_rate2.value = 4.0;
      dmi.carrying_capacity.readOnly = false
-     dmi.pop_size.value = "2";
+     dmi.pop_size.value = 2;
      dmi.bottleneck_yes.checked = true
      dmi.bottleneck_generation.value = parseInt(dmi.num_generations.value) + 1
      dmi.bottleneck_pop_size.value = 10

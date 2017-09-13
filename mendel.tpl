@@ -573,10 +573,14 @@
       <div class="form-group">
         <label for="pop_growth_rate" style="left:20px" class="control-label col-xs-12 col-sm-6">
           <a data-toggle="popover" title="pop_growth_rate" data-content='The population growth rate parameter determines the percent growth rate per generation. A value of 1.0 represents static population size (no growth). To grow the population 2% per generation, enter the parameter 1.02 (note: one may need to manually convert published annual population growth rates to population growth per generation by using a formula such as 1.0220 = 1.48/generation — assuming a 20 year generation time).'>b. population growth rate:</a></label>
-        <div class="col-xs-12 col-sm-3">
+        <div class="col-xs-12 col-sm-3 input-group" style="padding-left:15px; padding-right:15px">
           <input type="number" name="pop_growth_rate" class="form-control"
-                 min="1" max="1.26" step="0.02" onchange="validate(this)"
+                 min="1" max="10.0" step="0.02" onchange="validate(this)"
                  value="{{pop_growth_rate}}">
+          <span class="input-group-addon"></span>
+          <input type="number" name="pop_growth_rate2" class="form-control"
+                 min="1" max="10.0" step="0.02" onchange="validate(this)"
+                 value="{{pop_growth_rate2}}">
         </div>
       </div>
 
