@@ -931,13 +931,13 @@ function fxn_pop_growth_model(i) {
   } else if (i == 3) { // Founder effects
      dmi.pop_growth_rate.readOnly = false
      dmi.pop_growth_rate2.readOnly = false
-     if (dmi.pop_growth_rate.value == "0.0") { dmi.pop_growth_rate.value = 8.0; }
-     if (dmi.pop_growth_rate2.value == "0.0") { dmi.pop_growth_rate2.value = 4.0; }
-     dmi.carrying_capacity.readOnly = false
+     if (dmi.pop_growth_rate.value == 0) { dmi.pop_growth_rate.value = 8.0; }
+     if (dmi.pop_growth_rate2.value == 0) { dmi.pop_growth_rate2.value = 4.0; }
+     dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = 2;
-     dmi.bottleneck_yes.checked = true
-     dmi.bottleneck_generation.value = parseInt(dmi.num_generations.value) + 1
-     dmi.bottleneck_pop_size.value = 10
+     dmi.bottleneck_yes.checked = true;
+     if (dmi.bottleneck_generation.value == 0) { dmi.bottleneck_generation.value = parseInt(dmi.num_generations.value) + 1; }
+     if (dmi.bottleneck_pop_size.value == 0) { dmi.bottleneck_pop_size.value = 10; }
      document.getElementById("bydiv").style.display = "block"
      document.getElementById("nbg").style.display = "none"
      $('#desc').tagsinput('add', 'Founder');
