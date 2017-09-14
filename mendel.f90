@@ -251,7 +251,7 @@ end if
 ! If the bottleneck flag, bottleneck_yes, is false, set the value
 ! of bottleneck_generation beyond the generation range for this run.
 
-if(.not.bottleneck_yes .and. pop_growth_model /= 4) &
+if(.not.bottleneck_yes .and. pop_growth_model /= 3) &
    bottleneck_generation = 1 + gen_0 + num_generations
 
 ! Initialize the population size to be equal to the parameter
