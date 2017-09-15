@@ -54,7 +54,7 @@ real tin_offspring, tout_offspring, tgen, par_tgen
 real tin_diagnostics, tout_diagnostics, tin_selection, tout_selection
 real total_time_offspring, time_offspring, time_selection
 real par_time_offspring, par_time_selection, tsub
-real reproductive_rate_saved
+real reproductive_rate_input
 logical found, print_flag, am_parallel, file_exists, winner, create_fav_mutn
 character*3 myid_str
 character(len=128) :: arg, filename
@@ -156,6 +156,8 @@ else
   am_parallel = .false.
 endif
 
+reproductive_rate_input = reproductive_rate
+
 if(is_parallel .and. tribal_competition) then
    global_run_status = 0
    run_status = 0
@@ -170,7 +172,6 @@ elseif (pop_growth_model == 3) then
    bottleneck_yes = .false.
    gr1 = pop_growth_rate
    gr2 = pop_growth_rate2
-   reproductive_rate_saved = reproductive_rate
    reproductive_rate = gr1
    if (is_parallel .and. fission_tribes) then
        pop_size_allocation = 1.2*carrying_capacity*reproductive_rate*num_tribes
@@ -345,6 +346,12 @@ sec(1) = sec(1) + tout - tin
 ! Step population through num_generations generations.
 
 do gen=gen_0+1,gen_0+num_generations
+
+    if (special_feature_code == 50 .and. gen == 1) then
+        reproductive_rate = 50
+    else
+        reproductive_rate = reproductive_rate_input
+    end if
 
    !call print_genotype(1)
    !call print_genotype(1,10)
@@ -949,7 +956,7 @@ do gen=gen_0+1,gen_0+num_generations
             reproductive_rate = gr2
          else
             pop_size = pop_ceiling
-            reproductive_rate = reproductive_rate_saved
+            reproductive_rate = reproductive_rate_input
          end if
          current_pop_size = pop_size
          ! START_MPI

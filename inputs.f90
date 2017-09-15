@@ -16,7 +16,7 @@ integer pop_size, num_generations, num_linkage_subunits,          &
         migration_model, num_contrasting_alleles,                 &
         pop_growth_model, plot_allele_gens, verbosity,            &
         poisson_method, recombination_model, carrying_capacity,   &
-        num_high_impact_alleles
+        num_high_impact_alleles, special_feature_code
 
 
 real    reproductive_rate, mutn_rate,                             &
@@ -96,7 +96,7 @@ namelist /special_apps/ num_contrasting_alleles, &
      num_high_impact_alleles, high_impact_amplitude, &
      track_neutrals, fraction_neutral, &
      polygenic_effect, polygenic_beneficials, polygenic_target, &
-     polygenic_init
+     polygenic_init, special_feature_code
 
 read (unit=nf, nml=basic)
 read (unit=nf, nml=mutations)
@@ -335,6 +335,7 @@ polygenic_beneficials = .false.
 polygenic_init = 'AAAAAA'
 polygenic_target = 'TCGTCG'
 polygenic_effect = 0.001
+special_feature_code = 0
 
 end subroutine set_default_parameters
 

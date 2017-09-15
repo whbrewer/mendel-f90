@@ -1219,6 +1219,16 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="special_feature_code" class="control-label col-xs-10 col-sm-6">
+          <a data-toggle="popover" title="special_feature_code" data-html='true' data-content=''>4. Special feature code?</a></label>
+        <div class="col-xs-2 col-sm-3">
+            <input type="number" name="special_feature_code" class="form-control"
+                   min="0" max="100000" step="1" onchange="validate(this)"
+                   value="{{special_feature_code}}" title="0 - 100000">
+        </div>
+      </div>
+
     </div>
 
   </div>

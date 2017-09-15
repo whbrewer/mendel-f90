@@ -97,6 +97,7 @@
                polygenic_init = 'AAAAAA'
              polygenic_target = 'TCGTCG'
              polygenic_effect = 0.001
+         special_feature_code = 0
 /
 
 &interface
