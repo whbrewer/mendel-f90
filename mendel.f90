@@ -347,12 +347,6 @@ sec(1) = sec(1) + tout - tin
 
 do gen=gen_0+1,gen_0+num_generations
 
-    if (special_feature_code == 50 .and. gen == 1) then
-        reproductive_rate = 50
-    else
-        reproductive_rate = reproductive_rate_input
-    end if
-
    !call print_genotype(1)
    !call print_genotype(1,10)
 
@@ -952,6 +946,7 @@ do gen=gen_0+1,gen_0+num_generations
          else if (gen == bottleneck_generation) then
             pop_size = bottleneck_pop_size
          else if (gen > bottleneck_generation .and. pop_size < pop_ceiling) then
+            if (special_feature_code == 1500 .and. gen == 15) gr2 = 1.5
             pop_size = min(ceiling(gr2*pop_size), pop_ceiling)
             reproductive_rate = gr2
          else
