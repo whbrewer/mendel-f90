@@ -1630,24 +1630,24 @@ if(is_parallel) then
       if (global_allele_analysis) then
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized  del_count fav_count neu_count")')
-          write(21,'(i11,3f15.11,5f11.0,f15.11)') (k, dpbin(k), &
+          write(21,'(i11,3f15.11,5f11.0,f15.11)') (k-1, dpbin(k), &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k),     &
               npbin_count(k), 0.d0, 0.d0, (k-1)/float(NB), k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
           rewind(37)
           write(37,'("# frequency",4x,"del_count",4x,"fav_count")')
-          write(37,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
+          write(37,'(i11,2f11.0)') (k-1, dpbin_count(k)+dpbin_count(NB-k+1), &
                                        fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
       else
           write(21,'("# frequency del_normalized fav_normalized", &
                "  neu_normalized  del_count fav_count neu_count", &
                " upload_del upload_fav freq_normalized")')
-          write(21,'(i11,3f15.11,5f11.0,f15.11)')  (k, par_dpbin(k),  &
+          write(21,'(i11,3f15.11,5f11.0,f15.11)')  (k-1, par_dpbin(k),  &
                 par_fpbin(k), par_npbin(k), par_dpbin_count(k), par_fpbin_count(k), &
                 par_npbin_count(k), par_udpbin_count(k), &
                 par_ufpbin_count(k), (k-1)/float(NB), k=1,NB)
           ! minor allele frequency fold-over plot bins should be from 1 to 50
-          write(37,'(i11,2f11.0)') (k, par_dpbin_count(k)+par_dpbin_count(NB-k+1), &
+          write(37,'(i11,2f11.0)') (k-1, par_dpbin_count(k)+par_dpbin_count(NB-k+1), &
                                        par_fpbin_count(k)+par_fpbin_count(NB-k+1), k=1, NB/2)
       endif
 
@@ -1672,7 +1672,7 @@ if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
     write(11,'("# frequency del_normalized fav_normalized", &
                " neu_normalized del_count  fav_count  neu_count", &
                " upload_del upload_fav freq_normalized")')
-    write(11,'(i11,3f15.11,5f11.0,f15.11)')  (k, dpbin(k),  &
+    write(11,'(i11,3f15.11,5f11.0,f15.11)')  (k-1, dpbin(k),  &
               fpbin(k), npbin(k), dpbin_count(k), fpbin_count(k), &
               npbin_count(k), udpbin_count(k), &
               ufpbin_count(k), (k-1)/float(NB), k=1,NB)
@@ -1680,7 +1680,7 @@ if (mod(gen, plot_allele_gens)==0 .and. verbosity>0) then
     ! minor allele frequency fold-over plot bins should be from 1 to 50
     rewind(27)
     write(27,'("# frequency",4x,"del_count",4x,"fav_count")')
-    write(27,'(i11,2f11.0)') (k, dpbin_count(k)+dpbin_count(NB-k+1), &
+    write(27,'(i11,2f11.0)') (k-1, dpbin_count(k)+dpbin_count(NB-k+1), &
                                  fpbin_count(k)+fpbin_count(NB-k+1), k=1, NB/2)
 end if
 
@@ -1690,10 +1690,10 @@ if (.not.is_parallel.and.mod(gen,plot_allele_gens)==0.and.verbosity>0) then
     write(12,'("# generation = ",i8)') gen
     write(12,'("# frequency del_normalized fav_normalized ", &
                "  neu_normalized del_count fav_count neu_count")')
-    write(12,'(i11,3f15.11,3f11.0)')  (k, k*dpbin(k),  &
+    write(12,'(i11,3f15.11,3f11.0)')  (k-1, k*dpbin(k),  &
         k*fpbin(k), k*npbin(k), k*dpbin_count(k), k*fpbin_count(k), &
                         k*npbin_count(k), k=1,NB/2)
-    write(12,'(i11,3f15.11,3f11.0)')  (k, (NB-k)*dpbin(k), &
+    write(12,'(i11,3f15.11,3f11.0)')  (k-1, (NB-k)*dpbin(k), &
            (NB-k)*fpbin(k), (NB-k)*npbin(k), (NB-k)*dpbin_count(k),     &
            (NB-k)*fpbin_count(k), (NB-k)*npbin_count(k), k=NB/2,NB)
 end if
@@ -1705,7 +1705,7 @@ if (verbosity > 0) then
    write(13,'("# generation = ",i8)') gen
    write(13,'("# frequency del_normalized fav_normalized ", &
               "  neu_normalized del_count fav_count neu_count")')
-   write(13,'(i11,3f15.11,3f11.0)')  (k, dpbin(k), fpbin(k), npbin(k), &
+   write(13,'(i11,3f15.11,3f11.0)')  (k-1, dpbin(k), fpbin(k), npbin(k), &
         dpbin_count(k), fpbin_count(k), npbin_count(k), k=1,NB)
    call flush(13)
 end if
