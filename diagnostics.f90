@@ -1727,11 +1727,11 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
    write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
               num_nalleles(2), num_nalleles(3), ncount
    if(dwarn == 1) write(11,'("# Warning: Number of deleterious " &
-      "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+      "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(11,'("# Warning: Number of   favorable " &
-      "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+      "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(nwarn == 1) write(11,'("# Warning: Number of     neutral " &
-      "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+      "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    call flush(11)
 end if
 
@@ -1750,11 +1750,11 @@ if(myid == 0 .and. mod(gen,diagnostic_gens)==0 ) then
    write(6,"(' ',4i12,' neutral')")   num_nalleles(1),   &
         num_nalleles(2), num_nalleles(3), ncount
    if(dwarn == 1) write(6,'("  Warning: Number of deleterious " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(6,'("  Warning: Number of   favorable " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(nwarn == 1) write(6,'("  Warning: Number of     neutral " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 end if
 
 if(mod(gen,diagnostic_gens)==0) then
@@ -1772,11 +1772,11 @@ if(mod(gen,diagnostic_gens)==0) then
    write(9,"(' ',4i12,' neutral')")   num_nalleles(1),   &
         num_nalleles(2), num_nalleles(3), ncount
    if(dwarn == 1) write(9,'("  Warning: Number of deleterious " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(9,'("  Warning: Number of   favorable " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(nwarn == 1) write(9,'("  Warning: Number of     neutral " &
-        "polymorhisms exceeded the linkage block limit of ",i8)') MNP
+        "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 endif
 
 end subroutine diagnostics_polymorphisms_plot
