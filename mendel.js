@@ -922,6 +922,9 @@ function fxn_pop_growth_model(i) {
      dmi.carrying_capacity.readOnly = false
      dmi.pop_size.value = "2";
      dmi.num_generations.value = "1000";
+     dmi.pop_growth_rate.min = 0.0;
+     dmi.pop_growth_rate.max = 1.0;
+     dmi.pop_growth_rate.step = 0.1;
      dmi.pop_growth_rate.value = "0.1";
      dmi.pop_growth_rate.title = "0.0 - 1.0";
      warn("WARNING: dynamic populations are experimental and largely untested")
@@ -931,7 +934,12 @@ function fxn_pop_growth_model(i) {
   } else if (i == 3) { // Founder effects
      dmi.pop_growth_rate.readOnly = false
      dmi.pop_growth_rate2.readOnly = false
-     if (dmi.pop_growth_rate.value == 0) { dmi.pop_growth_rate.value = 8.0; }
+     if (dmi.pop_growth_rate.value <= 1) {
+         dmi.pop_growth_rate.value = 8.0;
+         dmi.pop_growth_rate.min = 1.0;
+         dmi.pop_growth_rate.max = 10.0;
+         dmi.pop_growth_rate.step = 0.1;
+     }
      if (dmi.pop_growth_rate2.value == 0) { dmi.pop_growth_rate2.value = 4.0; }
      dmi.carrying_capacity.readOnly = false;
      dmi.pop_size.value = 2;
