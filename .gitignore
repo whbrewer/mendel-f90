@@ -1,0 +1,7 @@
+*.o
+*.mod
+test00*
+success
+mendel
+init.f90.bak
+
