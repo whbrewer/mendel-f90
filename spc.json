@@ -73,7 +73,7 @@
                "label": "recessive"
             }
          ], 
-         "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return -Math.exp(x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }", 
+         "options": "xaxis: { axisLabel: 'Mutational Fitness Degradation', axisLabelFontSizePixels: 12, transform: function (x) { return -Math.log(x); }, inverseTransform: function (x) { return Math.exp(-x); }, ticks: [[1.0,'1'],[0.1,'1e-1'],[0.01,'1e-2'],[1e-3,'1e-3'], [1e-4,'1e-4'],[1e-5,'1e-5'],[1e-6,'1e-6'], [1e-7,'1e-7'], [1e-8,'1e-8']],tickDecimals: 6, max: 1.0 }, yaxis: { axisLabel: 'Fraction of Mutations Retained in Genome', axisLabelFontSizePixels: 12 }, legend: { position: 'nw' }",
          "ptype": "flot-scatter", 
          "title": "Distribution of accumulated mutations (deleterious)"
       }, 
