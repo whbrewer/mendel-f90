@@ -1,5 +1,7 @@
 # README #
 
+**Note: this is the original/old version of Mendel's Accountant implemented in Fortran. This is not used anymore. It is kept here for reference.**
+
 Mendel's Accountant (MENDEL) is an advanced numerical simulation program for modeling genetic change over time and was developed collaboratively by Sanford, Baumgardner, Brewer, Gibson and ReMine.
 
 For more information visit http://www.mendelsaccountant.info or http://sourceforge.net/projects/mendelsaccount
