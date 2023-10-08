@@ -10,9 +10,9 @@ For more information visit http://www.mendelsaccountant.info or http://sourcefor
 
 * Build instructions: (1) edit Makefile, (2) run "make"
 
-* A Fortran compiler is required for compiling.  A free gfortran compile can easily by installed on a Linux system by executing the command "sudo apt-get install gfortran" on Debian/Ubuntu systems, and "sudo yum install gfortran" on Redhat/Centos/SuSe systems.  
+* A Fortran compiler is required for compiling.  A free gfortran compile can easily by installed on a Linux system by executing the command `sudo apt-get install gfortran` on Debian/Ubuntu systems, and `sudo yum install gfortran` on Redhat/Centos/SuSe systems.  
 
-* gfortran can also easily on Mac OS X using Homebrew (see brew.sh) by running "brew install gcc" (gfortran is included with gcc).  You'll also need to install two files: libmpfr.4.dylib and libmpc.3.dylib in /usr/local/lib.
+* gfortran can also easily on Mac OS X using Homebrew (see brew.sh) by running `brew install gcc` (gfortran is included with gcc).  You'll also need to install two files: libmpfr.4.dylib and libmpc.3.dylib in /usr/local/lib.
 
 * MPICH (optional). Since mendel uses mpich libraries, for parallel computations, you may download and install mpich from www.mpich.org/downloads/.  
 
@@ -23,3 +23,14 @@ gfortran -O3 -I/usr/local/include -static-libgfortran -static-libgcc -o mendel_s
 ### INTERFACE ###
 
 Mendel's Accountant was designed to work with the Scientific Platform for the Cloud (SPC).  Instructions for setting up SPC can be found here: https://bitbucket.org/whbrewer/spc
+
+Since SPC is based on Python 2.7 which is no longer supported, a Dockerfile is provided to build a Docker container. This assumes that Docker has first been installed from https://docker.com. The command is as follows: 
+
+    docker build . -t mendel:2.7.3
+
+Once the image has been built, the container can be started using the following command, and then run:
+
+    docker run -p 8580:8580 mendel:2.7.3
+
+Then should be able to open a browser window to localhost:8580 to run mendel.
+
