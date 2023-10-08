@@ -5,7 +5,7 @@ GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
-FC = /usr/local/bin/mpif90
+FC = mpif90
 #FC = gfortran
 
 # Following are needed for building parallel version
