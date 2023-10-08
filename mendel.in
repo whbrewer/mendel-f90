@@ -1,5 +1,5 @@
 &basic
-                      case_id = test00
+                      case_id = 'test00'
                     mutn_rate = 10.0
                 frac_fav_mutn = 0.0001
             reproductive_rate = 1.5
