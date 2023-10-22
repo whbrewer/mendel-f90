@@ -522,7 +522,7 @@ initial_alleles_mean_effect = max_total_fitness_increase &
                             / num_contrasting_alleles
 
 ! Compute how often to output information
-if (num_generations <= 1000 .or. plot_allele_gens < 0) then
+if (num_generations <= 1000) then
    hst_gens = 1
    output_gens = 10
    diagnostic_gens = 20
@@ -543,8 +543,6 @@ else
    output_gens = 100000
    diagnostic_gens = 200000
 endif
-
-plot_allele_gens = abs(plot_allele_gens)
 
 end subroutine initialize
 
