@@ -1342,7 +1342,7 @@ if (myid == 0) then
        print '(/a)', 'Polymorphism analysis skipped because population size is too small.'
        return
     else
-       print '(/a)', 'Doing polymorphism analysis... please wait... gen: ', gen
+       print '(/a,I0)', 'Doing polymorphism analysis... please wait... gen: ', gen
     end if
 endif
 
