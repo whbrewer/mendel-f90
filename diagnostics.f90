@@ -1735,7 +1735,7 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
    call flush(11)
 end if
 
-if(myid == 0 .and. mod(gen,diagnostic_gens)==0 ) then
+if(myid == 0 .and. mod(gen,plot_allele_gens)==0 ) then
    write(6,"(/12x,'Allele summary statistics (tracked mutations only):'/ &
     '    (Statistics are based on ',i12,' tracked deleterious mutations'/ &
     '                             ',i12,' tracked   favorable mutations'/ &
@@ -1757,7 +1757,7 @@ if(myid == 0 .and. mod(gen,diagnostic_gens)==0 ) then
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 end if
 
-if(mod(gen,diagnostic_gens)==0) then
+if(mod(gen,plot_allele_gens)==0) then
    write(9,"(/12x,'Allele summary statistics (tracked mutations only):'/ &
     '    (Statistics are based on ',i12,' tracked deleterious mutations'/ &
     '                             ',i12,' tracked   favorable mutations'/ &
