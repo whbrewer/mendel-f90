@@ -522,19 +522,15 @@ initial_alleles_mean_effect = max_total_fitness_increase &
                             / num_contrasting_alleles
 
 ! Compute how often to output information
-if (num_generations <= 1000) then
+if (num_generations <= 2000) then
    hst_gens = 1
    output_gens = 10
    diagnostic_gens = 20
-elseif (num_generations <= 10000) then
+elseif (num_generations <= 20000) then
    hst_gens = 10
    output_gens = 100
    diagnostic_gens = 200
-elseif (num_generations <= 100000) then
-   hst_gens = 100
-   output_gens = 1000
-   diagnostic_gens = 2000
-elseif (num_generations <= 1000000) then
+elseif (num_generations <= 200000) then
    hst_gens = 100
    output_gens = 1000
    diagnostic_gens = 2000
