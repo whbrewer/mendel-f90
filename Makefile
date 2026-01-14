@@ -5,8 +5,8 @@ GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 #FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
 #FC = /opt/intel/bin/ifort
 #FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
-FC = /usr/local/bin/mpif90
-#FC = gfortran
+#FC = /usr/local/bin/mpif90
+FC = gfortran
 
 # Following are needed for building parallel version
 # Comment out if compiling with mpif90
@@ -44,7 +44,8 @@ OTHERS = $(MODULES) mutation.o mating.o fileio.o
 
 POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o
 
-SOBJECTS = $(OTHERS) $(SERIALFN).o init_serial.o
+SERIAL_OTHERS = $(filter-out init.o,$(OTHERS))
+SOBJECTS = $(SERIAL_OTHERS) $(SERIALFN).o init_serial.o serial_stubs.o
 
 TOBJECTS = $(OTHERS) diagnostics.o test.o migration.o
 
@@ -113,6 +114,9 @@ init.o:		init.f90 common.h
 
 init_serial.o:		init_serial.f90 common.h
 	$(FC) $(FCFLAGS) -c init_serial.f90
+
+serial_stubs.o:	serial_stubs.f90
+	$(FC) $(FCFLAGS) -c serial_stubs.f90
 
 diagnostics.o:  diagnostics.f90 common.h
 	$(FC) $(FCFLAGS) -c diagnostics.f90

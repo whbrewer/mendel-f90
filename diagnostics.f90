@@ -202,7 +202,7 @@ else
            total_fav_mutn, total_neu_mutn, pre_sel_fitness,       &
            pre_sel_geno_sd, pre_sel_pheno_sd, pre_sel_corr,       &
            post_sel_fitness, post_sel_geno_sd, post_sel_pheno_sd, &
-           post_sel_corr, num_polys_this_gen)
+           post_sel_corr, num_polys_this_gen, num_polys_cumulative)
 
       if(polygenic_beneficials) then
          suma = 0.
@@ -1299,8 +1299,8 @@ integer dcount, fcount, par_dcount, par_fcount
 integer global_mutn_count(MNP,num_tribes)
 integer global_mutn_list(MNP,num_tribes)
 integer global_list_count(num_tribes)
-integer num_falleles(3), num_dalleles(3), num_nalleles(3)
-integer par_num_falleles(3), par_num_dalleles(3), par_num_nalleles(3)
+real*8 num_falleles(3), num_dalleles(3), num_nalleles(3)
+real*8 par_num_falleles(3), par_num_dalleles(3), par_num_nalleles(3)
 integer lb_limit, dwarn, fwarn, idwarn, ifwarn, udwarn, ufwarn
 integer ncount, par_ncount, mutn_limit
 integer nwarn, mutn_thres, mutn, jmax
@@ -1656,11 +1656,11 @@ if(is_parallel) then
                  11x,"Total")')
       write(21,'("#",3x,"(0-1%)",9x,"(1-99%)",11x,"(100%)")')
       write(21,'("#",4i10," deleterious")') &
-          num_dalleles(1), num_dalleles(2), num_dalleles(3), dcount
+          int(num_dalleles(1)), int(num_dalleles(2)), int(num_dalleles(3)), dcount
       write(21,'("#",4i10," favorable")')   &
-          num_falleles(1), num_falleles(2), num_falleles(3), fcount
+          int(num_falleles(1)), int(num_falleles(2)), int(num_falleles(3)), fcount
       write(21,'("#",4i10," neutral")')     &
-          num_nalleles(1), num_nalleles(2), num_nalleles(3), ncount
+          int(num_nalleles(1)), int(num_nalleles(2)), int(num_nalleles(3)), ncount
       call flush(21)
    end if
 
@@ -1718,14 +1718,14 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
       '#    Very rare   Polymorphic     Fixed      Total'/   &
       '#      (0-1%)      (1-99%)      (100%)')") int(dsum), &
       int(fsum), int(nsum)
-   write(11,"('#',4i12,' deleterious')") num_dalleles(1), &
-              num_dalleles(2), num_dalleles(3), dcount
-   write(11,"('#',4i12,' favorable')")   num_falleles(1), &
-              num_falleles(2), num_falleles(3), fcount
-   write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
-              num_nalleles(2), num_nalleles(3), ncount
-   write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
-              num_nalleles(2), num_nalleles(3), ncount
+   write(11,"('#',4i12,' deleterious')") int(num_dalleles(1)), &
+              int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(11,"('#',4i12,' favorable')")   int(num_falleles(1)), &
+              int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(11,"('#',4i12,' neutral')")   int(num_nalleles(1)),   &
+              int(num_nalleles(2)), int(num_nalleles(3)), ncount
+   write(11,"('#',4i12,' neutral')")   int(num_nalleles(1)),   &
+              int(num_nalleles(2)), int(num_nalleles(3)), ncount
    if(dwarn == 1) write(11,'("# Warning: Number of deleterious " &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(11,'("# Warning: Number of   favorable " &
@@ -1743,12 +1743,12 @@ if(myid == 0 .and. mod(gen,diagnostic_gens)==0 ) then
     '     Very rare   Polymorphic     Fixed      Total'/   &
     '       (0-1%)      (1-99%)      (100%)')")            &
           int(dsum), int(fsum), int(nsum)
-   write(6,"(' ',4i12,' deleterious')") num_dalleles(1), &
-        num_dalleles(2), num_dalleles(3), dcount
-   write(6,"(' ',4i12,' favorable')")   num_falleles(1), &
-        num_falleles(2), num_falleles(3), fcount
-   write(6,"(' ',4i12,' neutral')")   num_nalleles(1),   &
-        num_nalleles(2), num_nalleles(3), ncount
+   write(6,"(' ',4i12,' deleterious')") int(num_dalleles(1)), &
+        int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(6,"(' ',4i12,' favorable')")   int(num_falleles(1)), &
+        int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(6,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
+        int(num_nalleles(2)), int(num_nalleles(3)), ncount
    if(dwarn == 1) write(6,'("  Warning: Number of deleterious " &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(6,'("  Warning: Number of   favorable " &
@@ -1765,12 +1765,12 @@ if(mod(gen,diagnostic_gens)==0) then
     '     Very rare   Polymorphic     Fixed      Total'/   &
     '       (0-1%)      (1-99%)      (100%)')")            &
           int(dsum), int(fsum), int(nsum)
-   write(9,"(' ',4i12,' deleterious')") num_dalleles(1), &
-        num_dalleles(2), num_dalleles(3), dcount
-   write(9,"(' ',4i12,' favorable')")   num_falleles(1), &
-        num_falleles(2), num_falleles(3), fcount
-   write(9,"(' ',4i12,' neutral')")   num_nalleles(1),   &
-        num_nalleles(2), num_nalleles(3), ncount
+   write(9,"(' ',4i12,' deleterious')") int(num_dalleles(1)), &
+        int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(9,"(' ',4i12,' favorable')")   int(num_falleles(1)), &
+        int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(9,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
+        int(num_nalleles(2)), int(num_nalleles(3)), ncount
    if(dwarn == 1) write(9,'("  Warning: Number of deleterious " &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    if(fwarn == 1) write(9,'("  Warning: Number of   favorable " &

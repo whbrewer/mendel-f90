@@ -42,7 +42,8 @@ logical :: fitness_dependent_fertility, dynamic_linkage,             &
            clonal_haploid, write_vcf,                                &
            upload_mutations, altruistic, allow_back_mutn,            &
            cyclic_bottlenecking, track_neutrals, tribal_competition, &
-           polygenic_beneficials, fission_tribes, reseed_rng,        &
+           polygenic_beneficials, fission_tribes, tribal_fission,    &
+           reseed_rng,                                               &
            global_allele_analysis
 
 ! note: if changing the string length of polygenic_target below,
@@ -52,20 +53,22 @@ character case_id*6, data_file_path*80, polygenic_target*40, polygenic_init*40
 contains
 
 subroutine read_parameters(nf)
-integer nf
+integer nf, ios
 
 namelist /basic/ case_id, mutn_rate, frac_fav_mutn, &
      reproductive_rate, pop_size, num_generations
 
 namelist /mutations/ fitness_distrib_type, &
-     genome_size, high_impact_mutn_fraction, &
+     fraction_neutral, genome_size, high_impact_mutn_fraction, &
      high_impact_mutn_threshold, uniform_fitness_effect_del, &
      uniform_fitness_effect_fav, &
      max_fav_fitness_gain, num_initial_fav_mutn, &
      multiplicative_weighting, fraction_recessive, &
      recessive_hetero_expression, dominant_hetero_expression, &
      upload_mutations, allow_back_mutn, se_nonlinked_scaling, &
-     se_linked_scaling, synergistic_epistasis
+     se_linked_scaling, synergistic_epistasis, &
+     polygenic_effect, polygenic_beneficials, polygenic_target, &
+     polygenic_init
 
 namelist /selection/ fraction_random_death, heritability, &
      non_scaling_noise, fitness_dependent_fertility, &
@@ -76,12 +79,14 @@ namelist /population/ recombination_model, clonal_haploid, &
      fraction_self_fertilization, num_linkage_subunits, &
      pop_growth_model, pop_growth_rate, pop_growth_rate2, &
      bottleneck_yes, bottleneck_generation, bottleneck_pop_size, &
-     num_bottleneck_generations, carrying_capacity
+     num_bottleneck_generations, carrying_capacity, &
+     num_contrasting_alleles, max_total_fitness_increase, &
+     initial_alleles_pop_frac
 
 namelist /substructure/ is_parallel, homogenous_tribes, &
      num_indiv_exchanged, migration_model, migration_generations, &
      tribal_competition, tc_scaling_factor, group_heritability, &
-     altruistic, social_bonus_factor, fission_tribes, &
+     altruistic, social_bonus_factor, fission_tribes, tribal_fission, &
      fission_type, fission_threshold
 
 namelist /computation/ tracking_threshold, extinction_threshold, &
@@ -89,7 +94,8 @@ namelist /computation/ tracking_threshold, extinction_threshold, &
      max_neu_mutn_per_indiv, random_number_seed, reseed_rng, &
      write_dump, write_vcf, restart_case, &
      restart_dump_number, data_file_path, plot_allele_gens, &
-     global_allele_analysis, verbosity, poisson_method
+     global_allele_analysis, verbosity, poisson_method, &
+     track_neutrals
 
 namelist /special_apps/ num_contrasting_alleles, &
      max_total_fitness_increase, initial_alleles_pop_frac, &
@@ -103,8 +109,9 @@ read (unit=nf, nml=mutations)
 read (unit=nf, nml=selection)
 read (unit=nf, nml=population)
 read (unit=nf, nml=substructure)
+if (tribal_fission) fission_tribes = .true.
 read (unit=nf, nml=computation)
-read (unit=nf, nml=special_apps)
+read (unit=nf, nml=special_apps, iostat=ios)
 
 end subroutine read_parameters
 
@@ -116,7 +123,7 @@ subroutine write_parameters(nf)
 integer nf
 
 write(nf,'("&basic")')
-write(nf,'(a32,6xa6)')  ' case_id = '              , case_id
+write(nf,'(a32,6x,a6)')  ' case_id = '              , case_id
 write(nf,'(a32,e12.3)') ' mutn_rate = '            , mutn_rate
 write(nf,'(a32,f12.7)') ' frac_fav_mutn = '        , frac_fav_mutn
 write(nf,'(a32,f12.7)') ' reproductive_rate = '    , reproductive_rate
@@ -305,6 +312,7 @@ social_bonus_factor = 1.0
 tracking_threshold = 0
 extinction_threshold = 0
 fission_tribes = .false.
+tribal_fission = fission_tribes
 fission_type = 2
 fission_threshold = 100
 

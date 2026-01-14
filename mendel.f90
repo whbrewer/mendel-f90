@@ -16,6 +16,7 @@ include 'mpif.h'
 real*8,  allocatable, target, dimension(:,:,:)   :: linkage_block_fitness
 integer, allocatable, target, dimension(:,:,:)   :: dmutn, nmutn, fmutn
 integer, allocatable, target, dimension(:,:,:,:) :: lb_mutn_count
+integer, allocatable, dimension(:,:) :: mfirst
 
 real,    allocatable, dimension(:) :: initial_allele_effects
 real*8,  allocatable, dimension(:) :: fitness, pheno_fitness
@@ -205,6 +206,7 @@ allocate(         dmutn(max_del_mutn_per_indiv/2,2,max_size),     &
                   fmutn(max_fav_mutn_per_indiv/2,2,max_size),     &
                  lb_mutn_count(num_linkage_subunits,2,3,max_size),&
          linkage_block_fitness(num_linkage_subunits,2,max_size),  &
+                 mfirst(2,max_size),                              &
         initial_allele_effects(num_linkage_subunits),             &
          pheno_fitness(max_size),      fitness(max_size),         &
           work_fitness(max_size), sorted_score(max_size),         &
@@ -851,9 +853,9 @@ do gen=gen_0+1,gen_0+num_generations
    endif
 
    if (plot_allele_gens > 0) then
-      if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
+         if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
          call diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
-                                work_fitness, max_size, gen)
+                                mfirst, max_size, gen)
    endif
 
    call second(tout_diagnostics)
@@ -1155,7 +1157,7 @@ end if
 if (plot_allele_gens > 0) then
    if(tracking_threshold /= 1.0) then
       call diagnostics_polymorphisms_plot(dmutn,nmutn,fmutn, &
-                          work_fitness, max_size, gen-1)
+                          mfirst, max_size, gen-1)
       ! if(recombination_model /= clonal)
       ! &      call diagnostics_heterozygosity(dmutn, fmutn)
    end if
