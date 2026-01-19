@@ -28,9 +28,8 @@ FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACY
 # executable name
 TARGET = $(SRC_DIR)/mendel
 
-MODULES = $(OBJDIR)/mpi_helpers.o $(OBJDIR)/ieee_helpers.o \
-          $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o $(OBJDIR)/inputs.o \
-          $(OBJDIR)/genome.o $(OBJDIR)/profile.o \
+MODULES = $(OBJDIR)/mpi_helpers.o $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o \
+          $(OBJDIR)/inputs.o $(OBJDIR)/genome.o $(OBJDIR)/profile.o \
           $(OBJDIR)/polygenic.o $(OBJDIR)/init.o $(OBJDIR)/selection.o
 
 OTHERS = $(MODULES) $(OBJDIR)/mutation.o $(OBJDIR)/mating.o \
@@ -130,6 +129,3 @@ $(OBJDIR)/genome.o:       $(SRC_DIR)/genome.f90
 	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90 -o $(OBJDIR)/genome.o
 $(OBJDIR)/mpi_helpers.o:	$(SRC_DIR)/mpi_helpers.f90 $(PROJECT_INCLUDE)/common.h
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mpi_helpers.f90 -o $(OBJDIR)/mpi_helpers.o
-
-$(OBJDIR)/ieee_helpers.o:	$(SRC_DIR)/ieee_helpers.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/ieee_helpers.f90 -o $(OBJDIR)/ieee_helpers.o

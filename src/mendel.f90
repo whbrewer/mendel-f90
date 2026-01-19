@@ -9,7 +9,6 @@ use random_pkg
 use selection_module
 use mpi
 use mpi_helpers
-use ieee_helpers
 include 'common.h'
 ! START_MPI
 ! END_MPI
@@ -66,7 +65,6 @@ integer, dimension(5) :: prescribed_pop_growth
 prescribed_pop_growth = (/16,128,1024,8192,10000/)
 
 call second(tin_run)
-call ieee_init()
 
 ! Get command-line arguments
 do i = 1, iargc()
@@ -1240,7 +1238,6 @@ endif
 ! END_MPI
 
 ! Write an empty file called success which is used by the unit testing
-call ieee_report('final')
 ! framework to know if the run has successfully completed or not
 filename = 'success'
 j = index(data_file_path,' ') - 1
