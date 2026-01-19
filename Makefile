@@ -17,7 +17,7 @@ FC = mpif90
 INCLUDE ?= /usr/local/include
 # Compiler flags
 LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
-DBUGFLAGS = -g -traceback -check $(LEGACYFLAGS) # debug version
+DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall $(LEGACYFLAGS) # debug version (gfortran)
 #FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
 FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACYFLAGS) # release version gfortran
 # note use flag -fpe:0 to handle floating point exceptions
