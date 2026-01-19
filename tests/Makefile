@@ -3,11 +3,9 @@ SRC_DIR = ../src
 MODDIR = ../src
 PROJECT_INCLUDE = ../src
 #INCLUDE = ..
-LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
 DBUGFLAGS = -g -traceback -check $(LEGACYFLAGS) # debug version
-FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACYFLAGS) # release version
-#LIBS = -lmpich -lpthread -lmpl
-FC ?= mpif90
+FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) # release version
+FC = mpif90
 # Linker flags (gfortran on OSX)
 #LDFLAGS = -static-libgfortran -static-libgcc
 

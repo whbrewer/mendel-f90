@@ -7,9 +7,8 @@ INCLUDE ?= /usr/local/include
 GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
 # gfortran flags (LEGACYFLAGS needed for older Fortran compatibility)
-LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
-FCFLAGS = -O3 -I$(SRC) -I$(INCLUDE) -J$(SRC) $(LEGACYFLAGS)
-DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall $(LEGACYFLAGS)
+FCFLAGS = -O3 -I$(SRC) -I$(INCLUDE) -J$(SRC)
+DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall
 
 # Object files
 MODULES = mpi_helpers sort random_pkg inputs genome profile polygenic init selection

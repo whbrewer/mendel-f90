@@ -322,47 +322,47 @@ open(27, file='alleles.'//myid_str//'.json', status='unknown')
 
 write(27, '(a)') '{ '
 
-write(27, '(a,i8,$)') '"pop_size":', pop_size, comma
+write(27, '(a,i8)', advance='no') '"pop_size":', pop_size, comma
 
-write(27, '(a$)') '"deleterious": ['
+write(27, '(a)', advance='no') '"deleterious": ['
 do k = 1, pop_size
    do j = 1, 2
       do i = 2, dmutn(1,j,k)
          id = abs(int(intmax * real(mod(dmutn(i,j,k), lb_modulo))*del_scale))
          if (k == pop_size .and. j == 2 .and. i == dmutn(1,j,k)) then
-            write(27, '(i12$)') id
+            write(27, '(i12)', advance='no') id
          else
-            write(27, '(i12, a1, $)') id, comma
+            write(27, '(i12, a1)', advance='no') id, comma
          end if
       end do
   end do
 end do
 write(27, '(a)') '], '
 
-write(27, '(a$)') '"neutral": ['
+write(27, '(a)', advance='no') '"neutral": ['
 do k = 1, pop_size
    do j = 1, 2
       do i = 2, nmutn(1,j,k)
          id = abs(int(intmax * real(mod(nmutn(i,j,k), lb_modulo))))
          if (k == pop_size .and. j == 2 .and. i == nmutn(1,j,k)) then
-            write(27, '(i12$)') id
+            write(27, '(i12)', advance='no') id
          else
-            write(27, '(i12, a1, $)') id, comma
+            write(27, '(i12, a1)', advance='no') id, comma
          end if
       end do
   end do
 end do
 write(27, '(a)') '], '
 
-write(27, '(a$)') '"favorable:" ['
+write(27, '(a)', advance='no') '"favorable:" ['
 do k = 1, pop_size
    do j = 1, 2
       do i = 2, fmutn(1,j,k)
          id = abs(int(intmax * real(mod(fmutn(i,j,k), lb_modulo))*fav_scale))
          if (k == pop_size .and. j == 2 .and. i == fmutn(1,j,k)) then
-            write(27, '(i12$)') id
+            write(27, '(i12)', advance='no') id
          else
-            write(27, '(i12, a1, $)') id, comma
+            write(27, '(i12, a1)', advance='no') id, comma
          end if
       end do
    end do
@@ -475,7 +475,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness degradations of tracked deleterious " &
+         write(fid,'("Fitness degradations of tracked deleterious ", &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -489,7 +489,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness degradations of tracked deleterious " &
+         write(fid,'("Fitness degradations of tracked deleterious ", &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -503,7 +503,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness improvements of tracked favorable " &
+         write(fid,'("Fitness improvements of tracked favorable ", &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -517,7 +517,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness improvements of tracked favorable " &
+         write(fid,'("Fitness improvements of tracked favorable ", &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -539,7 +539,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness degradations of tracked deleterious " &
+         write(fid,'("Fitness degradations of tracked deleterious ", &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -553,7 +553,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness degradations of tracked deleterious " &
+         write(fid,'("Fitness degradations of tracked deleterious ", &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -567,7 +567,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness improvements of tracked favorable " &
+         write(fid,'("Fitness improvements of tracked favorable ", &
                     "recessive mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -581,7 +581,7 @@ do i=current_pop_size/10,current_pop_size/3,current_pop_size/5
       end do
 
       if(j > 0) then
-         write(fid,'("Fitness improvements of tracked favorable " &
+         write(fid,'("Fitness improvements of tracked favorable ", &
                     "dominant mutations:")')
          write(fid,'(8f9.6)') (effect(m),m=1,j)
       end if
@@ -630,7 +630,8 @@ write(unit,'(/"generation =",i10,"  population size =", i6, &
       int(tracked_del_mutn/current_pop_size), &
       total_fav_mutn/current_pop_size
       if(neu_mutn > 0 .and. .not.polygenic_beneficials) write(unit, &
-         '("neu mutn/indiv =",i6,$)'), int(neu_mutn/current_pop_size)
+         '("neu mutn/indiv =",i6)', advance='no') &
+         int(neu_mutn/current_pop_size)
       if(num_polys_cumulative > 0) then
          write(unit, '("polys_this_gen =",i6,2x,"polys_cumulativ =",i6)') &
                num_polys_this_gen, num_polys_cumulative

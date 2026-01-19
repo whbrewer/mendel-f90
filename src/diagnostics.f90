@@ -179,8 +179,8 @@ if(is_parallel) then
            par_post_sel_pheno_sd, par_post_sel_corr,     &
            global_num_polys_this_gen, global_num_polys_cumulative)
 
-      if(allow_back_mutn) write(6,"('mean number of back ' &
-         'mutations/indiv =',f10.2)") real(global_num_back_mutn) &
+      if(allow_back_mutn) write(6,"('mean number of back mutations/indiv =',f10.2)") &
+         real(global_num_back_mutn) &
          /real(current_global_pop_size)
 
    end if
@@ -438,14 +438,14 @@ end if
 if(mod(gen, accum_gen) == 0 .and. verbosity == 2) then
 
    if(gen == 100) then
-   write(26,'("#"/"#",11x, "Generation    Accumulation Interval"/ &
-      2i19/"#"/"#           Accumulation Over Previous Interval"/ &
-      "#"/"# bin  fitness effect    actual      expected       "  &
+   write(26,'("#",/,"#",11x,"Generation    Accumulation Interval",/, &
+      2i19,/,"#",/,"#           Accumulation Over Previous Interval",/, &
+      "#",/,"# bin  fitness effect    actual      expected       ", &
       "ratio  expected fraction")') gen, accum_gen
    else
-   write(26,'("#"/"#",11x, "Generation    Accumulation Interval"/ &
-      2i19/"#"/"#           Accumulation Over Previous Interval"/ &
-      "#"/"# bin  fitness effect    actual      expected       "  &
+   write(26,'("#",/,"#",11x,"Generation    Accumulation Interval",/, &
+      2i19,/,"#",/,"#           Accumulation Over Previous Interval",/, &
+      "#",/,"# bin  fitness effect    actual      expected       ", &
       "ratio      total accum")') gen, accum_gen
    end if
 
@@ -1230,8 +1230,8 @@ write(*,'("and       ",i10," heterozygous mutations")') &
   count_heterozygous
 write(*,'("resulting in a percent heterozygosity of: ",f5.2,"%")') &
   fraction_heterozygous*100
-write(*,'("There are: ",f7.1," tracked deleterious " &
-  "mutations per individual")') mutn_per_individual
+write(*,'("There are: ",f7.1," tracked deleterious mutations per individual")') &
+  mutn_per_individual
 write(*,*)
 
 10   continue
@@ -1592,9 +1592,8 @@ end do
 
 if (verbosity==2) then
    write(19,'("# generation = ",i8)') gen
-   write(19,"('#',9x,'Table of polymorphism frequency vs. fitness' &
-      ' effect category'/'#'/ &
-      '#freq',17x,'fitness effect category center value')")
+   write(19,'("#",9x,"Table of polymorphism frequency vs. fitness effect category", &
+      /,"#",/,"#freq",17x,"fitness effect category center value")')
    write(19,'(3x,1p4e7.0,6e8.1)') bin_center(1:10)
    write(19,'(i3,4i7,6i8)') (k,int(febin(1:10,k)),k=1,NB)
    call flush(19)
@@ -1730,11 +1729,11 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
               int(num_nalleles(2)), int(num_nalleles(3)), ncount
    write(11,"('#',4i12,' neutral')")   int(num_nalleles(1)),   &
               int(num_nalleles(2)), int(num_nalleles(3)), ncount
-   if(dwarn == 1) write(11,'("# Warning: Number of deleterious " &
+   if(dwarn == 1) write(11,'("# Warning: Number of deleterious ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(11,'("# Warning: Number of   favorable " &
+   if(fwarn == 1) write(11,'("# Warning: Number of   favorable ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(11,'("# Warning: Number of     neutral " &
+   if(nwarn == 1) write(11,'("# Warning: Number of     neutral ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    call flush(11)
 end if
@@ -1753,11 +1752,11 @@ if(myid == 0 .and. mod(gen,diagnostic_gens)==0 ) then
         int(num_falleles(2)), int(num_falleles(3)), fcount
    write(6,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
         int(num_nalleles(2)), int(num_nalleles(3)), ncount
-   if(dwarn == 1) write(6,'("  Warning: Number of deleterious " &
+   if(dwarn == 1) write(6,'("  Warning: Number of deleterious ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(6,'("  Warning: Number of   favorable " &
+   if(fwarn == 1) write(6,'("  Warning: Number of   favorable ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(6,'("  Warning: Number of     neutral " &
+   if(nwarn == 1) write(6,'("  Warning: Number of     neutral ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 end if
 
@@ -1775,11 +1774,11 @@ if(mod(gen,diagnostic_gens)==0) then
         int(num_falleles(2)), int(num_falleles(3)), fcount
    write(9,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
         int(num_nalleles(2)), int(num_nalleles(3)), ncount
-   if(dwarn == 1) write(9,'("  Warning: Number of deleterious " &
+   if(dwarn == 1) write(9,'("  Warning: Number of deleterious ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(9,'("  Warning: Number of   favorable " &
+   if(fwarn == 1) write(9,'("  Warning: Number of   favorable ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(9,'("  Warning: Number of     neutral " &
+   if(nwarn == 1) write(9,'("  Warning: Number of     neutral ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 endif
 

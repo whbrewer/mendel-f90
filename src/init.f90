@@ -381,39 +381,7 @@ if(fitness_distrib_type == 1) then
       k = 3 + 3*i
       if((myid==0 .and. i==1) .or. i==2) then
 
-      write(k, &
-      '("  Properties of the Weibull fitness effect distribution ", &
-        "function:"//                                               &
-      "              e(x) = exp(-alpha*x**gamma), 0 < x < 1"//      &
-      "  genome_size       = ",1pe9.2/                              &
-      "  e_high_impact     = ",1pe9.2,"   defining value of *high " &
-      "impact* mutation"/ "  frac_high_impact  = ",1pe9.2,          &
-      "   fraction *high impact* mutations of total"//              &
-      "  mutation type:        deleterious  favorable "/            &
-      "  alpha             = ",0p2f12.5,"   log(genome_size) for"/  &
-                                            52x,"deleterious case"/ &
-      "  gamma             = ",0p2f12.6// &
-      "  mean   effect     = ",1p2e12.2/  &
-      "  median effect     = ",1p2e12.2,"   (x = 0.5)"/     &
-      "   0th   percentile = ",1p2e12.2,"   (x = 1.0)"/     &
-      "  10th   percentile = ",1p2e12.2,"   (x = 0.9)"/     &
-      "  20th   percentile = ",1p2e12.2,"   (x = 0.8)"/     &
-      "  30th   percentile = ",1p2e12.2,"   (x = 0.7)"/     &
-      "  40th   percentile = ",1p2e12.2,"   (x = 0.6)"/     &
-      "  50th   percentile = ",1p2e12.2,"   (x = 0.5)"/     &
-      "  60th   percentile = ",1p2e12.2,"   (x = 0.4)"/     &
-      "  70th   percentile = ",1p2e12.2,"   (x = 0.3)"/     &
-      "  80th   percentile = ",1p2e12.2,"   (x = 0.2)"/     &
-      "  90th   percentile = ",1p2e12.2,"   (x = 0.1)"/     &
-      "  99th   percentile = ",1p2e12.2,"   (x = 0.01)"/    &
-      "  99.9   percentile = ",1p2e12.2,"   (x = 0.001)"/   &
-      "  99.99  percentile = ",1p2e12.2,"   (x = 0.0001)"/  &
-      "  99.999 percentile = ",1p2e12.2,"   (x = 0.00001)"//&
-      "  Notes:"/ &
-      "  (1) The e(x) values above are for a homozygous pair of ", &
-         "mutations."/ &
-      "  (2) For favorables, e(x) also includes the factor ", &
-         "max_fav_fitness_gain."/)') &
+      write(k, 9001) &
       genome_size, high_impact_mutn_threshold,     &
       high_impact_mutn_fraction, alpha_del, alpha, &
       gamma_del, gamma, -del_mean, fav_mean,       &
@@ -447,6 +415,35 @@ if(fitness_distrib_type == 1) then
        exp(-alpha_fav*0.0001**gamma_fav)*max_fav_fitness_gain,&
       -exp(-alpha_del*0.00001**gamma_del), &
        exp(-alpha_fav*0.00001**gamma_fav)*max_fav_fitness_gain
+      9001 format("  Properties of the Weibull fitness effect distribution ", &
+                  "function:", /, /, &
+                  "              e(x) = exp(-alpha*x**gamma), 0 < x < 1", /, /, &
+                  "  genome_size       = ",1pe9.2, /, &
+                  "  e_high_impact     = ",1pe9.2, "   defining value of *high impact* mutation", /, &
+                  "  frac_high_impact  = ",1pe9.2, "   fraction *high impact* mutations of total", /, /, &
+                  "  mutation type:        deleterious  favorable ", /, &
+                  "  alpha             = ",0p2f12.5, "   log(genome_size) for", /, &
+                  52x, "deleterious case", /, &
+                  "  gamma             = ",0p2f12.6, /, /, &
+                  "  mean   effect     = ",1p2e12.2, /, &
+                  "  median effect     = ",1p2e12.2, "   (x = 0.5)", /, &
+                  "   0th   percentile = ",1p2e12.2, "   (x = 1.0)", /, &
+                  "  10th   percentile = ",1p2e12.2, "   (x = 0.9)", /, &
+                  "  20th   percentile = ",1p2e12.2, "   (x = 0.8)", /, &
+                  "  30th   percentile = ",1p2e12.2, "   (x = 0.7)", /, &
+                  "  40th   percentile = ",1p2e12.2, "   (x = 0.6)", /, &
+                  "  50th   percentile = ",1p2e12.2, "   (x = 0.5)", /, &
+                  "  60th   percentile = ",1p2e12.2, "   (x = 0.4)", /, &
+                  "  70th   percentile = ",1p2e12.2, "   (x = 0.3)", /, &
+                  "  80th   percentile = ",1p2e12.2, "   (x = 0.2)", /, &
+                  "  90th   percentile = ",1p2e12.2, "   (x = 0.1)", /, &
+                  "  99th   percentile = ",1p2e12.2, "   (x = 0.01)", /, &
+                  "  99.9   percentile = ",1p2e12.2, "   (x = 0.001)", /, &
+                  "  99.99  percentile = ",1p2e12.2, "   (x = 0.0001)", /, &
+                  "  99.999 percentile = ",1p2e12.2, "   (x = 0.00001)", /, /, &
+                  "  Notes:", /, &
+                  "  (1) The e(x) values above are for a homozygous pair of mutations.", /, &
+                  "  (2) For favorables, e(x) also includes the factor max_fav_fitness_gain.")
       end if
    end do
 endif
