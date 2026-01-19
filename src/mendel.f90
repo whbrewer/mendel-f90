@@ -874,7 +874,7 @@ do gen=gen_0+1,gen_0+num_generations
    !START_MPI
    if(is_parallel) then
       call mpi_ravg(tgen,par_tgen,1)
-      call mpi_ravg(time_offspring,par_time_offspring,3)
+      call mpi_ravg(time_offspring,par_time_offspring,1)
       call mpi_ravg(time_selection,par_time_selection,1)
       if (myid==0) then
          if (verbosity == 2) then

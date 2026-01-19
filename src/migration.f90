@@ -24,12 +24,12 @@ real*8  linkage_block_fitness(num_linkage_subunits,2,*)
 integer lb_mutn_count(num_linkage_subunits,2,3,*)
 integer gen
 
-integer dbuffs(max_del_mutn_per_indiv*num_indiv_exchanged)
-integer dbuffr(max_del_mutn_per_indiv*num_indiv_exchanged)
-integer nbuffs(max_neu_mutn_per_indiv*num_indiv_exchanged)
-integer nbuffr(max_neu_mutn_per_indiv*num_indiv_exchanged)
-integer fbuffs(max_fav_mutn_per_indiv*num_indiv_exchanged)
-integer fbuffr(max_fav_mutn_per_indiv*num_indiv_exchanged)
+integer dbuffs((max_del_mutn_per_indiv+4)*num_indiv_exchanged)
+integer dbuffr((max_del_mutn_per_indiv+4)*num_indiv_exchanged)
+integer nbuffs((max_neu_mutn_per_indiv+4)*num_indiv_exchanged)
+integer nbuffr((max_neu_mutn_per_indiv+4)*num_indiv_exchanged)
+integer fbuffs((max_fav_mutn_per_indiv+4)*num_indiv_exchanged)
+integer fbuffr((max_fav_mutn_per_indiv+4)*num_indiv_exchanged)
 
 integer i, j, k, l, m, n, ii, z, num_receiving_tribes, nie, id
 integer dest, src, status(MPI_Status_size,8), requests(8)
@@ -156,12 +156,24 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
       if(tracking_threshold < 1.) then
 
          do ii = 1, 2 ! one for each haplotype
+            if (k+max_num_dmutn-1 > size(dbuffs)) then
+               write(*,*) 'ERROR: dbuffs overflow', k, max_num_dmutn, size(dbuffs)
+               stop
+            end if
             dbuffs(k:k+max_num_dmutn-1) = dmutn(1:max_num_dmutn,ii,swap_list(id))
             k = k + max_num_dmutn
 
-            nbuffs(k:k+max_num_nmutn-1) = nmutn(1:max_num_nmutn,ii,swap_list(id))
+            if (j+max_num_nmutn-1 > size(nbuffs)) then
+               write(*,*) 'ERROR: nbuffs overflow', j, max_num_nmutn, size(nbuffs)
+               stop
+            end if
+            nbuffs(j:j+max_num_nmutn-1) = nmutn(1:max_num_nmutn,ii,swap_list(id))
             j = j + max_num_nmutn
 
+            if (n+max_num_fmutn-1 > size(fbuffs)) then
+               write(*,*) 'ERROR: fbuffs overflow', n, max_num_fmutn, size(fbuffs)
+               stop
+            end if
             fbuffs(n:n+max_num_fmutn-1) = fmutn(1:max_num_fmutn,ii,swap_list(id))
             n = n + max_num_fmutn
          end do
@@ -169,6 +181,10 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
       end if
 
       do ii = 1, 2
+         if (l+num_linkage_subunits-1 > size(lbuffs)) then
+            write(*,*) 'ERROR: lbuffs overflow', l, num_linkage_subunits, size(lbuffs)
+            stop
+         end if
          lbuffs(l:l+num_linkage_subunits-1) = linkage_block_fitness(:,ii,swap_list(id))
          cbuff1s(l:l+num_linkage_subunits-1) = lb_mutn_count(:,ii,1,swap_list(id))
          cbuff2s(l:l+num_linkage_subunits-1) = lb_mutn_count(:,ii,2,swap_list(id))
@@ -343,7 +359,7 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
             k = k + max_num_dmutn_recvd
 
             nmutn(1:max_num_nmutn_recvd,ii,swap_list(id)) = &
-                  nbuffr(k:k+max_num_nmutn_recvd-1)
+                  nbuffr(j:j+max_num_nmutn_recvd-1)
             j = j + max_num_nmutn_recvd
 
             fmutn(1:max_num_fmutn_recvd,ii,swap_list(id)) = &
