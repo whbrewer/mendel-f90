@@ -520,8 +520,12 @@ poisson_mean = mutn_rate
 k = random_poisson(poisson_mean,.true.)
 
 ! Compute initial_alleles_mean_effect from input parameters
-initial_alleles_mean_effect = max_total_fitness_increase &
-                            / num_contrasting_alleles
+if (num_contrasting_alleles > 0) then
+   initial_alleles_mean_effect = max_total_fitness_increase &
+                               / num_contrasting_alleles
+else
+   initial_alleles_mean_effect = 0.
+end if
 
 ! Compute how often to output information
 if (num_generations <= 1000) then
