@@ -4,4 +4,6 @@ test00*
 success
 src/mendel
 src/version.inc
+src/*.000.*
+src/*.st8
 dist/

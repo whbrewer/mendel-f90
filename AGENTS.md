@@ -9,8 +9,8 @@
 ## Build, Test, and Development Commands
 - `make` or `make release`: build the MPI-enabled `src/mendel` using `mpif90` (can run directly for single-rank or via `mpirun -np N`).
 - `make debug`: build with debug flags and checks.
-- `make test`: build a test executable named `test` from core sources.
-- `make -C tests`: build the dedicated test harness `tests/test_main`.
+- `make -C tests`: build the dedicated test harness `tests/test_main` (preferred).
+- `make test`: legacy target; only works if `src/test.f90` exists.
 - `make dist`: build SPC deployment packages into `dist/` (requires binaries in `bin/*/mendel`).
 - `docker build . -t mendel:2.7.3` and `docker run -p 8580:8580 mendel:2.7.3`: run the legacy SPC UI.
 
