@@ -6,4 +6,5 @@ src/mendel
 src/version.inc
 src/*.000.*
 src/*.st8
+tests/test_main
 dist/
