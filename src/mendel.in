@@ -60,7 +60,7 @@ num_bottleneck_generations = 0,
 /
 
 &substructure
-is_parallel = F,
+is_parallel = T,
 homogenous_tribes = T,
 num_indiv_exchanged = 1,
 migration_generations = 10,

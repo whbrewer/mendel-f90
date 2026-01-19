@@ -1,125 +1,64 @@
+SRC = src
+TARGET = $(SRC)/mendel
 INSTALL_DIR = /usr/local/bin
-SRC_DIR = src
-OBJDIR = $(SRC_DIR)
-MODDIR = $(SRC_DIR)
-PROJECT_INCLUDE = $(SRC_DIR)
-
-GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
 FC = mpif90
-
-# System include path (override with INCLUDE=/path/to/include)
 INCLUDE ?= /usr/local/include
+GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
-# Compiler flags for gfortran
-# LEGACYFLAGS needed for older Fortran code compatibility
+# gfortran flags (LEGACYFLAGS needed for older Fortran compatibility)
 LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
+FCFLAGS = -O3 -I$(SRC) -I$(INCLUDE) -J$(SRC) $(LEGACYFLAGS)
 DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall $(LEGACYFLAGS)
-FCFLAGS = -O3 -I$(SRC_DIR) -I$(INCLUDE) -J$(MODDIR) $(LEGACYFLAGS)
 
-# executable name
-TARGET = $(SRC_DIR)/mendel
+# Object files
+MODULES = mpi_helpers sort random_pkg inputs genome profile polygenic init selection
+CORE = $(MODULES) mutation mating fileio
+OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics mendel migration))
+TEST_OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics test migration))
 
-MODULES = $(OBJDIR)/mpi_helpers.o $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o \
-          $(OBJDIR)/inputs.o $(OBJDIR)/genome.o $(OBJDIR)/profile.o \
-          $(OBJDIR)/polygenic.o $(OBJDIR)/init.o $(OBJDIR)/selection.o
-
-OTHERS = $(MODULES) $(OBJDIR)/mutation.o $(OBJDIR)/mating.o \
-         $(OBJDIR)/fileio.o
-
-POBJECTS = $(OTHERS) $(OBJDIR)/diagnostics.o $(OBJDIR)/mendel.o \
-           $(OBJDIR)/migration.o
-
-TOBJECTS = $(OTHERS) $(OBJDIR)/diagnostics.o $(OBJDIR)/test.o \
-           $(OBJDIR)/migration.o
-
-##########################################
-# build rules
-##########################################
-
-.PHONY: all debug test release parallel install uninstall dist clean cln
+.PHONY: all release debug test install uninstall dist clean cln
 
 all: release
 
-debug: FCFLAGS = $(DBUGFLAGS)
-debug: pre-build $(POBJECTS)
-	$(FC) $(DBUGFLAGS) $(LDFLAGS) -o $(TARGET) $(POBJECTS) $(LIBS)
+release: pre-build $(OBJS)
+	$(FC) $(FCFLAGS) -o $(TARGET) $(OBJS)
 
-test: pre-build $(TOBJECTS)
-	$(FC) $(FCFLAGS) $(LDFLAGS) -o test $(TOBJECTS) $(LIBS)
+debug: FCFLAGS = $(DBUGFLAGS)
+debug: pre-build $(OBJS)
+	$(FC) $(FCFLAGS) -o $(TARGET) $(OBJS)
+
+test: pre-build $(TEST_OBJS)
+	$(FC) $(FCFLAGS) -o test $(TEST_OBJS)
 
 pre-build:
-	printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC_DIR)/version.inc
-
-release: pre-build $(POBJECTS)
-	$(FC) $(FCFLAGS) $(LDFLAGS) -o $(TARGET) $(POBJECTS) $(LIBS)
-
-parallel: release
+	@printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC)/version.inc
 
 install:
 	install $(TARGET) $(INSTALL_DIR)
 
 uninstall:
-	echo "removing file $(INSTALL_DIR)/$(TARGET)"
-	rm $(INSTALL_DIR)/$(TARGET)
+	rm -f $(INSTALL_DIR)/mendel
 
 dist:
 	scripts/package.sh
 
 cln:
-	\rm -f $(OBJDIR)/mendel.o $(OBJDIR)/migration.o $(TARGET)
+	rm -f $(SRC)/mendel.o $(SRC)/migration.o $(TARGET)
 
 clean:
-	\rm -f $(OBJDIR)/*.o $(MODDIR)/*.mod $(SRC_DIR)/version.inc $(TARGET) test0* *.f90-e a.out success
+	rm -f $(SRC)/*.o $(SRC)/*.mod $(SRC)/version.inc $(TARGET) test a.out success
 	$(MAKE) -C tests clean
 
-###########################################
-# dependencies
-###########################################
+# Pattern rule for Fortran compilation
+$(SRC)/%.o: $(SRC)/%.f90
+	$(FC) $(FCFLAGS) -c $< -o $@
 
-$(OBJDIR)/sort.o:		$(SRC_DIR)/sort.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/sort.f90 -o $(OBJDIR)/sort.o
-
-$(OBJDIR)/random_pkg.o:	$(SRC_DIR)/random_pkg.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/random_pkg.f90 -o $(OBJDIR)/random_pkg.o
-
-$(OBJDIR)/mendel.o:       $(SRC_DIR)/mendel.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mendel.f90 -o $(OBJDIR)/mendel.o
-
-$(OBJDIR)/init.o:		$(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90 -o $(OBJDIR)/init.o
-
-$(OBJDIR)/diagnostics.o:  $(SRC_DIR)/diagnostics.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/diagnostics.f90 -o $(OBJDIR)/diagnostics.o
-
-$(OBJDIR)/fileio.o:	$(SRC_DIR)/fileio.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/fileio.f90 -o $(OBJDIR)/fileio.o
-
-$(OBJDIR)/selection.o:    $(SRC_DIR)/selection.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/selection.f90 -o $(OBJDIR)/selection.o
-
-$(OBJDIR)/mating.o:	$(SRC_DIR)/mating.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mating.f90 -o $(OBJDIR)/mating.o
-
-$(OBJDIR)/mutation.o:	$(SRC_DIR)/mutation.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mutation.f90 -o $(OBJDIR)/mutation.o
-
-$(OBJDIR)/migration.o:	$(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration.f90 -o $(OBJDIR)/migration.o
-
-$(OBJDIR)/polygenic.o:	$(SRC_DIR)/polygenic.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/polygenic.f90 -o $(OBJDIR)/polygenic.o
-
-$(OBJDIR)/test.o:		$(SRC_DIR)/test.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/test.f90 -o $(OBJDIR)/test.o
-
-$(OBJDIR)/profile.o:	$(SRC_DIR)/profile.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/profile.f90 -o $(OBJDIR)/profile.o
-
-$(OBJDIR)/inputs.o:       $(SRC_DIR)/inputs.f90
-	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/inputs.f90 -o $(OBJDIR)/inputs.o
-
-$(OBJDIR)/genome.o:       $(SRC_DIR)/genome.f90
-	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90 -o $(OBJDIR)/genome.o
-$(OBJDIR)/mpi_helpers.o:	$(SRC_DIR)/mpi_helpers.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mpi_helpers.f90 -o $(OBJDIR)/mpi_helpers.o
+# Dependencies on common.h and mpi_helpers module
+$(SRC)/mendel.o: $(SRC)/common.h $(SRC)/mpi_helpers.o
+$(SRC)/init.o: $(SRC)/common.h $(SRC)/mpi_helpers.o
+$(SRC)/diagnostics.o: $(SRC)/common.h $(SRC)/mpi_helpers.o
+$(SRC)/migration.o: $(SRC)/common.h $(SRC)/mpi_helpers.o
+$(SRC)/fileio.o: $(SRC)/common.h
+$(SRC)/selection.o: $(SRC)/common.h
+$(SRC)/mpi_helpers.o: $(SRC)/common.h
