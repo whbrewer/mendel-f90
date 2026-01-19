@@ -3,17 +3,45 @@ set -euo pipefail
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 app_dir="$root_dir/app"
-bin_dir="$root_dir/bin"
+src_dir="$root_dir/src"
 dist_dir="$root_dir/dist"
+
+# Auto-detect platform
+detect_platform() {
+  local os arch
+  os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  arch="$(uname -m)"
+
+  # Normalize OS name
+  case "$os" in
+    darwin) os="darwin" ;;
+    linux)  os="linux" ;;
+    *)      echo "Unsupported OS: $os" >&2; exit 1 ;;
+  esac
+
+  # Normalize architecture
+  case "$arch" in
+    x86_64|amd64) arch="x86_64" ;;
+    arm64|aarch64) arch="arm64" ;;
+    *)      echo "Unsupported architecture: $arch" >&2; exit 1 ;;
+  esac
+
+  echo "${os}-${arch}"
+}
 
 mkdir -p "$dist_dir"
 
 package_one() {
   local platform="$1"
   local bin_path="$2"
-  local out_dir="$dist_dir/$platform"
-  local staging="$out_dir/staging"
+  local staging="$dist_dir/$platform/staging"
   local zip_name="$dist_dir/fmendel-spc-${platform}.zip"
+
+  if [[ ! -f "$bin_path" ]]; then
+    echo "Binary not found: $bin_path" >&2
+    echo "Run 'make' first to build the binary." >&2
+    exit 1
+  fi
 
   rm -rf "$staging"
   mkdir -p "$staging"
@@ -27,6 +55,6 @@ package_one() {
   echo "wrote $zip_name"
 }
 
-package_one "linux-x86_64" "$bin_dir/linux-x86_64/mendel"
-package_one "darwin-x86_64" "$bin_dir/darwin-x86_64/mendel"
-package_one "darwin-arm64" "$bin_dir/darwin-arm64/mendel"
+platform="$(detect_platform)"
+echo "Detected platform: $platform"
+package_one "$platform" "$src_dir/mendel"

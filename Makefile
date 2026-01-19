@@ -45,6 +45,8 @@ TOBJECTS = $(OTHERS) $(OBJDIR)/diagnostics.o $(OBJDIR)/test.o \
 # build rules
 ##########################################
 
+.PHONY: all debug test release parallel install uninstall dist clean cln
+
 all: release
 
 debug: FCFLAGS = $(DBUGFLAGS)
