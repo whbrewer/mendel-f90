@@ -7,9 +7,10 @@ use profiler
 use polygenic
 use random_pkg
 use selection_module
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 
 ! Data structures to maintain genetic information
@@ -1228,7 +1229,7 @@ if(am_parallel.and.tribal_competition) then
       call MPI_GROUP_FREE(OLDGROUP,ierr)
       call MPI_GROUP_FREE(NEWGROUP,ierr)
    end if
-   call MPI_COMM_FREE(MYCOMM)
+   call MPI_COMM_FREE(MYCOMM,ierr)
    call mpi_myfinalize(ierr)
 elseif (is_parallel) then
    call MPI_COMM_FREE(MYCOMM,ierr)
@@ -1264,8 +1265,8 @@ subroutine compute_tribal_fitness(dmutn, fmutn, pop_size_array, &
 use inputs
 use random_pkg
 use selection_module
+use mpi_helpers
 include 'common.h'
-include 'mpif.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer pop_size_array(num_tribes), current_global_pop_size
@@ -1301,8 +1302,8 @@ end if
 
 if (is_parallel) then
 
-   call mpi_davg(post_sel_fitness,par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_fitness,par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness,par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,par_pre_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
 
    if(tribal_competition) then
@@ -1311,9 +1312,7 @@ if (is_parallel) then
 !     array called post_sel_fitness_array in order to compute
 !     tribal fitness variance below.
 
-      call MPI_GATHER(post_sel_fitness,1,MPI_DOUBLE_PRECISION, &
-                      post_sel_fitness_array,1, &
-                      MPI_DOUBLE_PRECISION,0,MYCOMM,ierr)
+      call mpi_gather_d(post_sel_fitness,post_sel_fitness_array,1)
 
       call mpi_isum(current_pop_size,current_global_pop_size,1)
 
@@ -1369,7 +1368,7 @@ if (is_parallel) then
 !     The tribal_fitness_factor relates the fitness of the
 !     current tribe to the average tribal fitness from all tribes.
 
-      call mpi_davg(tribal_fitness,par_tribal_fitness,1)
+      call mpi_davg_scalar(tribal_fitness,par_tribal_fitness,1)
       call mpi_mybcastd(par_tribal_fitness,1)
 
       tribal_fitness_factor=tribal_fitness/ &
@@ -1383,7 +1382,7 @@ if (is_parallel) then
 !     Recompute tribal_fitness_factor which now includes
 !     social_bonus.
 
-      call mpi_davg(tribal_fitness,par_tribal_fitness,1)
+      call mpi_davg_scalar(tribal_fitness,par_tribal_fitness,1)
       call mpi_mybcastd(par_tribal_fitness,1)
       tribal_fitness_factor=tribal_fitness/par_tribal_fitness
 

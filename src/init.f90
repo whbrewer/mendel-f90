@@ -11,6 +11,7 @@ use random_pkg
 use polygenic
 use profiler
 use inputs
+use mpi_helpers
 include 'common.h'
 include 'version.inc'
 

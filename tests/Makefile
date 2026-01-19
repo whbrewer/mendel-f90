@@ -13,7 +13,7 @@ FC ?= mpif90
 
 TARGET = test_main
 
-MODULES = inputs.o profile.o genome.o random_pkg.o polygenic.o init.o unittest.o sort.o\
+MODULES = mpi_helpers.o inputs.o profile.o genome.o random_pkg.o polygenic.o init.o unittest.o sort.o\
 			 mutation.o selection.o migration.o
 
 OBJECTS = $(MODULES) $(TARGET).o fileio.o
@@ -31,7 +31,7 @@ random:
 	#f2py -c --f90exec=/usr/bin/ifort --f77exec=/usr/bin/ifort -m random_pkg random_pkg.f90
 
 clean:
-	rm *.o *.mod
+	rm -f *.o *.mod
 
 test_main.o:	test_main.f90
 	$(FC) $(FCFLAGS) -c test_main.f90
@@ -49,15 +49,17 @@ sort.o:     $(SRC_DIR)/sort.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/sort.f90
 genome.o:       $(SRC_DIR)/genome.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90
-init.o:     $(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h
+init.o:     $(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90
+mpi_helpers.o:	$(SRC_DIR)/mpi_helpers.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mpi_helpers.f90
 polygenic.o:	$(SRC_DIR)/polygenic.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/polygenic.f90
 profile.o:  $(SRC_DIR)/profile.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/profile.f90
 mutation.o: $(SRC_DIR)/mutation.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mutation.f90
-migration.o:   $(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h
+migration.o:   $(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration.f90
 fileio.o:   $(SRC_DIR)/fileio.f90 $(PROJECT_INCLUDE)/common.h
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/fileio.f90

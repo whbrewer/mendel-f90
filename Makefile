@@ -6,7 +6,7 @@ PROJECT_INCLUDE = $(SRC_DIR)
 
 GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
-FC ?= mpif90
+FC = mpif90
 
 # Optional MPI libs (usually provided by mpif90).
 #LIBS = -lmpich -lpthread -lmpl
@@ -28,9 +28,9 @@ FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACY
 # executable name
 TARGET = $(SRC_DIR)/mendel
 
-MODULES = $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o $(OBJDIR)/inputs.o \
-          $(OBJDIR)/genome.o $(OBJDIR)/profile.o $(OBJDIR)/polygenic.o \
-          $(OBJDIR)/init.o $(OBJDIR)/selection.o
+MODULES = $(OBJDIR)/mpi_helpers.o $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o \
+          $(OBJDIR)/inputs.o $(OBJDIR)/genome.o $(OBJDIR)/profile.o \
+          $(OBJDIR)/polygenic.o $(OBJDIR)/init.o $(OBJDIR)/selection.o
 
 OTHERS = $(MODULES) $(OBJDIR)/mutation.o $(OBJDIR)/mating.o \
          $(OBJDIR)/fileio.o
@@ -77,6 +77,7 @@ cln:
 
 clean:
 	\rm -f $(OBJDIR)/*.o $(MODDIR)/*.mod $(SRC_DIR)/version.inc $(TARGET) test0* *.f90-e a.out success
+	$(MAKE) -C tests clean
 
 ###########################################
 # dependencies
@@ -88,13 +89,13 @@ $(OBJDIR)/sort.o:		$(SRC_DIR)/sort.f90
 $(OBJDIR)/random_pkg.o:	$(SRC_DIR)/random_pkg.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/random_pkg.f90 -o $(OBJDIR)/random_pkg.o
 
-$(OBJDIR)/mendel.o:       $(SRC_DIR)/mendel.f90 $(PROJECT_INCLUDE)/common.h
+$(OBJDIR)/mendel.o:       $(SRC_DIR)/mendel.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mendel.f90 -o $(OBJDIR)/mendel.o
 
-$(OBJDIR)/init.o:		$(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h
+$(OBJDIR)/init.o:		$(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90 -o $(OBJDIR)/init.o
 
-$(OBJDIR)/diagnostics.o:  $(SRC_DIR)/diagnostics.f90 $(PROJECT_INCLUDE)/common.h
+$(OBJDIR)/diagnostics.o:  $(SRC_DIR)/diagnostics.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/diagnostics.f90 -o $(OBJDIR)/diagnostics.o
 
 $(OBJDIR)/fileio.o:	$(SRC_DIR)/fileio.f90 $(PROJECT_INCLUDE)/common.h
@@ -109,7 +110,7 @@ $(OBJDIR)/mating.o:	$(SRC_DIR)/mating.f90
 $(OBJDIR)/mutation.o:	$(SRC_DIR)/mutation.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mutation.f90 -o $(OBJDIR)/mutation.o
 
-$(OBJDIR)/migration.o:	$(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h
+$(OBJDIR)/migration.o:	$(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h $(OBJDIR)/mpi_helpers.o
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration.f90 -o $(OBJDIR)/migration.o
 
 $(OBJDIR)/polygenic.o:	$(SRC_DIR)/polygenic.f90
@@ -126,3 +127,5 @@ $(OBJDIR)/inputs.o:       $(SRC_DIR)/inputs.f90
 
 $(OBJDIR)/genome.o:       $(SRC_DIR)/genome.f90
 	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90 -o $(OBJDIR)/genome.o
+$(OBJDIR)/mpi_helpers.o:	$(SRC_DIR)/mpi_helpers.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mpi_helpers.f90 -o $(OBJDIR)/mpi_helpers.o

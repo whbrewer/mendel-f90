@@ -13,8 +13,9 @@ subroutine migration(dmutn,nmutn,fmutn,linkage_block_fitness, &
 !                 other tribe.
 use random_pkg
 use inputs
+use mpi
+use mpi_helpers
 include 'common.h'
-include 'mpif.h'
 
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer nmutn(max_neu_mutn_per_indiv/2,2,*)
@@ -227,17 +228,17 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
 
 !     send the maximum number of deleterious mutations
       call MPI_Isend(max_num_dmutn,1,MPI_INTEGER,dest,msg_num,MYCOMM,requests(1),ierr)
-      call MPI_IRecv(max_num_dmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(2))
+      call MPI_IRecv(max_num_dmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(2),ierr)
       msg_num = msg_num + 1
 
 !     send the maximum number of neutral mutations
       call MPI_Isend(max_num_nmutn,1,MPI_INTEGER,dest,msg_num,MYCOMM,requests(3),ierr)
-      call MPI_IRecv(max_num_nmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(4))
+      call MPI_IRecv(max_num_nmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(4),ierr)
       msg_num = msg_num + 1
 
 !     send the maximum number of favorable mutations
       call MPI_Isend(max_num_fmutn,1,MPI_INTEGER,dest,msg_num,MYCOMM,requests(5),ierr)
-      call MPI_IRecv(max_num_fmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(6))
+      call MPI_IRecv(max_num_fmutn_recvd,1,MPI_INTEGER,src,msg_num,MYCOMM,requests(6),ierr)
       msg_num = msg_num + 1
 
 !     complete the nonblocking sends+receives before proceeding
@@ -248,7 +249,7 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
       call MPI_Isend(dbuffs,msg_size_dbuff,MPI_INTEGER, &
            dest,msg_num,MYCOMM,requests(1),ierr)
       call MPI_IRecv(dbuffr,msg_size_rdbuff,MPI_INTEGER, &
-           src,msg_num,MYCOMM,requests(2))
+           src,msg_num,MYCOMM,requests(2),ierr)
       msg_num = msg_num + 1
 
 !     communicate buffer of neutral mutations
@@ -256,7 +257,7 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
       call MPI_Isend(nbuffs,msg_size_nbuff,MPI_INTEGER, &
            dest,msg_num,MYCOMM,requests(3),ierr)
       call MPI_IRecv(nbuffr,msg_size_rnbuff,MPI_INTEGER, &
-           src,msg_num,MYCOMM,requests(4))
+           src,msg_num,MYCOMM,requests(4),ierr)
       msg_num = msg_num + 1
 
 !     communicate buffer of favorable mutations
@@ -264,7 +265,7 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
       call MPI_Isend(fbuffs,msg_size_fbuff,MPI_INTEGER, &
            dest,msg_num,MYCOMM,requests(3),ierr)
       call MPI_IRecv(fbuffr,msg_size_rfbuff,MPI_INTEGER, &
-           src,msg_num,MYCOMM,requests(4))
+           src,msg_num,MYCOMM,requests(4),ierr)
       msg_num = msg_num + 1
 
       call MPI_Waitall(4,requests,status,ierr)
@@ -275,28 +276,28 @@ do m = 1, num_receiving_tribes ! loop over number of receiving tribes
    call MPI_Isend(lbuffs,msg_size_lbuff,MPI_DOUBLE_PRECISION, &
         dest,msg_num,MYCOMM,requests(1),ierr)
    call MPI_IRecv(lbuffr,msg_size_lbuff,MPI_DOUBLE_PRECISION, &
-        src,msg_num,MYCOMM,requests(2))
+        src,msg_num,MYCOMM,requests(2),ierr)
    msg_num = msg_num + 1
 
 !  communicate buffer of lb_mutn_count
    call MPI_Isend(cbuff1s,msg_size_lbuff,MPI_INTEGER, &
         dest,msg_num,MYCOMM,requests(3),ierr)
    call MPI_IRecv(cbuff1r,msg_size_lbuff,MPI_INTEGER, &
-        src,msg_num,MYCOMM,requests(4))
+        src,msg_num,MYCOMM,requests(4),ierr)
    msg_num = msg_num + 1
 
 !  communicate buffer of lb_mutn_count
    call MPI_Isend(cbuff2s,msg_size_lbuff,MPI_INTEGER, &
         dest,msg_num,MYCOMM,requests(5),ierr)
    call MPI_IRecv(cbuff2r,msg_size_lbuff,MPI_INTEGER, &
-        src,msg_num,MYCOMM,requests(6))
+        src,msg_num,MYCOMM,requests(6),ierr)
    msg_num = msg_num + 1
 
 !  communicate buffer of lb_mutn_count
    call MPI_Isend(cbuff3s,msg_size_lbuff,MPI_INTEGER, &
         dest,msg_num,MYCOMM,requests(7),ierr)
    call MPI_IRecv(cbuff3r,msg_size_lbuff,MPI_INTEGER, &
-        src,msg_num,MYCOMM,requests(8))
+        src,msg_num,MYCOMM,requests(8),ierr)
    msg_num = msg_num + 1
 
    call MPI_Waitall(8,requests,status,ierr)
@@ -408,99 +409,6 @@ do i = 1, nie
 end do
 end
 
-subroutine mpi_myinit(ownid,ierr)
-   include 'common.h'
-   include 'mpif.h'
-   integer ownid
-   call MPI_INIT(ierr)
-
-!  create group of workers
-   call MPI_COMM_DUP(MPI_COMM_WORLD,MYCOMM,ierr)
-   call MPI_COMM_RANK(MYCOMM,ownid,ierr)
-   call MPI_COMM_SIZE(MYCOMM,num_tribes,ierr)
-end
-
-subroutine mpi_mybarrier()
-   include 'common.h'
-   include 'mpif.h'
-   call MPI_BARRIER(MPI_COMM_WORLD,ierr)
-end
-
-subroutine mpi_myabort()
-   include 'common.h'
-   include 'mpif.h'
-   call MPI_Abort(MYCOMM,ierr)
-end
-
-subroutine mpi_mybcastd(x,n)
-   include 'common.h'
-   include 'mpif.h'
-   integer n
-   real*8 x
-   call MPI_Bcast(x,n,MPI_DOUBLE_PRECISION,0,MYCOMM,ierr)
-end
-
-subroutine mpi_mybcasti(x,n)
-   include 'common.h'
-   include 'mpif.h'
-   integer x, n
-   call MPI_Bcast(x,n,MPI_INTEGER,0,MYCOMM,ierr)
-end
-
-subroutine mpi_send_int(istatus,dest,msg_num,ierr)
-   include 'common.h'
-   include 'mpif.h'
-   integer status(MPI_Status_size)
-   integer istatus,dest
-   call MPI_Send(istatus,1,MPI_INTEGER,dest,msg_num,MYCOMM,status,ierr)
-end
-
-subroutine mpi_recv_int(istatus,src,msg_num,ierr)
-   include 'common.h'
-   include 'mpif.h'
-   integer status(MPI_Status_size)
-   integer istatus,src
-   call MPI_Recv(istatus,1,MPI_INTEGER,src,msg_num,MYCOMM,status,ierr)
-end
-
-subroutine mpi_myfinalize(ierr)
-   include 'mpif.h'
-   call MPI_FINALIZE(ierr)
-end
-
-subroutine mpi_davg(x, xavg, n)
-   include 'common.h'
-   include 'mpif.h'
-   real*8 x(n), xavg(n)
-   integer n
-   call MPI_REDUCE(x,xavg,n,MPI_DOUBLE_PRECISION,MPI_SUM,0,MYCOMM,ierr)
-   xavg = xavg/num_tribes
-end
-
-subroutine mpi_dsum(x, xsum, n)
-   include 'common.h'
-   include 'mpif.h'
-   real*8 x(n), xsum(n)
-   integer n
-   call MPI_REDUCE(x,xsum,n,MPI_DOUBLE_PRECISION,MPI_SUM,0,MYCOMM,ierr)
-end
-
-subroutine mpi_ravg(x, xavg, n)
-   include 'common.h'
-   include 'mpif.h'
-   real x(n), xavg(n)
-   integer n
-   call MPI_REDUCE(x,xavg,n,MPI_REAL,MPI_SUM,0,MYCOMM,ierr)
-   xavg = xavg/num_tribes
-end
-
-subroutine mpi_isum(i, isum, n)
-   include 'common.h'
-   include 'mpif.h'
-   integer i, isum, n
-   call MPI_REDUCE(i,isum,n,MPI_INTEGER,MPI_SUM,0,MYCOMM,ierr)
-end
-
 subroutine migrate_individual(other,sid,did,dmutn,fmutn,nmutn,lb_mutn_count, &
            linkage_block_fitness,sender)
 ! This subroutine just passes a single individual to another tribes
@@ -516,8 +424,8 @@ subroutine migrate_individual(other,sid,did,dmutn,fmutn,nmutn,lb_mutn_count, &
 ! Credits: The skeleton of this code came from:
 ! http://stackoverflow.com/questions/13211990
 use inputs
+use mpi
 include 'common.h'
-include 'mpif.h'
 
 integer, parameter :: n = 5000, m = 1000, NV = 5
 integer, intent(in) :: sid, did  ! source id, destination id
@@ -539,7 +447,7 @@ end type
 
 type (individual) :: bob
 integer :: datatype, oldtypes(NV), blockcounts(NV)
-integer :: offsets(NV)
+integer(kind=MPI_ADDRESS_KIND) :: offsets(NV)
 integer :: i, myint
 integer :: status(MPI_Status_size)
 

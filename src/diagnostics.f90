@@ -6,9 +6,10 @@ use random_pkg
 use polygenic
 use inputs
 use init
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 integer, parameter :: MNP=100000
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
@@ -70,15 +71,15 @@ tracked_neu_mutn = tracked_neu_mutn - ica_count(3)
 !START_MPI
 if (is_parallel) then
 
-   call mpi_davg(post_sel_fitness,par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_fitness,par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness,par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,par_pre_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_geno_sd,par_pre_sel_geno_sd,1)
-   call mpi_davg(pre_sel_pheno_sd,par_pre_sel_pheno_sd,1)
-   call mpi_davg(pre_sel_corr,par_pre_sel_corr,1)
-   call mpi_davg(post_sel_geno_sd,par_post_sel_geno_sd,1)
-   call mpi_davg(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
-   call mpi_davg(post_sel_corr,par_post_sel_corr,1)
+   call mpi_davg_scalar(pre_sel_geno_sd,par_pre_sel_geno_sd,1)
+   call mpi_davg_scalar(pre_sel_pheno_sd,par_pre_sel_pheno_sd,1)
+   call mpi_davg_scalar(pre_sel_corr,par_pre_sel_corr,1)
+   call mpi_davg_scalar(post_sel_geno_sd,par_post_sel_geno_sd,1)
+   call mpi_davg_scalar(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
+   call mpi_davg_scalar(post_sel_corr,par_post_sel_corr,1)
 
    call mpi_dsum(total_del_mutn,par_total_del_mutn,1)
    call mpi_dsum(tracked_del_mutn,par_tracked_del_mutn,1)
@@ -290,6 +291,7 @@ end subroutine diagnostics_history_plot
 
 subroutine diagnostics_mutn_bins_plot(dmutn, fmutn, accum, gen)
 use inputs
+use mpi_helpers
 include 'common.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
@@ -720,14 +722,14 @@ if(.not. is_parallel) then
    end if
 else
    !START_MPI
-   call mpi_davg(del_dom_thres,par_del_dom_thres,1)
+   call mpi_davg_scalar(del_dom_thres,par_del_dom_thres,1)
    if(myid == 0. .and. par_del_dom_thres > 0.) then
       x0 = (-log(par_del_dom_thres)/alpha_del)**(1/gamma_del)
       write(6, '("deleterious selection threshold   =",1pe10.3)') &
             par_del_dom_thres
       write(6, '("deleterious fraction unselectable =",f6.3)') 1. - x0
    end if
-   call mpi_davg(fav_dom_thres,par_fav_dom_thres,1)
+   call mpi_davg_scalar(fav_dom_thres,par_fav_dom_thres,1)
    !END_MPI
    if(myid == 0 .and. par_fav_dom_thres > 0.) then
       x0 = (-log(par_fav_dom_thres/max_fav_fitness_gain) &
@@ -796,6 +798,7 @@ subroutine diagnostics_near_neutrals_plot(dmutn, fmutn, &
            linkage_block_fitness, lb_mutn_count, gen)
 use selection_module
 use inputs
+use mpi_helpers
 include 'common.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
@@ -990,8 +993,8 @@ call flush(4)
 
 !START_MPI
 if (is_parallel) then
-   call mpi_davg(avg_lb_effect,par_avg_lb_effect,1)
-   call mpi_davg(lb_fitness_frac_positive,par_lb_fitness_frac_pos,1)
+   call mpi_davg_scalar(avg_lb_effect,par_avg_lb_effect,1)
+   call mpi_davg_scalar(lb_fitness_frac_positive,par_lb_fitness_frac_pos,1)
    call mpi_davg(haplotype_bins,par_haplotype_bins,200)
 !  Note: currently only averaging haplotype_bins--
 !  all the other values are currently coming from processor 0
@@ -1283,9 +1286,10 @@ subroutine diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
 use polygenic
 use inputs
 use init
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 ! MNP = max number of polymorphisms, NP = number of bins
 integer, parameter :: MNP=100000, NB=100
@@ -1785,6 +1789,7 @@ subroutine diagnostics_selection(fitness_pre_sel,fitness_post_sel, &
                                  total_offspring,gen)
 use selection_module
 use inputs
+use mpi_helpers
 include 'common.h'
 integer, parameter :: NB=200 ! Number of bins
 real*8 fitness_pre_sel(*), fitness_post_sel(*)
@@ -1828,15 +1833,15 @@ end if
 
 if (is_parallel) then
 
-   call mpi_davg(pre_sel_fitness,  par_pre_sel_fitness,1)
-   call mpi_davg(post_sel_fitness, par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,  par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness, par_post_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_geno_sd,  par_pre_sel_geno_sd,1)
-   call mpi_davg(pre_sel_pheno_sd, par_pre_sel_pheno_sd,1)
-   call mpi_davg(pre_sel_corr,     par_pre_sel_corr,1)
-   call mpi_davg(post_sel_geno_sd, par_post_sel_geno_sd,1)
-   call mpi_davg(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
-   call mpi_davg(post_sel_corr,    par_post_sel_corr,1)
+   call mpi_davg_scalar(pre_sel_geno_sd,  par_pre_sel_geno_sd,1)
+   call mpi_davg_scalar(pre_sel_pheno_sd, par_pre_sel_pheno_sd,1)
+   call mpi_davg_scalar(pre_sel_corr,     par_pre_sel_corr,1)
+   call mpi_davg_scalar(post_sel_geno_sd, par_post_sel_geno_sd,1)
+   call mpi_davg_scalar(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
+   call mpi_davg_scalar(post_sel_corr,    par_post_sel_corr,1)
 
 end if
 !END_MPI
@@ -1905,9 +1910,9 @@ subroutine count_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mutn_list, 
                          mutn_count, list_count, mfirst, gen)
 use inputs
 use polygenic
+use mpi
 include 'common.h'
 !START_MPI
-include 'mpif.h'
 !END_MPI
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
@@ -2016,9 +2021,9 @@ subroutine count_uploaded_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mu
                                   mutn_count, list_count, mfirst, gen)
 use inputs
 use polygenic
+use mpi
 include 'common.h'
 !START_MPI
-include 'mpif.h'
 !END_MPI
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
