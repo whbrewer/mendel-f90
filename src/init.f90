@@ -12,6 +12,7 @@ use polygenic
 use profiler
 use inputs
 include 'common.h'
+include 'version.inc'
 
 integer     :: values(8), npath, i, k
 real        :: d1, d2, sum, del_mean, fav_mean, alpha, gamma
@@ -26,7 +27,7 @@ cyclic_bottlenecking = .false.
 ! Output version information.  RCS will automatically update
 ! the following $Id string on check-in
 
-write(6,*) 'VERSION >>> v2.7.2-6-g78cf48a <<< VERSION'
+write(6,*) 'VERSION >>> ', trim(build_version), ' <<< VERSION'
 
 call date_and_time(VALUES=values)
 

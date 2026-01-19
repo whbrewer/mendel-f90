@@ -1,18 +1,19 @@
-INCLUDE = /usr/local/include
+INCLUDE ?= /usr/local/include
 SRC_DIR = ../src
-PROJECT_INCLUDE = ../include
+MODDIR = ../src
+PROJECT_INCLUDE = ../src
 #INCLUDE = ..
-DBUGFLAGS = -g -traceback -check # debug version
-FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) # release version
+LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
+DBUGFLAGS = -g -traceback -check $(LEGACYFLAGS) # debug version
+FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACYFLAGS) # release version
 #LIBS = -lmpich -lpthread -lmpl
-#FC = ifort
-FC = /usr/local/bin/mpif90
+FC ?= mpif90
 # Linker flags (gfortran on OSX)
 #LDFLAGS = -static-libgfortran -static-libgcc
 
 TARGET = test_main
 
-MODULES = inputs.o profile.o genome.o random_pkg.o init.o unittest.o sort.o\
+MODULES = inputs.o profile.o genome.o random_pkg.o polygenic.o init.o unittest.o sort.o\
 			 mutation.o selection.o migration.o
 
 OBJECTS = $(MODULES) $(TARGET).o fileio.o
@@ -50,6 +51,8 @@ genome.o:       $(SRC_DIR)/genome.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90
 init.o:     $(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90
+polygenic.o:	$(SRC_DIR)/polygenic.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/polygenic.f90
 profile.o:  $(SRC_DIR)/profile.f90
 	$(FC) $(FCFLAGS) -c $(SRC_DIR)/profile.f90
 mutation.o: $(SRC_DIR)/mutation.f90

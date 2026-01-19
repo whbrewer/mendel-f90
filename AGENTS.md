@@ -1,15 +1,14 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Fortran source lives in `src/` (e.g., `src/mendel.f90`, `src/inputs.f90`, `src/genome.f90`). Shared headers live in `include/` (`include/common.h`).
+- Fortran source lives in `src/` (e.g., `src/mendel.f90`, `src/inputs.f90`, `src/genome.f90`). Shared headers live in `src/` (`src/common.h`).
 - Tests and test harness sources live in `tests/` (e.g., `test_main.f90`, `unittest.f90`, `test_*.f90`).
 - Input templates and runtime files for the SPC UI are in `app/` (e.g., `app/mendel.in`, `app/mendel.j2`, `app/spc.json`, `app/about.html`).
 - Build and container tooling remain at the repo root: `Makefile`, `tests/Makefile`, `Dockerfile`.
 
 ## Build, Test, and Development Commands
-- `make` or `make release`: build the default parallel executable `mendel` using `mpif90`.
+- `make` or `make release`: build the MPI-enabled `src/mendel` using `mpif90` (can run directly for single-rank or via `mpirun -np N`).
 - `make debug`: build with debug flags and checks.
-- `make preserial` then `make serial`: build `mendel_serial` without MPI code sections.
 - `make test`: build a test executable named `test` from core sources.
 - `make -C tests`: build the dedicated test harness `tests/test_main`.
 - `make dist`: build SPC deployment packages into `dist/` (requires binaries in `bin/*/mendel`).
@@ -31,5 +30,5 @@
 - Include input/output examples or relevant `mendel.in` snippets when behavior changes.
 
 ## Configuration Tips
-- Runtime configuration is primarily via `app/mendel.in`. Start from `app/mendel.j2` or `tests/mendel.in` when adding new parameters.
-- MPI support is optional; ensure serial builds still work when editing MPI sections.
+- Runtime configuration is primarily via `app/mendel.in`. For quick local runs, use `src/mendel.in`. Start from `app/mendel.j2` or `tests/mendel.in` when adding new parameters.
+- MPI support is expected; keep MPI calls compatible with running as a single rank when invoked without `mpirun`.

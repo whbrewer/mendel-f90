@@ -1,55 +1,45 @@
 INSTALL_DIR = /usr/local/bin
 SRC_DIR = src
-PROJECT_INCLUDE = include
+OBJDIR = $(SRC_DIR)
+MODDIR = $(SRC_DIR)
+PROJECT_INCLUDE = $(SRC_DIR)
 
 GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
-#FC = /opt/intel/fc/10.0.026/bin/ifort -vec-report0
-#FC = /opt/intel/bin/ifort
-#FC = /opt/pgi/linux86-64/8.0-4/bin/pgf90 # c101
-#FC = /usr/local/bin/mpif90
-FC = gfortran
+FC ?= mpif90
 
-# Following are needed for building parallel version
-# Comment out if compiling with mpif90
-# or if making serial version.
-# MPICH
+# Optional MPI libs (usually provided by mpif90).
 #LIBS = -lmpich -lpthread -lmpl
 #LIBS = -L/usr/local/lib -lmpich -lpthread -lmpl
 # Open MPI
 #LIBS = -L/usr/lib64/mpi/gcc/openmpi/lib64 -lopen-rte -lmpi
 
-# when using Open MPI
-#INCLUDE = /usr/lib64/mpi/gcc/openmpi/include
-# when using MPICH
-INCLUDE = /usr/local/lib
-
-INCLUDE = /usr/local/include
+INCLUDE ?= /usr/local/include
 # Compiler flags
-DBUGFLAGS = -g -traceback -check # debug version
+LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
+DBUGFLAGS = -g -traceback -check $(LEGACYFLAGS) # debug version
 #FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
-FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) # release version gfortran
+FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACYFLAGS) # release version gfortran
 # note use flag -fpe:0 to handle floating point exceptions
 
-# Linker flags (gfortran on OSX)
+# Linker flags
 #LDFLAGS = -static-libgfortran -static-libgcc
 
-SERIALFN = mendel_serial
-
 # executable name
-TARGET = mendel
+TARGET = $(SRC_DIR)/mendel
 
-MODULES = sort.o random_pkg.o inputs.o genome.o profile.o polygenic.o \
-          init.o selection.o
+MODULES = $(OBJDIR)/sort.o $(OBJDIR)/random_pkg.o $(OBJDIR)/inputs.o \
+          $(OBJDIR)/genome.o $(OBJDIR)/profile.o $(OBJDIR)/polygenic.o \
+          $(OBJDIR)/init.o $(OBJDIR)/selection.o
 
-OTHERS = $(MODULES) mutation.o mating.o fileio.o
+OTHERS = $(MODULES) $(OBJDIR)/mutation.o $(OBJDIR)/mating.o \
+         $(OBJDIR)/fileio.o
 
-POBJECTS = $(OTHERS) diagnostics.o mendel.o migration.o
+POBJECTS = $(OTHERS) $(OBJDIR)/diagnostics.o $(OBJDIR)/mendel.o \
+           $(OBJDIR)/migration.o
 
-SERIAL_OTHERS = $(filter-out init.o,$(OTHERS))
-SOBJECTS = $(SERIAL_OTHERS) $(SERIALFN).o init_serial.o serial_stubs.o
-
-TOBJECTS = $(OTHERS) diagnostics.o test.o migration.o
+TOBJECTS = $(OTHERS) $(OBJDIR)/diagnostics.o $(OBJDIR)/test.o \
+           $(OBJDIR)/migration.o
 
 ##########################################
 # build rules
@@ -58,24 +48,19 @@ TOBJECTS = $(OTHERS) diagnostics.o test.o migration.o
 all: release
 
 debug: FCFLAGS = $(DBUGFLAGS)
-debug: $(POBJECTS)
+debug: pre-build $(POBJECTS)
 	$(FC) $(DBUGFLAGS) $(LDFLAGS) -o $(TARGET) $(POBJECTS) $(LIBS)
 
-test: $(TOBJECTS)
+test: pre-build $(TOBJECTS)
 	$(FC) $(FCFLAGS) $(LDFLAGS) -o test $(TOBJECTS) $(LIBS)
 
 pre-build:
-	sed -i.bak 's/VERSION.*VERSION/VERSION >>> $(GIT_VERSION) <<< VERSION/' $(SRC_DIR)/init.f90
+	printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC_DIR)/version.inc
 
 release: pre-build $(POBJECTS)
 	$(FC) $(FCFLAGS) $(LDFLAGS) -o $(TARGET) $(POBJECTS) $(LIBS)
 
-# in order to build the serial version, first
-# run "make preserial", then "make serial"
 parallel: release
-
-serial: $(SOBJECTS)
-	$(FC) $(FCFLAGS) $(LDFLAGS) -o $(SERIALFN) $(SOBJECTS) $(LIBS)
 
 install:
 	install $(TARGET) $(INSTALL_DIR)
@@ -87,77 +72,57 @@ uninstall:
 dist:
 	scripts/package.sh
 
-preserial:
-	cp $(SRC_DIR)/mendel.f90 $(SRC_DIR)/$(SERIALFN).f90
-	cat $(SRC_DIR)/diagnostics.f90 >> $(SRC_DIR)/$(SERIALFN).f90
-	cp $(SRC_DIR)/init.f90 $(SRC_DIR)/init_serial.f90
-	sed -i.bak '/START_MPI/,/END_MPI/d' $(SRC_DIR)/init_serial.f90
-	sed -i.bak '/START_MPI/,/END_MPI/d' $(SRC_DIR)/$(SERIALFN).f90
-
 cln:
-	\rm -f mendel.o migration.o mendel
+	\rm -f $(OBJDIR)/mendel.o $(OBJDIR)/migration.o $(TARGET)
 
 clean:
-	\rm -f *.o *.mod $(TARGET) test0* $(SRC_DIR)/*_serial.f90 *.f90-e a.out\
-	       success mendel_serial
+	\rm -f $(OBJDIR)/*.o $(MODDIR)/*.mod $(SRC_DIR)/version.inc $(TARGET) test0* *.f90-e a.out success
 
 ###########################################
 # dependencies
 ###########################################
 
-sort.o:		$(SRC_DIR)/sort.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/sort.f90
+$(OBJDIR)/sort.o:		$(SRC_DIR)/sort.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/sort.f90 -o $(OBJDIR)/sort.o
 
-random_pkg.o:	$(SRC_DIR)/random_pkg.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/random_pkg.f90
+$(OBJDIR)/random_pkg.o:	$(SRC_DIR)/random_pkg.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/random_pkg.f90 -o $(OBJDIR)/random_pkg.o
 
-mendel.o:       $(SRC_DIR)/mendel.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mendel.f90
+$(OBJDIR)/mendel.o:       $(SRC_DIR)/mendel.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mendel.f90 -o $(OBJDIR)/mendel.o
 
-init.o:		$(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90
+$(OBJDIR)/init.o:		$(SRC_DIR)/init.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init.f90 -o $(OBJDIR)/init.o
 
-init_serial.o:		$(SRC_DIR)/init_serial.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/init_serial.f90
+$(OBJDIR)/diagnostics.o:  $(SRC_DIR)/diagnostics.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/diagnostics.f90 -o $(OBJDIR)/diagnostics.o
 
-serial_stubs.o:	serial_stubs.f90
-	$(FC) $(FCFLAGS) -c serial_stubs.f90
+$(OBJDIR)/fileio.o:	$(SRC_DIR)/fileio.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/fileio.f90 -o $(OBJDIR)/fileio.o
 
-diagnostics.o:  $(SRC_DIR)/diagnostics.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/diagnostics.f90
+$(OBJDIR)/selection.o:    $(SRC_DIR)/selection.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/selection.f90 -o $(OBJDIR)/selection.o
 
-fileio.o:	$(SRC_DIR)/fileio.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/fileio.f90
+$(OBJDIR)/mating.o:	$(SRC_DIR)/mating.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mating.f90 -o $(OBJDIR)/mating.o
 
-selection.o:    $(SRC_DIR)/selection.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/selection.f90
+$(OBJDIR)/mutation.o:	$(SRC_DIR)/mutation.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mutation.f90 -o $(OBJDIR)/mutation.o
 
-mating.o:	$(SRC_DIR)/mating.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mating.f90
+$(OBJDIR)/migration.o:	$(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration.f90 -o $(OBJDIR)/migration.o
 
-mutation.o:	$(SRC_DIR)/mutation.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mutation.f90
+$(OBJDIR)/polygenic.o:	$(SRC_DIR)/polygenic.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/polygenic.f90 -o $(OBJDIR)/polygenic.o
 
-migration.o:	$(SRC_DIR)/migration.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration.f90
+$(OBJDIR)/test.o:		$(SRC_DIR)/test.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/test.f90 -o $(OBJDIR)/test.o
 
-mendel_serial.o:	$(SRC_DIR)/mendel_serial.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/mendel_serial.f90
+$(OBJDIR)/profile.o:	$(SRC_DIR)/profile.f90
+	$(FC) $(FCFLAGS) -c $(SRC_DIR)/profile.f90 -o $(OBJDIR)/profile.o
 
-migration_serial.o:	$(SRC_DIR)/migration_serial.f90 $(PROJECT_INCLUDE)/common.h
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/migration_serial.f90
+$(OBJDIR)/inputs.o:       $(SRC_DIR)/inputs.f90
+	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/inputs.f90 -o $(OBJDIR)/inputs.o
 
-polygenic.o:	$(SRC_DIR)/polygenic.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/polygenic.f90
-
-test.o:		$(SRC_DIR)/test.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/test.f90
-
-profile.o:	$(SRC_DIR)/profile.f90
-	$(FC) $(FCFLAGS) -c $(SRC_DIR)/profile.f90
-
-inputs.o:       $(SRC_DIR)/inputs.f90
-	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/inputs.f90
-
-genome.o:       $(SRC_DIR)/genome.f90
-	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90
+$(OBJDIR)/genome.o:       $(SRC_DIR)/genome.f90
+	        $(FC) $(FCFLAGS) -c $(SRC_DIR)/genome.f90 -o $(OBJDIR)/genome.o
