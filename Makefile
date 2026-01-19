@@ -8,22 +8,14 @@ GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
 
 FC = mpif90
 
-# Optional MPI libs (usually provided by mpif90).
-#LIBS = -lmpich -lpthread -lmpl
-#LIBS = -L/usr/local/lib -lmpich -lpthread -lmpl
-# Open MPI
-#LIBS = -L/usr/lib64/mpi/gcc/openmpi/lib64 -lopen-rte -lmpi
-
+# System include path (override with INCLUDE=/path/to/include)
 INCLUDE ?= /usr/local/include
-# Compiler flags
-LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
-DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall $(LEGACYFLAGS) # debug version (gfortran)
-#FCFLAGS = -traceback -O3 -I$(INCLUDE) # release version ifort
-FCFLAGS = -O3 -I$(PROJECT_INCLUDE) -I$(INCLUDE) -I$(MODDIR) -J$(MODDIR) $(LEGACYFLAGS) # release version gfortran
-# note use flag -fpe:0 to handle floating point exceptions
 
-# Linker flags
-#LDFLAGS = -static-libgfortran -static-libgcc
+# Compiler flags for gfortran
+# LEGACYFLAGS needed for older Fortran code compatibility
+LEGACYFLAGS ?= -fallow-argument-mismatch -std=legacy
+DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall $(LEGACYFLAGS)
+FCFLAGS = -O3 -I$(SRC_DIR) -I$(INCLUDE) -J$(MODDIR) $(LEGACYFLAGS)
 
 # executable name
 TARGET = $(SRC_DIR)/mendel
