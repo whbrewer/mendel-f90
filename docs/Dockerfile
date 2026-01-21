@@ -1,3 +1,5 @@
+# Note: this is for running Mendel's Accountant in the old Python 2 version of SPC
+
 FROM ubuntu:16.04
 
 # Update Ubuntu and install necessary packages
