@@ -1,25 +1,37 @@
-# README #
+# Mendel's Accountant - Original Fortran Source Code
 
-**Note: this is the original/old version of Mendel's Accountant implemented in Fortran. This is not used anymore. It is kept here for reference.**
+Mendel's Accountant (MENDEL) is an advanced numerical simulation program
+for modeling genetic change over time. It was developed collaboratively
+by Sanford, Baumgardner, Brewer, Gibson, and ReMine.
 
-Mendel's Accountant (MENDEL) is an advanced numerical simulation program for modeling genetic change over time and was developed collaboratively by Sanford, Baumgardner, Brewer, Gibson and ReMine.
+## Installation
 
-For more information visit http://www.mendelsaccountant.info or http://sourceforge.net/projects/mendelsaccount
+- Build: edit `Makefile`, then run `make`.
+- Linux (gfortran):
+  - Debian/Ubuntu: `sudo apt-get install gfortran`
+  - Redhat/CentOS/SUSE: `sudo yum install gfortran`
+- macOS (Homebrew):
+  - `brew install gcc` (includes `gfortran`)
+  - `brew install open-mpi`
+  - Install `libmpfr.4.dylib` and `libmpc.3.dylib` in `/usr/local/lib`
+- MPICH (optional, for parallel runs): https://www.mpich.org/downloads/
 
-### INSTALLATION ###
+## SPC integration
 
-* Build instructions: (1) edit Makefile, (2) run "make"
+Mendel's Accountant was designed to work with the Scientific Platform for
+the Cloud (SPC). Setup instructions:
+https://github.com/whbrewer/spc
 
-* A Fortran compiler is required for compiling.  A free gfortran compile can easily by installed on a Linux system by executing the command "sudo apt-get install gfortran" on Debian/Ubuntu systems, and "sudo yum install gfortran" on Redhat/Centos/SuSe systems.  
+## Mendel's Accountant References
 
-* gfortran can also easily on Mac OS X using Homebrew (see brew.sh) by running "brew install gcc" (gfortran is included with gcc), and also "brew install open-mpi".  You'll also need to install two files: libmpfr.4.dylib and libmpc.3.dylib in /usr/local/lib.
-
-* MPICH (optional). Since mendel uses mpich libraries, for parallel computations, you may download and install mpich from www.mpich.org/downloads/.  
-
-* However, it is possible to install mendel without installing the parallel libs, which means all options will work, but will be limited to running a single tribe/deme at a time. In order to compile Mendel without the parallel libs, first remove all MPICH code by running "make preserial", then run "make serial".  It will croak when it tries to do the final linking.  So run this command after it fails:
-
-gfortran -O3 -I/usr/local/include -static-libgfortran -static-libgcc -o mendel_serial sort.o random_pkg.o inputs.o genome.o profile.o polygenic.o selection.o mutation.o mating.o fileio.o  mendel_serial.o init_serial.o
-
-### INTERFACE ###
-
-Mendel's Accountant was designed to work with the Scientific Platform for the Cloud (SPC).  Instructions for setting up SPC can be found here: https://bitbucket.org/whbrewer/spc
+- Sanford et al., "Mendel's Accountant: A biologically realistic forward-time population genetics program." Scalable Computing: Practice and Experience 8, no. 2 (2007).
+- Sanford et al., "Using computer simulation to understand mutation accumulation dynamics and genetic load." In International Conference on Computational Science, 386-392. Berlin, Heidelberg: Springer Berlin Heidelberg, 2007.
+- Baumgardner et al., "Mendel’s Accountant: A new population genetics simulation tool for studying mutation and natural selection." In Proceedings of the Sixth International Conference on Creationism, vol. 8798. 2008.
+- Sanford et al., "Using numerical simulation to test the validity of neo-Darwinian theory." In Proceedings of the International Conference on Creationism, vol. 6, no. 1, 16. 2008.
+- Sanford et al., "Selection threshold severely constrains capture of beneficial mutations." In Biological Information: New Perspectives, 264-297. 2013.
+- Brewer et al., "Information loss: potential for accelerating natural genetic attenuation of RNA viruses." In Biological Information: New Perspectives, 369-384. 2013.
+- Brewer et al., "Using numerical simulation to test the 'mutation-count' hypothesis." In Biological Information: New Perspectives, 298-311. 2013.
+- Gibson et al., "Can Purifying Natural Selection Preserve Biological Information?" In Biological Information: New Perspectives, 232-263. 2013.
+- Baumgardner et al., "Can synergistic epistasis halt mutation accumulation? Results from numerical simulation." In Biological Information: New Perspectives, 312-337. 2013.
+- Sanford et al., "The waiting time problem in a model hominin population." Theoretical Biology and Medical Modelling 12, no. 1 (2015): 18.
+- Sanford et al., "Adam and Eve, designed diversity, and allele frequencies." 2018.

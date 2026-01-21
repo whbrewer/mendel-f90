@@ -496,39 +496,14 @@ end do
 ! Perform an iteration of smoothing on the fitness_bin values
 ! using a three-point average.  Iterate three times.
 
-do i=1,3
-fm1 = fitness_bins(1,1)
-fm2 = fitness_bins(1,2)
-do k=2,49
-  av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
-  fm1 = fitness_bins(k,1)
-  work(k,1) = 0.5*av1
-  av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
-  fm2 = fitness_bins(k,2)
-  work(k,2) = 0.5*av2
-end do
-fitness_bins(50,:) = 0.5*(fitness_bins(49,:) + fitness_bins(50,:))
-fitness_bins(2:49,:) = work(2:49,:)
-end do
+call smooth_bins(fitness_bins, work, 1, 50, 3, .true.)
 
 ! For favorable distribution, limit maximum to a value of 100.
 ! To increase the smoothness, iterate the smoothing two times.
 
 fitness_bins(51:100,:) = min(100., fitness_bins(51:100,:))
 
-do i=1,2
-fm1 = fitness_bins(51,1)
-fm2 = fitness_bins(51,2)
-do k=52,99
-  av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
-  fm1 = fitness_bins(k,1)
-  work(k,1) = 0.5*av1
-  av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
-  fm2 = fitness_bins(k,2)
-  work(k,2) = 0.5*av2
-end do
-fitness_bins(52:99,:) = work(52:99,:)
-end do
+call smooth_bins(fitness_bins, work, 51, 100, 2, .false.)
 
 ! Write the fitness bin information for deleterious mutations
 ! to standard output.
@@ -793,6 +768,31 @@ do i=1,oneortwo
 end do
 
 end subroutine diagnostics_mutn_bins_plot
+
+subroutine smooth_bins(fitness_bins, work, k_start, k_end, iterations, fix_end)
+real*8 fitness_bins(200,2), work(100,2)
+integer k_start, k_end, iterations, i, k
+logical fix_end
+real*8 fm1, fm2, av1, av2
+
+do i=1,iterations
+   fm1 = fitness_bins(k_start,1)
+   fm2 = fitness_bins(k_start,2)
+   do k=k_start+1,k_end-1
+      av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
+      fm1 = fitness_bins(k,1)
+      work(k,1) = 0.5*av1
+      av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
+      fm2 = fitness_bins(k,2)
+      work(k,2) = 0.5*av2
+   end do
+   if (fix_end) then
+      fitness_bins(k_end,:) = 0.5*(fitness_bins(k_end-1,:) + fitness_bins(k_end,:))
+   end if
+   fitness_bins(k_start+1:k_end-1,:) = work(k_start+1:k_end-1,:)
+end do
+
+end subroutine smooth_bins
 
 subroutine diagnostics_near_neutrals_plot(dmutn, fmutn, &
            linkage_block_fitness, lb_mutn_count, gen)

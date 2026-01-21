@@ -5,9 +5,10 @@
 ! if I set mutation rate = 0, fitness should be zero.
 
 program test_main
+use mpi_helpers
 use random_pkg
+use inputs
 include 'common.h'
-include 'mpif.h'
 real*8,  allocatable, dimension(:,:,:)   :: linkage_block_fitness
 integer, allocatable, dimension(:,:,:)   :: dmutn, nmutn, fmutn
 integer, allocatable, dimension(:,:,:,:) :: lb_mutn_count
@@ -134,6 +135,7 @@ call mpi_myfinalize(ierr)
 end program test_main
 
 subroutine test_init(dmutn,nmutn,fmutn,lb_mutn_count,linkage_block_fitness,max_size)
+use inputs
 include 'common.h'
 integer, intent(in)    :: max_size
 integer, intent(inout) :: dmutn(max_del_mutn_per_indiv/2,2,max_size)
@@ -166,6 +168,7 @@ end
 
 subroutine test_restart(dmutn,nmutn,fmutn,lb_mutn_count,linkage_block_fitness, &
                         max_size)
+use inputs
 include 'common.h'
 integer, intent(in)    :: max_size
 integer, intent(inout) :: dmutn(max_del_mutn_per_indiv/2,2,max_size)
@@ -192,4 +195,3 @@ call read_restart_dump(dmutn,nmutn,fmutn,lb_mutn_count, &
 call assert(shutdown_gen == gen_0) 
 
 end subroutine test_restart
-

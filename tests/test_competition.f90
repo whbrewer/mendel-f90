@@ -5,9 +5,11 @@
 ! if I set mutation rate = 0, fitness should be zero.
 
 program test_main
+use mpi
+use mpi_helpers
 use random_pkg
+use inputs
 include 'common.h'
-include 'mpif.h'
 real*8,  allocatable, dimension(:,:,:)   :: linkage_block_fitness
 integer, allocatable, dimension(:,:,:)   :: dmutn, nmutn, fmutn
 integer, allocatable, dimension(:,:,:,:) :: lb_mutn_count
@@ -36,12 +38,14 @@ if(is_parallel) then
   call mpi_mybcasti(global_pop_size,1)
 end if
 
-if(is_parallel .and. tribal_competition) then
+if(is_parallel) then
    allocate( pop_size_array(num_tribes) )
    pop_size_array = pop_size
    pop_size_allocation = global_pop_size
-   write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
-                pop_size_allocation
+   if (tribal_competition) then
+      write(*,*) 'Allocating tribe ', myid, ' with max pop_size of:',&
+                   pop_size_allocation
+   endif
 else
    pop_size_allocation = pop_size
 endif
@@ -68,7 +72,7 @@ allocate(         dmutn(max_del_mutn_per_indiv/2,2,max_size),     &
 
 call test_init(dmutn,nmutn,fmutn,lb_mutn_count,linkage_block_fitness,max_size)
 
-if (1 == 1) then
+if (is_parallel .and. num_tribes > 1) then
    current_pop_size = pop_size
    call mpi_gather(current_pop_size,1,mpi_integer, &
         pop_size_array,1,mpi_integer,0,mycomm,ierr)
@@ -131,6 +135,7 @@ call mpi_myfinalize(ierr)
 end program test_main
 
 subroutine test_init(dmutn,nmutn,fmutn,lb_mutn_count,linkage_block_fitness,max_size)
+use inputs
 include 'common.h'
 integer, intent(in)    :: max_size
 integer, intent(inout) :: dmutn(max_del_mutn_per_indiv/2,2,max_size)
@@ -149,17 +154,3 @@ lb_mutn_count = 0
 linkage_block_fitness = 1.d0
 
 end subroutine test_init
-
-subroutine assert( b )
-
-logical b
-
-if ( .not. b) then
-  write(*,*) 'assert failed'
-  stop 1
-endif
-
-end
-
-end subroutine test_restart
-
