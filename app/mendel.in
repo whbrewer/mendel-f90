@@ -3,7 +3,7 @@ case_id = 'x01e36',
 mutn_rate = 10.0,
 frac_fav_mutn = 0.0001,
 reproductive_rate = 2.0,
-pop_size = 500,
+pop_size = 1000,
 num_generations = 500,
 /
 

@@ -7,15 +7,17 @@ use profiler
 use polygenic
 use random_pkg
 use selection_module
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 
 ! Data structures to maintain genetic information
 real*8,  allocatable, target, dimension(:,:,:)   :: linkage_block_fitness
 integer, allocatable, target, dimension(:,:,:)   :: dmutn, nmutn, fmutn
 integer, allocatable, target, dimension(:,:,:,:) :: lb_mutn_count
+integer, allocatable, dimension(:,:) :: mfirst
 
 real,    allocatable, dimension(:) :: initial_allele_effects
 real*8,  allocatable, dimension(:) :: fitness, pheno_fitness
@@ -205,6 +207,7 @@ allocate(         dmutn(max_del_mutn_per_indiv/2,2,max_size),     &
                   fmutn(max_fav_mutn_per_indiv/2,2,max_size),     &
                  lb_mutn_count(num_linkage_subunits,2,3,max_size),&
          linkage_block_fitness(num_linkage_subunits,2,max_size),  &
+                 mfirst(2,max_size),                              &
         initial_allele_effects(num_linkage_subunits),             &
          pheno_fitness(max_size),      fitness(max_size),         &
           work_fitness(max_size), sorted_score(max_size),         &
@@ -851,9 +854,9 @@ do gen=gen_0+1,gen_0+num_generations
    endif
 
    if (plot_allele_gens > 0) then
-      if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
+         if(mod(gen, plot_allele_gens)==0 .and. gen /= num_generations) &
          call diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
-                                work_fitness, max_size, gen)
+                                mfirst, max_size, gen)
    endif
 
    call second(tout_diagnostics)
@@ -871,7 +874,7 @@ do gen=gen_0+1,gen_0+num_generations
    !START_MPI
    if(is_parallel) then
       call mpi_ravg(tgen,par_tgen,1)
-      call mpi_ravg(time_offspring,par_time_offspring,3)
+      call mpi_ravg(time_offspring,par_time_offspring,1)
       call mpi_ravg(time_selection,par_time_selection,1)
       if (myid==0) then
          if (verbosity == 2) then
@@ -1155,7 +1158,7 @@ end if
 if (plot_allele_gens > 0) then
    if(tracking_threshold /= 1.0) then
       call diagnostics_polymorphisms_plot(dmutn,nmutn,fmutn, &
-                          work_fitness, max_size, gen-1)
+                          mfirst, max_size, gen-1)
       ! if(recombination_model /= clonal)
       ! &      call diagnostics_heterozygosity(dmutn, fmutn)
    end if
@@ -1226,7 +1229,7 @@ if(am_parallel.and.tribal_competition) then
       call MPI_GROUP_FREE(OLDGROUP,ierr)
       call MPI_GROUP_FREE(NEWGROUP,ierr)
    end if
-   call MPI_COMM_FREE(MYCOMM)
+   call MPI_COMM_FREE(MYCOMM,ierr)
    call mpi_myfinalize(ierr)
 elseif (is_parallel) then
    call MPI_COMM_FREE(MYCOMM,ierr)
@@ -1262,8 +1265,8 @@ subroutine compute_tribal_fitness(dmutn, fmutn, pop_size_array, &
 use inputs
 use random_pkg
 use selection_module
+use mpi_helpers
 include 'common.h'
-include 'mpif.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer pop_size_array(num_tribes), current_global_pop_size
@@ -1299,8 +1302,8 @@ end if
 
 if (is_parallel) then
 
-   call mpi_davg(post_sel_fitness,par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_fitness,par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness,par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,par_pre_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
 
    if(tribal_competition) then
@@ -1309,9 +1312,7 @@ if (is_parallel) then
 !     array called post_sel_fitness_array in order to compute
 !     tribal fitness variance below.
 
-      call MPI_GATHER(post_sel_fitness,1,MPI_DOUBLE_PRECISION, &
-                      post_sel_fitness_array,1, &
-                      MPI_DOUBLE_PRECISION,0,MYCOMM,ierr)
+      call mpi_gather_d(post_sel_fitness,post_sel_fitness_array,1)
 
       call mpi_isum(current_pop_size,current_global_pop_size,1)
 
@@ -1367,7 +1368,7 @@ if (is_parallel) then
 !     The tribal_fitness_factor relates the fitness of the
 !     current tribe to the average tribal fitness from all tribes.
 
-      call mpi_davg(tribal_fitness,par_tribal_fitness,1)
+      call mpi_davg_scalar(tribal_fitness,par_tribal_fitness,1)
       call mpi_mybcastd(par_tribal_fitness,1)
 
       tribal_fitness_factor=tribal_fitness/ &
@@ -1381,7 +1382,7 @@ if (is_parallel) then
 !     Recompute tribal_fitness_factor which now includes
 !     social_bonus.
 
-      call mpi_davg(tribal_fitness,par_tribal_fitness,1)
+      call mpi_davg_scalar(tribal_fitness,par_tribal_fitness,1)
       call mpi_mybcastd(par_tribal_fitness,1)
       tribal_fitness_factor=tribal_fitness/par_tribal_fitness
 

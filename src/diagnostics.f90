@@ -6,9 +6,10 @@ use random_pkg
 use polygenic
 use inputs
 use init
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 integer, parameter :: MNP=100000
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
@@ -70,15 +71,15 @@ tracked_neu_mutn = tracked_neu_mutn - ica_count(3)
 !START_MPI
 if (is_parallel) then
 
-   call mpi_davg(post_sel_fitness,par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_fitness,par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness,par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,par_pre_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_geno_sd,par_pre_sel_geno_sd,1)
-   call mpi_davg(pre_sel_pheno_sd,par_pre_sel_pheno_sd,1)
-   call mpi_davg(pre_sel_corr,par_pre_sel_corr,1)
-   call mpi_davg(post_sel_geno_sd,par_post_sel_geno_sd,1)
-   call mpi_davg(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
-   call mpi_davg(post_sel_corr,par_post_sel_corr,1)
+   call mpi_davg_scalar(pre_sel_geno_sd,par_pre_sel_geno_sd,1)
+   call mpi_davg_scalar(pre_sel_pheno_sd,par_pre_sel_pheno_sd,1)
+   call mpi_davg_scalar(pre_sel_corr,par_pre_sel_corr,1)
+   call mpi_davg_scalar(post_sel_geno_sd,par_post_sel_geno_sd,1)
+   call mpi_davg_scalar(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
+   call mpi_davg_scalar(post_sel_corr,par_post_sel_corr,1)
 
    call mpi_dsum(total_del_mutn,par_total_del_mutn,1)
    call mpi_dsum(tracked_del_mutn,par_tracked_del_mutn,1)
@@ -178,8 +179,8 @@ if(is_parallel) then
            par_post_sel_pheno_sd, par_post_sel_corr,     &
            global_num_polys_this_gen, global_num_polys_cumulative)
 
-      if(allow_back_mutn) write(6,"('mean number of back ' &
-         'mutations/indiv =',f10.2)") real(global_num_back_mutn) &
+      if(allow_back_mutn) write(6,"('mean number of back mutations/indiv =',f10.2)") &
+         real(global_num_back_mutn) &
          /real(current_global_pop_size)
 
    end if
@@ -202,7 +203,7 @@ else
            total_fav_mutn, total_neu_mutn, pre_sel_fitness,       &
            pre_sel_geno_sd, pre_sel_pheno_sd, pre_sel_corr,       &
            post_sel_fitness, post_sel_geno_sd, post_sel_pheno_sd, &
-           post_sel_corr, num_polys_this_gen)
+           post_sel_corr, num_polys_this_gen, num_polys_cumulative)
 
       if(polygenic_beneficials) then
          suma = 0.
@@ -290,6 +291,7 @@ end subroutine diagnostics_history_plot
 
 subroutine diagnostics_mutn_bins_plot(dmutn, fmutn, accum, gen)
 use inputs
+use mpi_helpers
 include 'common.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
@@ -436,14 +438,14 @@ end if
 if(mod(gen, accum_gen) == 0 .and. verbosity == 2) then
 
    if(gen == 100) then
-   write(26,'("#"/"#",11x, "Generation    Accumulation Interval"/ &
-      2i19/"#"/"#           Accumulation Over Previous Interval"/ &
-      "#"/"# bin  fitness effect    actual      expected       "  &
+   write(26,'("#",/,"#",11x,"Generation    Accumulation Interval",/, &
+      2i19,/,"#",/,"#           Accumulation Over Previous Interval",/, &
+      "#",/,"# bin  fitness effect    actual      expected       ", &
       "ratio  expected fraction")') gen, accum_gen
    else
-   write(26,'("#"/"#",11x, "Generation    Accumulation Interval"/ &
-      2i19/"#"/"#           Accumulation Over Previous Interval"/ &
-      "#"/"# bin  fitness effect    actual      expected       "  &
+   write(26,'("#",/,"#",11x,"Generation    Accumulation Interval",/, &
+      2i19,/,"#",/,"#           Accumulation Over Previous Interval",/, &
+      "#",/,"# bin  fitness effect    actual      expected       ", &
       "ratio      total accum")') gen, accum_gen
    end if
 
@@ -494,39 +496,14 @@ end do
 ! Perform an iteration of smoothing on the fitness_bin values
 ! using a three-point average.  Iterate three times.
 
-do i=1,3
-fm1 = fitness_bins(1,1)
-fm2 = fitness_bins(1,2)
-do k=2,49
-  av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
-  fm1 = fitness_bins(k,1)
-  work(k,1) = 0.5*av1
-  av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
-  fm2 = fitness_bins(k,2)
-  work(k,2) = 0.5*av2
-end do
-fitness_bins(50,:) = 0.5*(fitness_bins(49,:) + fitness_bins(50,:))
-fitness_bins(2:49,:) = work(2:49,:)
-end do
+call smooth_bins(fitness_bins, work, 1, 50, 3, .true.)
 
 ! For favorable distribution, limit maximum to a value of 100.
 ! To increase the smoothness, iterate the smoothing two times.
 
 fitness_bins(51:100,:) = min(100., fitness_bins(51:100,:))
 
-do i=1,2
-fm1 = fitness_bins(51,1)
-fm2 = fitness_bins(51,2)
-do k=52,99
-  av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
-  fm1 = fitness_bins(k,1)
-  work(k,1) = 0.5*av1
-  av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
-  fm2 = fitness_bins(k,2)
-  work(k,2) = 0.5*av2
-end do
-fitness_bins(52:99,:) = work(52:99,:)
-end do
+call smooth_bins(fitness_bins, work, 51, 100, 2, .false.)
 
 ! Write the fitness bin information for deleterious mutations
 ! to standard output.
@@ -720,14 +697,14 @@ if(.not. is_parallel) then
    end if
 else
    !START_MPI
-   call mpi_davg(del_dom_thres,par_del_dom_thres,1)
+   call mpi_davg_scalar(del_dom_thres,par_del_dom_thres,1)
    if(myid == 0. .and. par_del_dom_thres > 0.) then
       x0 = (-log(par_del_dom_thres)/alpha_del)**(1/gamma_del)
       write(6, '("deleterious selection threshold   =",1pe10.3)') &
             par_del_dom_thres
       write(6, '("deleterious fraction unselectable =",f6.3)') 1. - x0
    end if
-   call mpi_davg(fav_dom_thres,par_fav_dom_thres,1)
+   call mpi_davg_scalar(fav_dom_thres,par_fav_dom_thres,1)
    !END_MPI
    if(myid == 0 .and. par_fav_dom_thres > 0.) then
       x0 = (-log(par_fav_dom_thres/max_fav_fitness_gain) &
@@ -792,10 +769,36 @@ end do
 
 end subroutine diagnostics_mutn_bins_plot
 
+subroutine smooth_bins(fitness_bins, work, k_start, k_end, iterations, fix_end)
+real*8 fitness_bins(200,2), work(100,2)
+integer k_start, k_end, iterations, i, k
+logical fix_end
+real*8 fm1, fm2, av1, av2
+
+do i=1,iterations
+   fm1 = fitness_bins(k_start,1)
+   fm2 = fitness_bins(k_start,2)
+   do k=k_start+1,k_end-1
+      av1 = fitness_bins(k,1) + 0.5*(fm1 + fitness_bins(k+1,1))
+      fm1 = fitness_bins(k,1)
+      work(k,1) = 0.5*av1
+      av2 = fitness_bins(k,2) + 0.5*(fm2 + fitness_bins(k+1,2))
+      fm2 = fitness_bins(k,2)
+      work(k,2) = 0.5*av2
+   end do
+   if (fix_end) then
+      fitness_bins(k_end,:) = 0.5*(fitness_bins(k_end-1,:) + fitness_bins(k_end,:))
+   end if
+   fitness_bins(k_start+1:k_end-1,:) = work(k_start+1:k_end-1,:)
+end do
+
+end subroutine smooth_bins
+
 subroutine diagnostics_near_neutrals_plot(dmutn, fmutn, &
            linkage_block_fitness, lb_mutn_count, gen)
 use selection_module
 use inputs
+use mpi_helpers
 include 'common.h'
 integer dmutn(max_del_mutn_per_indiv/2,2,*)
 integer fmutn(max_fav_mutn_per_indiv/2,2,*)
@@ -990,8 +993,8 @@ call flush(4)
 
 !START_MPI
 if (is_parallel) then
-   call mpi_davg(avg_lb_effect,par_avg_lb_effect,1)
-   call mpi_davg(lb_fitness_frac_positive,par_lb_fitness_frac_pos,1)
+   call mpi_davg_scalar(avg_lb_effect,par_avg_lb_effect,1)
+   call mpi_davg_scalar(lb_fitness_frac_positive,par_lb_fitness_frac_pos,1)
    call mpi_davg(haplotype_bins,par_haplotype_bins,200)
 !  Note: currently only averaging haplotype_bins--
 !  all the other values are currently coming from processor 0
@@ -1227,8 +1230,8 @@ write(*,'("and       ",i10," heterozygous mutations")') &
   count_heterozygous
 write(*,'("resulting in a percent heterozygosity of: ",f5.2,"%")') &
   fraction_heterozygous*100
-write(*,'("There are: ",f7.1," tracked deleterious " &
-  "mutations per individual")') mutn_per_individual
+write(*,'("There are: ",f7.1," tracked deleterious mutations per individual")') &
+  mutn_per_individual
 write(*,*)
 
 10   continue
@@ -1283,9 +1286,10 @@ subroutine diagnostics_polymorphisms_plot(dmutn, nmutn, fmutn, &
 use polygenic
 use inputs
 use init
+use mpi
+use mpi_helpers
 include 'common.h'
 ! START_MPI
-include 'mpif.h'
 ! END_MPI
 ! MNP = max number of polymorphisms, NP = number of bins
 integer, parameter :: MNP=100000, NB=100
@@ -1299,8 +1303,8 @@ integer dcount, fcount, par_dcount, par_fcount
 integer global_mutn_count(MNP,num_tribes)
 integer global_mutn_list(MNP,num_tribes)
 integer global_list_count(num_tribes)
-integer num_falleles(3), num_dalleles(3), num_nalleles(3)
-integer par_num_falleles(3), par_num_dalleles(3), par_num_nalleles(3)
+real*8 num_falleles(3), num_dalleles(3), num_nalleles(3)
+real*8 par_num_falleles(3), par_num_dalleles(3), par_num_nalleles(3)
 integer lb_limit, dwarn, fwarn, idwarn, ifwarn, udwarn, ufwarn
 integer ncount, par_ncount, mutn_limit
 integer nwarn, mutn_thres, mutn, jmax
@@ -1588,9 +1592,8 @@ end do
 
 if (verbosity==2) then
    write(19,'("# generation = ",i8)') gen
-   write(19,"('#',9x,'Table of polymorphism frequency vs. fitness' &
-      ' effect category'/'#'/ &
-      '#freq',17x,'fitness effect category center value')")
+   write(19,'("#",9x,"Table of polymorphism frequency vs. fitness effect category", &
+      /,"#",/,"#freq",17x,"fitness effect category center value")')
    write(19,'(3x,1p4e7.0,6e8.1)') bin_center(1:10)
    write(19,'(i3,4i7,6i8)') (k,int(febin(1:10,k)),k=1,NB)
    call flush(19)
@@ -1656,11 +1659,11 @@ if(is_parallel) then
                  11x,"Total")')
       write(21,'("#",3x,"(0-1%)",9x,"(1-99%)",11x,"(100%)")')
       write(21,'("#",4i10," deleterious")') &
-          num_dalleles(1), num_dalleles(2), num_dalleles(3), dcount
+          int(num_dalleles(1)), int(num_dalleles(2)), int(num_dalleles(3)), dcount
       write(21,'("#",4i10," favorable")')   &
-          num_falleles(1), num_falleles(2), num_falleles(3), fcount
+          int(num_falleles(1)), int(num_falleles(2)), int(num_falleles(3)), fcount
       write(21,'("#",4i10," neutral")')     &
-          num_nalleles(1), num_nalleles(2), num_nalleles(3), ncount
+          int(num_nalleles(1)), int(num_nalleles(2)), int(num_nalleles(3)), ncount
       call flush(21)
    end if
 
@@ -1718,19 +1721,19 @@ if(mod(gen,plot_allele_gens)==0.and.verbosity>0) then
       '#    Very rare   Polymorphic     Fixed      Total'/   &
       '#      (0-1%)      (1-99%)      (100%)')") int(dsum), &
       int(fsum), int(nsum)
-   write(11,"('#',4i12,' deleterious')") num_dalleles(1), &
-              num_dalleles(2), num_dalleles(3), dcount
-   write(11,"('#',4i12,' favorable')")   num_falleles(1), &
-              num_falleles(2), num_falleles(3), fcount
-   write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
-              num_nalleles(2), num_nalleles(3), ncount
-   write(11,"('#',4i12,' neutral')")   num_nalleles(1),   &
-              num_nalleles(2), num_nalleles(3), ncount
-   if(dwarn == 1) write(11,'("# Warning: Number of deleterious " &
+   write(11,"('#',4i12,' deleterious')") int(num_dalleles(1)), &
+              int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(11,"('#',4i12,' favorable')")   int(num_falleles(1)), &
+              int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(11,"('#',4i12,' neutral')")   int(num_nalleles(1)),   &
+              int(num_nalleles(2)), int(num_nalleles(3)), ncount
+   write(11,"('#',4i12,' neutral')")   int(num_nalleles(1)),   &
+              int(num_nalleles(2)), int(num_nalleles(3)), ncount
+   if(dwarn == 1) write(11,'("# Warning: Number of deleterious ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(11,'("# Warning: Number of   favorable " &
+   if(fwarn == 1) write(11,'("# Warning: Number of   favorable ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(11,'("# Warning: Number of     neutral " &
+   if(nwarn == 1) write(11,'("# Warning: Number of     neutral ", &
       "polymorphisms exceeded the linkage block limit of ",i8)') MNP
    call flush(11)
 end if
@@ -1743,17 +1746,17 @@ if(myid == 0 .and. mod(gen,plot_allele_gens)==0 ) then
     '     Very rare   Polymorphic     Fixed      Total'/   &
     '       (0-1%)      (1-99%)      (100%)')")            &
           int(dsum), int(fsum), int(nsum)
-   write(6,"(' ',4i12,' deleterious')") num_dalleles(1), &
-        num_dalleles(2), num_dalleles(3), dcount
-   write(6,"(' ',4i12,' favorable')")   num_falleles(1), &
-        num_falleles(2), num_falleles(3), fcount
-   write(6,"(' ',4i12,' neutral')")   num_nalleles(1),   &
-        num_nalleles(2), num_nalleles(3), ncount
-   if(dwarn == 1) write(6,'("  Warning: Number of deleterious " &
+   write(6,"(' ',4i12,' deleterious')") int(num_dalleles(1)), &
+        int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(6,"(' ',4i12,' favorable')")   int(num_falleles(1)), &
+        int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(6,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
+        int(num_nalleles(2)), int(num_nalleles(3)), ncount
+   if(dwarn == 1) write(6,'("  Warning: Number of deleterious ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(6,'("  Warning: Number of   favorable " &
+   if(fwarn == 1) write(6,'("  Warning: Number of   favorable ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(6,'("  Warning: Number of     neutral " &
+   if(nwarn == 1) write(6,'("  Warning: Number of     neutral ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 end if
 
@@ -1765,17 +1768,17 @@ if(mod(gen,plot_allele_gens)==0) then
     '     Very rare   Polymorphic     Fixed      Total'/   &
     '       (0-1%)      (1-99%)      (100%)')")            &
           int(dsum), int(fsum), int(nsum)
-   write(9,"(' ',4i12,' deleterious')") num_dalleles(1), &
-        num_dalleles(2), num_dalleles(3), dcount
-   write(9,"(' ',4i12,' favorable')")   num_falleles(1), &
-        num_falleles(2), num_falleles(3), fcount
-   write(9,"(' ',4i12,' neutral')")   num_nalleles(1),   &
-        num_nalleles(2), num_nalleles(3), ncount
-   if(dwarn == 1) write(9,'("  Warning: Number of deleterious " &
+   write(9,"(' ',4i12,' deleterious')") int(num_dalleles(1)), &
+        int(num_dalleles(2)), int(num_dalleles(3)), dcount
+   write(9,"(' ',4i12,' favorable')")   int(num_falleles(1)), &
+        int(num_falleles(2)), int(num_falleles(3)), fcount
+   write(9,"(' ',4i12,' neutral')")   int(num_nalleles(1)),   &
+        int(num_nalleles(2)), int(num_nalleles(3)), ncount
+   if(dwarn == 1) write(9,'("  Warning: Number of deleterious ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(fwarn == 1) write(9,'("  Warning: Number of   favorable " &
+   if(fwarn == 1) write(9,'("  Warning: Number of   favorable ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
-   if(nwarn == 1) write(9,'("  Warning: Number of     neutral " &
+   if(nwarn == 1) write(9,'("  Warning: Number of     neutral ", &
         "polymorphisms exceeded the linkage block limit of ",i8)') MNP
 endif
 
@@ -1785,6 +1788,7 @@ subroutine diagnostics_selection(fitness_pre_sel,fitness_post_sel, &
                                  total_offspring,gen)
 use selection_module
 use inputs
+use mpi_helpers
 include 'common.h'
 integer, parameter :: NB=200 ! Number of bins
 real*8 fitness_pre_sel(*), fitness_post_sel(*)
@@ -1828,15 +1832,15 @@ end if
 
 if (is_parallel) then
 
-   call mpi_davg(pre_sel_fitness,  par_pre_sel_fitness,1)
-   call mpi_davg(post_sel_fitness, par_post_sel_fitness,1)
+   call mpi_davg_scalar(pre_sel_fitness,  par_pre_sel_fitness,1)
+   call mpi_davg_scalar(post_sel_fitness, par_post_sel_fitness,1)
    call mpi_mybcastd(par_post_sel_fitness,1)
-   call mpi_davg(pre_sel_geno_sd,  par_pre_sel_geno_sd,1)
-   call mpi_davg(pre_sel_pheno_sd, par_pre_sel_pheno_sd,1)
-   call mpi_davg(pre_sel_corr,     par_pre_sel_corr,1)
-   call mpi_davg(post_sel_geno_sd, par_post_sel_geno_sd,1)
-   call mpi_davg(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
-   call mpi_davg(post_sel_corr,    par_post_sel_corr,1)
+   call mpi_davg_scalar(pre_sel_geno_sd,  par_pre_sel_geno_sd,1)
+   call mpi_davg_scalar(pre_sel_pheno_sd, par_pre_sel_pheno_sd,1)
+   call mpi_davg_scalar(pre_sel_corr,     par_pre_sel_corr,1)
+   call mpi_davg_scalar(post_sel_geno_sd, par_post_sel_geno_sd,1)
+   call mpi_davg_scalar(post_sel_pheno_sd,par_post_sel_pheno_sd,1)
+   call mpi_davg_scalar(post_sel_corr,    par_post_sel_corr,1)
 
 end if
 !END_MPI
@@ -1905,9 +1909,9 @@ subroutine count_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mutn_list, 
                          mutn_count, list_count, mfirst, gen)
 use inputs
 use polygenic
+use mpi
 include 'common.h'
 !START_MPI
-include 'mpif.h'
 !END_MPI
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
@@ -2016,9 +2020,9 @@ subroutine count_uploaded_alleles(xmutn, max_mutn_per_indiv, MNP, mutn_limit, mu
                                   mutn_count, list_count, mfirst, gen)
 use inputs
 use polygenic
+use mpi
 include 'common.h'
 !START_MPI
-include 'mpif.h'
 !END_MPI
 integer, intent(in)    :: MNP
 integer, intent(in)    :: max_mutn_per_indiv
