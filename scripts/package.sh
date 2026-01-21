@@ -2,7 +2,7 @@
 set -euo pipefail
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-app_dir="$root_dir/app"
+app_dir="$root_dir/spc-app"
 src_dir="$root_dir/src"
 dist_dir="$root_dir/dist"
 

@@ -22,6 +22,8 @@ Mendel's Accountant was designed to work with the Scientific Platform for
 the Cloud (SPC). Setup instructions:
 https://github.com/whbrewer/spc
 
+Run `make dist` to package for deployment.
+
 ## References
 
 1. Sanford et al., "Mendel's Accountant: A biologically realistic forward-time population genetics program." Scalable Computing: Practice and Experience 8, no. 2 (2007).
