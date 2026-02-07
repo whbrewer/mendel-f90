@@ -687,7 +687,7 @@
           <label for="num_tribes" class="control-label col-xs-6">
             2. Number of subpopulations:</label>
           <div class="col-xs-6">
-            <input type="number" name="num_tribes" class="form-control"
+            <input type="number" name="num_procs" id="num_procs" class="form-control"
                    min="2" max="100" step="1" onchange="fxn_tribes(8)"
                    value="{{num_tribes}}" title="2 - 100">
           </div>
@@ -1071,7 +1071,7 @@
         <label for="uneu" class="control-label col-xs-6">    
           &nbsp;&nbsp;&nbsp; :: neutral mutation rate: </label>
         <div class="col-xs-6">
-          <input name="uneu" type="number" class="form-control" readOnly=true>
+          <input name="uneu" id="uneu" type="number" class="form-control" readOnly=true>
         </div>
       </div>
 

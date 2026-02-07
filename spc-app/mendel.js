@@ -404,9 +404,9 @@ function compute_memory() {
 function compute_u() {
    u = dmi.mutn_rate.value
    uneu = u*dmi.fraction_neutral.value
-   document.getElementById("uben").innerHTML = String(Math.round((u-uneu)*dmi.frac_fav_mutn.value*10)/10)
-   document.getElementById("udel").innerHTML = String(Math.round((u-uneu)*(1-dmi.frac_fav_mutn.value)*10)/10)
-   document.getElementById("uneu").innerHTML = String(Math.round(uneu*10)/10)
+   document.getElementById("uben").value = String(Math.round((u-uneu)*dmi.frac_fav_mutn.value*10)/10)
+   document.getElementById("udel").value = String(Math.round((u-uneu)*(1-dmi.frac_fav_mutn.value)*10)/10)
+   document.getElementById("uneu").value = String(Math.round(uneu*10)/10)
 }
 
 function fxn_fraction_neutral() {
