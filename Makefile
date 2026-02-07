@@ -18,7 +18,7 @@ CORE = $(MODULES) mutation mating fileio
 OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics mendel migration))
 TEST_OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics test migration))
 
-.PHONY: all release debug test install uninstall dist clean cln
+.PHONY: all release debug test install uninstall dist clean cln install-spc
 
 all: release
 
@@ -39,6 +39,13 @@ pre-build:
 
 install:
 	install $(TARGET) $(INSTALL_DIR)
+
+install-spc:
+	mkdir -p ../spc/src/spc/static/apps/mendel ../spc/templates/apps
+	cp spc-app/mendel.js ../spc/src/spc/static/apps/mendel
+	cp spc-app/help.html ../spc/src/spc/static/apps/mendel
+	cp spc-app/about.html ../spc/src/spc/static/apps/mendel
+	cp spc-app/mendel.j2 ../spc/templates/apps
 
 uninstall:
 	rm -f $(INSTALL_DIR)/mendel
