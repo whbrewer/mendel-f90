@@ -35,5 +35,6 @@ Run `make dist` to package for deployment.
 1. Brewer et al., "Using numerical simulation to test the 'mutation-count' hypothesis." In Biological Information: New Perspectives, 298-311. 2013.
 1. Gibson et al., "Can Purifying Natural Selection Preserve Biological Information?" In Biological Information: New Perspectives, 232-263. 2013.
 1. Baumgardner et al., "Can synergistic epistasis halt mutation accumulation? Results from numerical simulation." In Biological Information: New Perspectives, 312-337. 2013.
+1. Rupe and Sanford, "Using numerical simulation to better understand fixation rates, and establishment of a new principle: Haldane’s ratchet." In Proceedings of the International Conference on Creationism, vol. 7, no. 1, p. 32. 2013.
 1. Sanford et al., "The waiting time problem in a model hominin population." Theoretical Biology and Medical Modelling 12, no. 1 (2015): 18.
 1. Sanford et al., "Adam and Eve, designed diversity, and allele frequencies." 2018.
