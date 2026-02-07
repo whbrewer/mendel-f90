@@ -4,7 +4,10 @@ INSTALL_DIR = /usr/local/bin
 
 FC = mpif90
 INCLUDE ?= /usr/local/include
-GIT_VERSION := $(shell git describe --abbrev=7 --dirty --always --tags)
+GIT_TAG := $(shell git describe --tags --abbrev=0 2>/dev/null)
+GIT_SHA := $(shell git rev-parse --short=7 HEAD 2>/dev/null)
+GIT_DIRTY := $(shell test -n "$$(git status --porcelain 2>/dev/null)" && echo -dirty)
+GIT_VERSION := $(if $(GIT_TAG),$(patsubst v%,%,$(GIT_TAG))-$(GIT_SHA)$(GIT_DIRTY),$(GIT_SHA)$(GIT_DIRTY))
 
 # gfortran flags (LEGACYFLAGS needed for older Fortran compatibility)
 FCFLAGS = -O3 -I$(SRC) -I$(INCLUDE) -J$(SRC)
@@ -32,6 +35,7 @@ test: pre-build $(TEST_OBJS)
 
 pre-build:
 	@printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC)/version.inc
+	@perl -pi -e "s/(tagsinput\\('add',\\s*')([^']*)(')/\\$${1}$(GIT_VERSION)\\$${3}/" spc-app/mendel.j2
 
 install:
 	install $(TARGET) $(INSTALL_DIR)
