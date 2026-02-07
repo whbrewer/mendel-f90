@@ -2,6 +2,7 @@
 var tracking_threshold;
 var fraction_neutral;
 var tt;
+var uneu_manual = false;
 
 function fxn_init() {
   fxn_tribes(16)
@@ -60,6 +61,12 @@ function fxn_initial_alleles() {
 }
 
 function fxn_initial_alleles_init() {
+  if (!dmi.initial_alleles) {
+    dmi.num_contrasting_alleles.readOnly = false
+    dmi.max_total_fitness_increase.readOnly = false
+    dmi.initial_alleles_pop_frac.readOnly = false
+    return
+  }
   if (dmi.num_contrasting_alleles.value > 0) {
     dmi.num_contrasting_alleles.readOnly = false
     dmi.max_total_fitness_increase.readOnly = false
@@ -402,11 +409,18 @@ function compute_memory() {
 }
 
 function compute_u() {
-  var u = dmi.mutn_rate.value
-  var uneu = u*dmi.fraction_neutral.value
-  document.getElementById("uben").value = String(Math.round((u-uneu)*dmi.frac_fav_mutn.value*10)/10)
-  document.getElementById("udel").value = String(Math.round((u-uneu)*(1-dmi.frac_fav_mutn.value)*10)/10)
-  document.getElementById("uneu").value = String(Math.round(uneu*10)/10)
+  var u = parseFloat(dmi.mutn_rate.value || 0)
+  var frac_neu = parseFloat(dmi.fraction_neutral.value || 0)
+  var frac_fav = parseFloat(dmi.frac_fav_mutn.value || 0)
+  var uneu;
+  if (uneu_manual) {
+    uneu = parseFloat(dmi.uneu.value || 0)
+  } else {
+    uneu = u * frac_neu
+    dmi.uneu.value = String(Math.round(uneu * 10) / 10)
+  }
+  document.getElementById("uben").value = String(Math.round((u-uneu)*frac_fav*10)/10)
+  document.getElementById("udel").value = String(Math.round((u-uneu)*(1-frac_fav)*10)/10)
 }
 
 function fxn_fraction_neutral() {
@@ -484,6 +498,7 @@ function fxn_polygenic_target() {
 function fxn_track_neutrals() {
   if (dmi.track_neutrals.checked) {
     dmi.fraction_neutral.readOnly = false
+    dmi.uneu.readOnly = false
     if (fraction_neutral > 0) {
       dmi.fraction_neutral.value = fraction_neutral
     } else {
@@ -497,8 +512,16 @@ function fxn_track_neutrals() {
   } else {
     dmi.fraction_neutral.value = 0.0
     dmi.fraction_neutral.readOnly = true
+    dmi.uneu.value = 0.0
+    dmi.uneu.readOnly = true
+    uneu_manual = false
     $('#desc').tagsinput('remove', 'Neutrals');
   }
+  compute_u()
+}
+
+function fxn_uneu_manual() {
+  uneu_manual = true
   compute_u()
 }
 

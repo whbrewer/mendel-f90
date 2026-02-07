@@ -1017,6 +1017,19 @@
       </div>
 
       <div class="form-group">
+        <label for="initial_alleles" class="control-label col-xs-6">
+          &nbsp;&nbsp;&nbsp; :: include initial heterozygous alleles?</label>
+        <div class="col-xs-6">
+          <input type="checkbox" name="initial_alleles"
+                 onclick="fxn_initial_alleles()"
+            {% if num_contrasting_alleles|int > 0 %}
+            checked
+            {% endif %}
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="num_contrasting_alleles" class="control-label col-xs-6">    
           &nbsp;&nbsp;&nbsp; :: number of initial contrasting alleles:<br>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1071,7 +1084,8 @@
         <label for="uneu" class="control-label col-xs-6">    
           &nbsp;&nbsp;&nbsp; :: neutral mutation rate: </label>
         <div class="col-xs-6">
-          <input name="uneu" id="uneu" type="number" class="form-control" readOnly=true>
+          <input name="uneu" type="number" class="form-control"
+                 onchange="fxn_uneu_manual(); validate(this)">
         </div>
       </div>
 
