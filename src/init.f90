@@ -154,8 +154,9 @@ if (verbosity == 2) then
 endif
 
 ! If parallel, write additional average files with name-tag 000.
+! Only rank 0 should open these shared aggregate files.
 
-if (is_parallel) then
+if (is_parallel .and. myid == 0) then
 
    if (verbosity > 0) then
 

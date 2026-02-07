@@ -42,8 +42,6 @@ function fxn_initial_alleles() {
     dmi.max_total_fitness_increase.readOnly = false
     dmi.initial_alleles_pop_frac.readOnly = false
     dmi.initial_alleles.checked = true
-    dmi.num_high_impact_alleles.readOnly = false
-    dmi.high_impact_amplitude.readOnly = false
     dmi.num_contrasting_alleles.value = "1000"
     dmi.max_total_fitness_increase.value = "1.0"
     dmi.initial_alleles_pop_frac.value = "1.0"
@@ -53,8 +51,6 @@ function fxn_initial_alleles() {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
-    dmi.num_high_impact_alleles.readOnly = true
-    dmi.high_impact_amplitude.readOnly = true
     dmi.num_contrasting_alleles.value = 0
     $('#desc').tagsinput('remove', 'Initial alleles');
   }
@@ -72,14 +68,10 @@ function fxn_initial_alleles_init() {
     dmi.max_total_fitness_increase.readOnly = false
     dmi.initial_alleles_pop_frac.readOnly = false
     dmi.initial_alleles.checked = true
-    dmi.num_high_impact_alleles.readOnly = false
-    dmi.high_impact_amplitude.readOnly = false
   } else {
     dmi.num_contrasting_alleles.readOnly = true
     dmi.max_total_fitness_increase.readOnly = true
     dmi.initial_alleles_pop_frac.readOnly = true
-    dmi.num_high_impact_alleles.readOnly = true
-    dmi.high_impact_amplitude.readOnly = true
   }
 }
 
@@ -885,6 +877,7 @@ function check_back_mutn() {
 }
 
 function fxn_fission() {
+  if (!dmi.fission_tribes) return
   if (dmi.fission_tribes.checked) {
     dmi.fission_type.style.display = "block"
     dmi.fission_threshold.readOnly = false
@@ -897,11 +890,11 @@ function fxn_fission() {
 function fxn_pop_growth_model(i) {
   if (i == 0) {
     dmi.pop_growth_rate.readOnly = true
-    dmi.pop_growth_rate2.readOnly = true
+
     dmi.carrying_capacity.readOnly = true
   } else if (i == 1) { // Exponential growth
     dmi.pop_growth_rate.readOnly = false
-    dmi.pop_growth_rate2.readOnly = true
+
     dmi.carrying_capacity.readOnly = true
     dmi.pop_size.value = "2";
     dmi.num_generations.value = "2000";
@@ -913,7 +906,7 @@ function fxn_pop_growth_model(i) {
     $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 2) { // Carrying capacity
     dmi.pop_growth_rate.readOnly = false
-    dmi.pop_growth_rate2.readOnly = true
+
     dmi.carrying_capacity.readOnly = false
     dmi.pop_size.value = "2";
     dmi.num_generations.value = "1000";
@@ -928,14 +921,14 @@ function fxn_pop_growth_model(i) {
     $('#desc').tagsinput('remove', 'Founder');
   } else if (i == 3) { // Founder effects
     dmi.pop_growth_rate.readOnly = false
-    dmi.pop_growth_rate2.readOnly = false
+
     if (dmi.pop_growth_rate.value <= 1) {
       dmi.pop_growth_rate.value = 8.0;
       dmi.pop_growth_rate.min = 1.0;
       dmi.pop_growth_rate.max = 10.0;
       dmi.pop_growth_rate.step = 0.1;
     }
-    if (dmi.pop_growth_rate2.value == 0) { dmi.pop_growth_rate2.value = 4.0; }
+
     dmi.carrying_capacity.readOnly = false;
     dmi.pop_size.value = 2;
     dmi.bottleneck_yes.checked = true;
@@ -948,7 +941,7 @@ function fxn_pop_growth_model(i) {
     $('#desc').tagsinput('remove', 'Exponential growth');
   } else if (i == 4) { // Prescribed pop size
     dmi.pop_growth_rate.readOnly = true
-    dmi.pop_growth_rate2.readOnly = true
+
     dmi.carrying_capacity.readOnly = true
     dmi.carrying_capacity.value = 10000
   } else {

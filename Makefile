@@ -45,7 +45,8 @@ install-spc:
 	cp spc-app/mendel.js ../spc/src/spc/static/apps/mendel
 	cp spc-app/help.html ../spc/src/spc/static/apps/mendel
 	cp spc-app/about.html ../spc/src/spc/static/apps/mendel
-	cp spc-app/mendel.j2 ../spc/templates/apps
+	cp spc-app/mendel.j2 ../spc/src/spc/templates/apps
+	cp src/mendel ../spc/src/spc_apps/mendel
 
 uninstall:
 	rm -f $(INSTALL_DIR)/mendel
