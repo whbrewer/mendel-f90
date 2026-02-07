@@ -5,7 +5,7 @@ INSTALL_DIR = /usr/local/bin
 FC = mpif90
 INCLUDE ?= /usr/local/include
 GIT_TAG := $(shell git describe --tags --abbrev=0 2>/dev/null)
-GIT_SHA := $(shell git rev-parse --short=7 HEAD 2>/dev/null)
+GIT_SHA := $(shell git rev-parse --short=4 HEAD 2>/dev/null)
 GIT_VERSION := $(if $(GIT_TAG),$(patsubst v%,%,$(GIT_TAG))-$(GIT_SHA),$(GIT_SHA))
 
 # gfortran flags (LEGACYFLAGS needed for older Fortran compatibility)
@@ -34,7 +34,8 @@ test: pre-build $(TEST_OBJS)
 
 pre-build:
 	@printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC)/version.inc
-	@awk -v v="$(GIT_VERSION)" 'BEGIN{r=0} {if(!r && match($$0, /tagsinput\(\047add\047, *\047[^\047]*\047/)){sub(/tagsinput\(\047add\047, *\047[^\047]*\047/, "tagsinput(\047add\047, \047" v "\047)"); r=1} print}' spc-app/mendel.j2 > spc-app/mendel.j2.tmp && mv spc-app/mendel.j2.tmp spc-app/mendel.j2
+	@sed "s/tagsinput('add', '[^']*')/tagsinput('add', '$(GIT_VERSION)')/" spc-app/mendel.j2 > spc-app/mendel.j2.tmp
+	@mv spc-app/mendel.j2.tmp spc-app/mendel.j2
 
 install:
 	install $(TARGET) $(INSTALL_DIR)
