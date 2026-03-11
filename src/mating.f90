@@ -315,7 +315,7 @@ integer          dmutn(max_del_mutn_per_indiv/2,2,*), &
 real*8   offsprng_lb_fitness(num_linkage_subunits,2)
 real*8 linkage_block_fitness(num_linkage_subunits,2,*)
 real*8 fitness_effect, se_effect, ran1, ran2, ran3, ran4, rtmr
-real w, y, chance_back_mutn
+real*8 w, y, chance_back_mutn
 integer dad, mom, chr_length, ch, ls0, ls1, ls2, iseg, iseg_max, gen
 integer md1, md2, mf1, mf2, mn1, mn2
 integer mdd_off, mfd_off, mnd_off, mdm_off, mfm_off, mnm_off
@@ -883,26 +883,46 @@ do mut=1,new_mutn
       ! Update linkage subunit fitness.
       
       if(mutn_type == fav) then
-         
+
+         if(verbosity >= 2) then
+            write(6,'(a,i12,a,e22.15,a,e22.15,a,e22.15)') &
+               'FORWARD  fav mutn=', mutn_indx, &
+               ' fitness=', fitness_effect, &
+               ' lb_before=', offsprng_lb_fitness(lb,hap_id), &
+               ' lb_after=', &
+               (offsprng_lb_fitness(lb,hap_id) + (1.-w)*fitness_effect) &
+               * (1.d0 + w*fitness_effect)
+         end if
+
          offsprng_lb_fitness(lb,hap_id) = &
               (offsprng_lb_fitness(lb,hap_id) + (1. - w)*fitness_effect) &
               * (1.d0 + w *fitness_effect)
-         
+
          ! Increment the mutation count for the linkage subunit
          ! in which the mutation occurs.
-         
+
          offsprng_lb_mutn_count(lb,hap_id,2) =  &
               offsprng_lb_mutn_count(lb,hap_id,2) + 1
-         
+
       elseif(mutn_type == del) then
-         
+
+         if(verbosity >= 2) then
+            write(6,'(a,i12,a,e22.15,a,e22.15,a,e22.15)') &
+               'FORWARD  del mutn=', mutn_indx, &
+               ' fitness=', fitness_effect, &
+               ' lb_before=', offsprng_lb_fitness(lb,hap_id), &
+               ' lb_after=', &
+               (offsprng_lb_fitness(lb,hap_id) - (1.-w)*fitness_effect) &
+               * (1.d0 - w*fitness_effect)
+         end if
+
          offsprng_lb_fitness(lb,hap_id) =  &
               (offsprng_lb_fitness(lb,hap_id) - (1. - w)*fitness_effect) &
               * (1.d0 - w *fitness_effect)
-         
+
          ! Increment the mutation count for the linkage subunit
          ! in which the mutation occurs.
-         
+
          offsprng_lb_mutn_count(lb,hap_id,1) =  &
               offsprng_lb_mutn_count(lb,hap_id,1) + 1
          
