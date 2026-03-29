@@ -8,7 +8,7 @@ integer, intent(out) :: mutn_indx, mutn_type, lb, hap_id
 real*8,  intent(out) :: fitness_effect
 
 integer :: mutn, i
-real    :: x
+real*8  :: x
 
 ! Select a random linkage block for the new mutation.
 
@@ -101,9 +101,10 @@ if(is_parallel) mutn_indx = mutn_indx + myid
      
 if(fitness_distrib_type == 1) then  ! Natural mutation distribution
    if(mutn_type == fav) then
-      fitness_effect = max_fav_fitness_gain*dexp(-alpha_fav*x**gamma_fav)
+      fitness_effect = max_fav_fitness_gain &
+                      *dexp(-alpha_fav*(dble(mutn)*fav_scale)**gamma_fav)
    elseif(mutn_type == del) then
-      fitness_effect = dexp(-alpha_del*x**gamma_del)
+      fitness_effect = dexp(-alpha_del*(dble(mutn)*del_scale)**gamma_del)
    else  ! neutral
       fitness_effect = 0.
    end if
@@ -165,7 +166,7 @@ integer fmutn(max_fav_mutn_per_indiv/2,2,*)
 integer lb_mutn_count(num_linkage_subunits,2,3,*)
 real*8 linkage_block_fitness(num_linkage_subunits,2,*)
 real*8 fitness_gain
-real w, x
+real*8 w, x
 integer id, lb, hap_id, mutn, num_mutn, j
 
 ! Specify the new random favorable mutation. 
@@ -239,7 +240,8 @@ if(effect > 0) then ! case of polygenic_beneficials with fixed effect
    fitness_gain = effect
 else
    if(fitness_distrib_type == 1) then ! Natural distribution
-      fitness_gain = max_fav_fitness_gain*dexp(-alpha_fav*x**gamma_fav)
+      fitness_gain = max_fav_fitness_gain &
+                    *dexp(-alpha_fav*(dble(mutn)*fav_scale)**gamma_fav)
    else if (fitness_distrib_type == 2) then ! All mutn neutral
       fitness_gain = 0
    else ! All mutations have equal effect
@@ -296,6 +298,15 @@ end if
 
 w = multiplicative_weighting
 
+if(verbosity >= 2) then
+   write(6,'(a,i12,a,e22.15,a,e22.15,a,e22.15)') &
+      'FORWARD  fav mutn=', mutn_indx, ' fitness=', fitness_gain, &
+      ' lb_before=', linkage_block_fitness(lb,hap_id,id), &
+      ' lb_after=', &
+      (linkage_block_fitness(lb,hap_id,id) + (1.-w)*fitness_gain) &
+      * (1.d0 + w*fitness_gain)
+end if
+
 linkage_block_fitness(lb,hap_id,id) = &
    (linkage_block_fitness(lb,hap_id,id) + (1. - w)*fitness_gain) &
                                       * (1.d0 + w *fitness_gain)
@@ -315,7 +326,7 @@ integer lb, hap_id, mutn, i, j, tries, idorf, random_index
 integer num_fmutns, num_dmutns, decode_lb
 real*8  lb_fitness(num_linkage_subunits,2)
 real*8  fitness, decode_fitness_del, decode_fitness_fav
-real    w
+real*8  w
 logical fav
 call second(tin)
 
@@ -384,6 +395,22 @@ else
 end if
 
 ! Make appropriate adjustments to linkage block fitness.
+
+if(verbosity >= 2) then
+   if(fav) then
+      write(6,'(a,i12,a,e22.15,a,e22.15,a,e22.15)') &
+         'BACK_MUTN fav mutn=', mutn, ' fitness=', fitness, &
+         ' lb_before=', lb_fitness(lb,hap_id), &
+         ' lb_after=', (lb_fitness(lb,hap_id) - (1. - w)*fitness) &
+                      *(1.d0 - w*fitness)
+   else
+      write(6,'(a,i12,a,e22.15,a,e22.15,a,e22.15)') &
+         'BACK_MUTN del mutn=', mutn, ' fitness=', fitness, &
+         ' lb_before=', lb_fitness(lb,hap_id), &
+         ' lb_after=', (lb_fitness(lb,hap_id) - (1. - w)*fitness) &
+                      *(1.d0 - w*fitness)
+   end if
+end if
 
 lb_fitness(lb,hap_id) = (lb_fitness(lb,hap_id) - (1. - w)*fitness) &
                        *(1.d0 - w*fitness)

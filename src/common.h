@@ -8,8 +8,8 @@ integer :: global_pop_size, new_pop_size
 integer :: num_uploaded_mutn, num_back_mutn
 integer :: myid, num_tribes, ierr, msg_num, MYCOMM
 
-real :: del_scale, fav_scale, gamma_del, gamma_fav
-real :: poisson_mean, ica_mean_effect, fav_mean_freq
+real*8 :: del_scale, fav_scale, gamma_del, gamma_fav
+real   :: poisson_mean, ica_mean_effect, fav_mean_freq
 
 real*8 :: alpha_del, alpha_fav
 real*8 :: tribal_fitness_factor,                                    &
@@ -23,8 +23,8 @@ common /mndl1/ new_mutn_count, uploaded_mutn, dump_number, lb_modulo, &
                global_pop_size, new_pop_size, num_uploaded_mutn,      &
                num_back_mutn, myid, num_tribes, MYCOMM, live_pop_size
 
-common /mndl2/ del_scale, fav_scale, gamma_del, gamma_fav, &
-               poisson_mean, ica_mean_effect, fav_mean_freq
+common /mndl2/ del_scale, fav_scale, gamma_del, gamma_fav
+common /mndl2a/ poisson_mean, ica_mean_effect, fav_mean_freq
 
 common /mndl3/ alpha_del, alpha_fav, &
   	            tribal_fitness_factor, tribal_fitness_factor_scaled,     &

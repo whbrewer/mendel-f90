@@ -16,7 +16,6 @@ DBUGFLAGS = -g -fbacktrace -fcheck=all -Wall
 MODULES = mpi_helpers sort random_pkg inputs genome profile polygenic init selection
 CORE = $(MODULES) mutation mating fileio
 OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics mendel migration))
-TEST_OBJS = $(addprefix $(SRC)/, $(addsuffix .o, $(CORE) diagnostics test migration))
 
 .PHONY: all release debug test install uninstall dist clean cln install-spc
 
@@ -29,8 +28,8 @@ debug: FCFLAGS = $(DBUGFLAGS)
 debug: pre-build $(OBJS)
 	$(FC) $(FCFLAGS) -o $(TARGET) $(OBJS)
 
-test: pre-build $(TEST_OBJS)
-	$(FC) $(FCFLAGS) -o test $(TEST_OBJS)
+test:
+	$(MAKE) -C tests run
 
 pre-build:
 	@printf 'character(len=64), parameter :: build_version = "%s"\n' "$(GIT_VERSION)" > $(SRC)/version.inc
