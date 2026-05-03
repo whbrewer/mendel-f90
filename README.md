@@ -26,15 +26,15 @@ Run `make dist` to package for deployment.
 
 ## References
 
-1. Sanford et al., "Mendel's Accountant: A biologically realistic forward-time population genetics program." Scalable Computing: Practice and Experience 8, no. 2 (2007).
-1. Sanford et al., "Using computer simulation to understand mutation accumulation dynamics and genetic load." In International Conference on Computational Science, 386-392. Berlin, Heidelberg: Springer Berlin Heidelberg, 2007.
-1. Baumgardner et al., "Mendel’s Accountant: A new population genetics simulation tool for studying mutation and natural selection." In Proceedings of the Sixth International Conference on Creationism, vol. 8798. 2008.
-1. Sanford et al., "Using numerical simulation to test the validity of neo-Darwinian theory." In Proceedings of the International Conference on Creationism, vol. 6, no. 1, 16. 2008.
-1. Sanford et al., "Selection threshold severely constrains capture of beneficial mutations." In Biological Information: New Perspectives, 264-297. 2013.
-1. Brewer et al., "Information loss: potential for accelerating natural genetic attenuation of RNA viruses." In Biological Information: New Perspectives, 369-384. 2013.
-1. Brewer et al., "Using numerical simulation to test the 'mutation-count' hypothesis." In Biological Information: New Perspectives, 298-311. 2013.
-1. Gibson et al., "Can Purifying Natural Selection Preserve Biological Information?" In Biological Information: New Perspectives, 232-263. 2013.
-1. Baumgardner et al., "Can synergistic epistasis halt mutation accumulation? Results from numerical simulation." In Biological Information: New Perspectives, 312-337. 2013.
-1. Rupe and Sanford, "Using numerical simulation to better understand fixation rates, and establishment of a new principle: Haldane’s ratchet." In Proceedings of the International Conference on Creationism, vol. 7, no. 1, p. 32. 2013.
-1. Sanford et al., "The waiting time problem in a model hominin population." Theoretical Biology and Medical Modelling 12, no. 1 (2015): 18.
-1. Sanford et al., "Adam and Eve, designed diversity, and allele frequencies." 2018.
+1. Sanford et al., "Mendel's Accountant: A biologically realistic forward-time population genetics program." Scalable Computing: Practice and Experience 8, no. 2 (2007). [Link](https://scpe.org/index.php/scpe/article/view/407)
+1. Sanford et al., "Using computer simulation to understand mutation accumulation dynamics and genetic load." In International Conference on Computational Science, 386-392. Berlin, Heidelberg: Springer Berlin Heidelberg, 2007. [Link](https://link.springer.com/chapter/10.1007/978-3-540-72586-2_55)
+1. Baumgardner et al., "Mendel's Accountant: A new population genetics simulation tool for studying mutation and natural selection." In Proceedings of the Sixth International Conference on Creationism, vol. 8798. 2008. [Link](https://www.academia.edu/4227028/Mendels_Accountant_A_New_Population_Genetics_Simulation_Tool_for_Studying_Mutation_and_Natural_Selection)
+1. Sanford et al., "Using numerical simulation to test the validity of neo-Darwinian theory." In Proceedings of the International Conference on Creationism, vol. 6, no. 1, 16. 2008. [Link](https://digitalcommons.cedarville.edu/icc_proceedings/vol6/iss1/16/)
+1. Sanford et al., "Selection threshold severely constrains capture of beneficial mutations." In Biological Information: New Perspectives, 264-297. 2013. [Link](https://www.worldscientific.com/doi/abs/10.1142/9789814508728_0011)
+1. Brewer et al., "Information loss: potential for accelerating natural genetic attenuation of RNA viruses." In Biological Information: New Perspectives, 369-384. 2013. [Link](https://www.worldscientific.com/doi/abs/10.1142/9789814508728_0015)
+1. Brewer et al., "Using numerical simulation to test the 'mutation-count' hypothesis." In Biological Information: New Perspectives, 298-311. 2013. [Link](https://www.worldscientific.com/doi/abs/10.1142/9789814508728_0012)
+1. Gibson et al., "Can Purifying Natural Selection Preserve Biological Information?" In Biological Information: New Perspectives, 232-263. 2013. [Link](https://www.worldscientific.com/worldscibooks/10.1142/8818)
+1. Baumgardner et al., "Can synergistic epistasis halt mutation accumulation? Results from numerical simulation." In Biological Information: New Perspectives, 312-337. 2013. [Link](https://www.worldscientific.com/worldscibooks/10.1142/8818)
+1. Rupe and Sanford, "Using numerical simulation to better understand fixation rates, and establishment of a new principle: Haldane's ratchet." In Proceedings of the International Conference on Creationism, vol. 7, no. 1, p. 32. 2013. [Link](https://digitalcommons.cedarville.edu/icc_proceedings/vol7/iss1/32)
+1. Sanford et al., "The waiting time problem in a model hominin population." Theoretical Biology and Medical Modelling 12, no. 1 (2015): 18. [Link](https://link.springer.com/article/10.1186/s12976-015-0016-z)
+1. Sanford et al., "Adam and Eve, designed diversity, and allele frequencies." 2018. [Link](https://digitalcommons.cedarville.edu/icc_proceedings/vol8/iss1/8/)
